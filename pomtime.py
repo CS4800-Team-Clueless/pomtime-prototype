@@ -18,5 +18,9 @@ def kristie_api():
 def darlyn_api():
     return "darlyn's endpoint!"
 
+@app.route("/nothing", methods=["GET"])
+def nothing():
+    return "nothing"
+
 if __name__ == "__main__":
     app.run(debug=True)

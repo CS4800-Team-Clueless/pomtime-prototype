@@ -10,5 +10,9 @@ def hello():
 def cays_api():
     return "cay's endpoint contribution!"
 
+@app.route("/kristie", methods=["GET"])
+def kristie_api():
+    return "kristie's enpoint!"
+
 if __name__ == "__main__":
     app.run(debug=True)

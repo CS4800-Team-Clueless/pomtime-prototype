@@ -1,5 +1,5 @@
 from src.assignment6 import add
-from src.assignment import squared
+from src.assignment6 import squared
 
 def test_add():
     assert add(15, 25) == 40

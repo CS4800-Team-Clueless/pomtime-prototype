@@ -34,6 +34,8 @@ calendar = [
                 }
             ]
 
+import random
+
 def add(a, b):
     sum = a + b
     return sum
@@ -47,3 +49,9 @@ def get_events(date):
         if (date == event.get('date')):
             events.append(event.get('event'))
     return events
+
+def gacha_tenfold():
+    choices = ["3 star", "4 star", "5 star"]
+    weights = [0.94, 0.05, 0.01]
+
+    return random.choices(choices, weights=weights, k=10)

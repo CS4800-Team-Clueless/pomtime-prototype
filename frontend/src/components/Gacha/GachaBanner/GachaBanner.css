@@ -1,0 +1,52 @@
+.banner {
+  background: linear-gradient(135deg, #f6ede4, #faf7f2);
+  border: 1px solid #e4d4c3;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 2px 8px rgba(120, 100, 80, 0.15);
+}
+
+.banner-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #7c5e45;
+  margin: 0;
+}
+
+.banner-sub {
+  color: #a8927b;
+  margin-bottom: 20px;
+}
+
+.banner-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+/* Buttons */
+.ten-btn {
+  padding: 10px 16px;
+  border-radius: 6px;
+  border: 1px solid #d5c3ac;
+  background: #fff9f0;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #705e4a;
+}
+
+.ten-btn:hover {
+  background: #f0e3d4;
+}
+
+.btn.primary {
+  background: #d4a373;
+  color: #fff;
+  border-color: #c49260;
+}
+
+.btn.primary:hover {
+  background: #bb8a56;
+  color: #fff;
+}

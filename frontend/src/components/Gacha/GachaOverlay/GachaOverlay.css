@@ -1,0 +1,101 @@
+.gacha-modal {
+  background: radial-gradient(circle at 50% 30%, #f6ede4, #faf7f2);
+  color: #705e4a;
+  border: 1px solid #e4d4c3;
+  padding: 20px;
+  text-align: center;
+  border-radius: 16px;
+  box-shadow: 0 8px 28px rgba(124, 94, 69, 0.18);
+}
+
+/* Header */
+.gacha-header {
+  font-weight: 700;
+  color: #7c5e45;
+  justify-content: center;
+}
+
+/* Single pull */
+.single-pull {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 240px;
+}
+
+/* Multi-pull grid */
+.grid-pull {
+  display: grid;
+  gap: 12px;
+  padding: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+}
+
+/* Card */
+.character-card {
+  border-radius: 10px;
+  padding: 12px;
+  border: 2px solid transparent;
+  transition: transform 0.2s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  color: #705e4a;
+}
+
+.character-card:hover {
+  transform: translateY(-4px);
+}
+
+.stars {
+  letter-spacing: 1px;
+  font-size: 1.1rem;
+}
+
+.stars-3 {
+  background: linear-gradient(180deg, #e6f3ff, #cde9ff);
+  border-color: #4fa3ff;
+  box-shadow: 0 0 12px rgba(79, 163, 255, 0.4);
+  color: #397ecc;
+}
+
+.stars-4 {
+  background: linear-gradient(180deg, #f1e8ff, #dccbff);
+  border-color: #a58bff;
+  box-shadow: 0 0 12px rgba(165, 139, 255, 0.4);
+  color: #8265d9;
+}
+
+.stars-5 {
+  background: linear-gradient(180deg, #fff4d6, #ffe9a8);
+  border-color: #ffd773;
+  box-shadow: 0 0 14px rgba(255, 215, 115, 0.45);
+  color: #a47a1e;
+}
+
+/* Footer */
+.gacha-footer {
+  margin-top: 20px;
+}
+
+.gacha-footer .btn {
+  border-radius: 10px;
+  border: 1px solid #e4d4c3;
+  background: #fff9f0;
+  color: #705e4a;
+  font-weight: 700;
+}
+
+.gacha-footer .btn:hover {
+  background: #f0e3d4;
+  border-color: #d4a373;
+  color: #705e4a;
+}
+
+.gacha-footer .btn.btn-light {
+  background: #d4a373;
+  border-color: #d4a373;
+  color: #fff;
+}
+
+.gacha-footer .btn.btn-light:hover {
+  background: #bb8a56;
+  border-color: #bb8a56;
+}

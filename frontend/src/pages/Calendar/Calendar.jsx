@@ -1,47 +1,10 @@
-import { useState } from 'react';
-import { Calendar, dateFnsLocalizer } from "react-big-calendar";
-import { format, parse, getDay, startOfWeek } from 'date-fns';
-import { enUS } from 'date-fns/locale'
-import "./Calendar.css";
-
-const locales = {
-    'en-US': enUS
-}
-
-const localizer = dateFnsLocalizer ({
-    format,
-    parse,
-    getDay,
-    startOfWeek,
-    locales
-})
+import CalendarComponent from '../../components/Calendar/CalendarComponent';
+import './Calendar.css';
 
 export default function CalendarPage({ events }) {
-
-    const [view, setView] = useState('month');
-    const [date, setDate] = useState(new Date());
-
-    const handleNavigate = (newDate) => {
-        setDate(newDate);
-    };
-
-    const handleView = (newView) => {
-        setView(newView);
-    };
-
-    return (
-        <div className="p-3">
-            <Calendar
-                localizer={localizer}
-                events={events}
-                startAccessor="start"
-                endAccessor="end"
-                view={view}
-                date={date}
-                onNavigate={handleNavigate}
-                onView={handleView}
-                className="min-vh-100"
-            />
-        </div>
-    )
+  return (
+    <div className='p-3'>
+      <CalendarComponent events={events}/>
+    </div>
+  );
 }

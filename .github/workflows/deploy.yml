@@ -36,7 +36,8 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           source: "frontend/dist/*"
-          target: "/var/www/pomtime-prototype/frontend/dist/"
+          target: "/var/www/pomtime-prototype/"
+          strip_components: 2
 
       # Reload Nginx to serve the new build
       - name: Reload Nginx

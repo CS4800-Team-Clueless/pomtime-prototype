@@ -7,7 +7,9 @@ export default function BasePage() {
   return (
     <Container fluid className="p-0 min-vh-100 d-flex flex-column">
       <Header />
-      <Outlet />
+      <div className="flex-grow-1">
+        <Outlet />
+      </div>
       <Footer />
     </Container>
   );

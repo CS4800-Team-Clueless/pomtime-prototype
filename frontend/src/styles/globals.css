@@ -1,7 +1,7 @@
 :root {
-  --brand: #db5c7c; /* bootstrap primary-like */
-  --bg: #f8f9fa;
-  --text: #1f2937;
+  --brand: #5685a5; /* bootstrap primary-like */
+  --bg: #d3dee9;
+  --text: #384a63;
 }
 
 * {
@@ -12,6 +12,7 @@ html,
 body,
 #root {
   height: 100%;
+  margin: 0;
 }
 
 body {

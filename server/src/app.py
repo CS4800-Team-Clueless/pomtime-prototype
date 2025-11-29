@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 from functools import wraps
 import certifi
 
-# Load variables from .env file
+# Load variables from .env
 load_dotenv()
 
 # Initialize MongoDB client

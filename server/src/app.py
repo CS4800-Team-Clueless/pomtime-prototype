@@ -8,6 +8,7 @@ from google.auth.transport import requests
 import secrets
 from datetime import datetime, timedelta
 from functools import wraps
+import certifi
 
 # Load variables from .env file
 load_dotenv()
@@ -16,8 +17,11 @@ load_dotenv()
 MONGODB_URI = os.getenv("MONGODB_URI")
 DB_NAME = os.getenv("MONGODB_DB_NAME", "PomTimeDB")
 
-# Connect to MongoDB
-client = MongoClient(MONGODB_URI)
+# Connect to MongoDB with SSL certificate
+client = MongoClient(
+    MONGODB_URI,
+    tlsCAFile=certifi.where()
+)
 db = client[DB_NAME]
 users_collection = db['users']
 
@@ -30,7 +34,7 @@ CORS(app, supports_credentials=True, origins=[
     os.getenv('FRONTEND_URL', 'http://localhost:5173')
 ])
 
-# Get Google OAuth settings
+# Google OAuth settings
 GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
 
 # In-memory session storage (use Redis/MongoDB for production)

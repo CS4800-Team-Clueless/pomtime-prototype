@@ -38,6 +38,17 @@ jobs:
           npm run build
 
       # Deploy frontend dist to EC2
+      - name: Clean deployment directory
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # Clean the deployment directory
+            rm -rf /var/www/pomtime-prototype/*
+            mkdir -p /var/www/pomtime-prototype/dist
+
       - name: Upload frontend to EC2
         uses: appleboy/scp-action@v0.1.4
         with:
@@ -45,9 +56,9 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
-          source: "frontend/dist/"
-          target: "/var/www/pomtime-prototype/"
-          strip_components: 1
+          source: "frontend/dist/*"
+          target: "/var/www/pomtime-prototype/dist/"
+          strip_components: 2
 
       # Deploy backend code to EC2
       - name: Upload backend to EC2

@@ -30,7 +30,7 @@ CORS(app, supports_credentials=True, origins=[
     os.getenv('FRONTEND_URL', 'http://localhost:5173')
 ])
 
-# Google OAuth settings
+# Get Google OAuth settings
 GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
 
 # In-memory session storage (use Redis/MongoDB for production)

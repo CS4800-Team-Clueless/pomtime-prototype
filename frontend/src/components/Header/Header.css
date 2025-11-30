@@ -3,6 +3,9 @@
   top: 1;
   z-index: 50;
   border-bottom: 1px solid #f9fcff;
+}
+
+.pt-header {
   background: white !important;
 }
 

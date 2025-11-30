@@ -106,6 +106,11 @@ def google_auth():
                 'picture': picture,
                 'points': 0,  # Initialize with 0 points
                 'collection': {},  # Initialize empty collection
+                'settings': {  # Initialize default settings
+                    'background_type': 'gradient',
+                    'background_value': 'gradient-1',
+                    'dark_mode': False
+                },
                 'created_at': datetime.utcnow(),
                 'last_login': datetime.utcnow()
             }
@@ -202,43 +207,6 @@ def get_points():
 
     return jsonify({'error': 'User not found'}), 404
 
-
-@app.route('/api/pomodoro/complete', methods=['POST'])
-@require_auth
-def complete_pomodoro():
-    """Complete a pomodoro session and award points"""
-    user_id = request.user['user_id']
-    data = request.get_json()
-
-    duration_minutes = data.get('duration_minutes', 25)
-    session_type = data.get('session_type', 'work')  # 'work' or 'break'
-
-    # Only award points for work sessions
-    if session_type == 'work':
-        # Award 2 points per 25-minute work session
-        points_earned = ( duration_minutes / 25 ) * 2
-
-        # Award points to user
-        users_collection.update_one(
-            {'_id': ObjectId(user_id)},
-            {'$inc': {'points': points_earned}}
-        )
-
-        # Get updated user points
-        user = users_collection.find_one({'_id': ObjectId(user_id)})
-
-        return jsonify({
-            'success': True,
-            'points_earned': points_earned,
-            'total_points': user.get('points', 0)
-        })
-
-    # Break sessions don't award points
-    return jsonify({
-        'success': True,
-        'points_earned': 0,
-        'message': 'Break completed'
-    })
 
 # ==================== TASK ROUTES ====================
 
@@ -497,6 +465,85 @@ def get_collection():
         return jsonify({'collection': user.get('collection', {})})
 
     return jsonify({'error': 'User not found'}), 404
+
+
+# ==================== SETTINGS ROUTES ====================
+
+@app.route('/api/settings', methods=['GET'])
+@require_auth
+def get_settings():
+    """Get user's settings"""
+    user_id = request.user['user_id']
+    user = users_collection.find_one({'_id': ObjectId(user_id)})
+
+    if user:
+        default_settings = {
+            'background_type': 'gradient',
+            'background_value': 'gradient-1',
+            'dark_mode': False
+        }
+        return jsonify({'settings': user.get('settings', default_settings)})
+
+    return jsonify({'error': 'User not found'}), 404
+
+
+@app.route('/api/settings', methods=['PUT'])
+@require_auth
+def update_settings():
+    """Update user's settings"""
+    user_id = request.user['user_id']
+    data = request.get_json()
+
+    settings = data.get('settings', {})
+
+    users_collection.update_one(
+        {'_id': ObjectId(user_id)},
+        {'$set': {'settings': settings}}
+    )
+
+    return jsonify({'success': True, 'settings': settings})
+
+
+@app.route('/api/settings/background-image', methods=['POST'])
+@require_auth
+def upload_background_image():
+    """Upload a custom background image"""
+    user_id = request.user['user_id']
+
+    if 'image' not in request.files:
+        return jsonify({'error': 'No image provided'}), 400
+
+    file = request.files['image']
+
+    if file.filename == '':
+        return jsonify({'error': 'No image selected'}), 400
+
+    # Validate file type
+    allowed_extensions = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
+    file_ext = file.filename.rsplit('.', 1)[1].lower() if '.' in file.filename else ''
+
+    if file_ext not in allowed_extensions:
+        return jsonify({'error': 'Invalid file type. Use PNG, JPG, JPEG, GIF, or WEBP'}), 400
+
+    # Read file as base64
+    import base64
+    file_data = file.read()
+    base64_image = base64.b64encode(file_data).decode('utf-8')
+    data_uri = f"data:image/{file_ext};base64,{base64_image}"
+
+    # Update user's settings with the image
+    users_collection.update_one(
+        {'_id': ObjectId(user_id)},
+        {'$set': {
+            'settings.background_type': 'image',
+            'settings.background_value': data_uri
+        }}
+    )
+
+    return jsonify({
+        'success': True,
+        'image_url': data_uri
+    })
 
 
 # ==================== HEALTH CHECK ====================

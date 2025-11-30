@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
+import { SettingsProvider } from "./contexts/SettingsContext";
 import Home from "./pages/Home/Home";
 import BasePage from "./pages/BasePage";
 import Gacha from "./pages/GachaPage/GachaPage";
@@ -8,6 +9,7 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 import ProfileSettings from "./pages/ProfileSettings/ProfileSettings";
 import Inventory from "./pages/InventoryPage/InventoryPage";
 import PomodoroPage from "./pages/PomodoroPage/PomodoroPage";
+import Settings from "./pages/Settings/Settings";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 function AppRoutes() {
@@ -25,6 +27,7 @@ function AppRoutes() {
         <Route path="calendar" element={<CalendarPage />} />
         <Route path="pomodoro" element={<PomodoroPage />} />
         <Route path="inventory" element={<Inventory />} />
+        <Route path="settings" element={<Settings />} />
         <Route path="profile-settings" element={<ProfileSettings />} />
       </Route>
     </Routes>
@@ -34,7 +37,9 @@ function AppRoutes() {
 function App() {
   return (
     <AuthProvider>
-      <AppRoutes />
+      <SettingsProvider>
+        <AppRoutes />
+      </SettingsProvider>
     </AuthProvider>
   );
 }

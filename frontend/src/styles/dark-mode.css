@@ -1,0 +1,271 @@
+/* Dark Mode Styles - Add to src/styles/dark-mode.css */
+
+/* Light mode defaults (no class needed) */
+body {
+  color: #1f2937;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Dark mode overrides */
+body.dark-mode {
+  color: #e5e7eb;
+}
+
+/* Cards and containers */
+body.dark-mode .settings-card,
+body.dark-mode .agenda-section,
+body.dark-mode .stat-card,
+body.dark-mode .calendar-container,
+body.dark-mode .task-card,
+body.dark-mode .character-card,
+body.dark-mode .banner {
+  background: #1f2937;
+  color: #e5e7eb;
+}
+
+body.dark-mode .settings-card {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+}
+
+/* Text colors */
+body.dark-mode .settings-section-title,
+body.dark-mode .agenda-title,
+body.dark-mode .task-title,
+body.dark-mode .character-name,
+body.dark-mode .toggle-label,
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3 {
+  color: #f9fafb;
+}
+
+body.dark-mode .settings-section-desc,
+body.dark-mode .toggle-desc,
+body.dark-mode .task-time,
+body.dark-mode .upload-hint,
+body.dark-mode .character-count,
+body.dark-mode p {
+  color: #9ca3af;
+}
+
+/* Inputs and forms */
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select {
+  background: #374151;
+  color: #e5e7eb;
+  border-color: #4b5563;
+}
+
+body.dark-mode input:focus,
+body.dark-mode textarea:focus,
+body.dark-mode select:focus {
+  border-color: #6366f1;
+  background: #374151;
+}
+
+body.dark-mode .form-control {
+  background: #374151;
+  color: #e5e7eb;
+  border-color: #4b5563;
+}
+
+body.dark-mode .form-control:focus {
+  background: #374151;
+  color: #e5e7eb;
+  border-color: #6366f1;
+}
+
+/* Buttons */
+body.dark-mode .upload-button,
+body.dark-mode .add-task-btn,
+body.dark-mode .filter-tab {
+  background: #374151;
+  color: #e5e7eb;
+}
+
+body.dark-mode .filter-tab.active {
+  background: #6366f1;
+  color: white;
+}
+
+/* Dark mode toggle */
+body.dark-mode .dark-mode-toggle {
+  background: #374151;
+}
+
+/* Header */
+body.dark-mode .pt-header {
+  background: #1f2937;
+  border-bottom-color: #374151;
+}
+
+body.dark-mode .pt-link {
+  color: #9ca3af;
+}
+
+body.dark-mode .pt-link:hover {
+  background: #374151;
+  color: #e5e7eb;
+}
+
+body.dark-mode .pt-link.active {
+  background: #374151;
+  color: #6366f1;
+}
+
+/* Footer */
+body.dark-mode .footer {
+  background: #1f2937;
+  border-top-color: #374151;
+}
+
+body.dark-mode .footer__text {
+  color: #9ca3af;
+}
+
+/* Calendar */
+body.dark-mode .rbc-calendar {
+  background: #1f2937;
+  color: #e5e7eb;
+}
+
+body.dark-mode .rbc-header {
+  background: #374151;
+  color: #e5e7eb;
+  border-bottom-color: #4b5563;
+}
+
+body.dark-mode .rbc-month-view,
+body.dark-mode .rbc-time-view {
+  background: #1f2937;
+  border-color: #4b5563;
+}
+
+body.dark-mode .rbc-day-bg {
+  border-color: #4b5563;
+}
+
+body.dark-mode .rbc-today {
+  background-color: rgba(99, 102, 241, 0.1);
+}
+
+body.dark-mode .rbc-off-range-bg {
+  background: #111827;
+}
+
+body.dark-mode .rbc-toolbar button {
+  background: #374151;
+  color: #e5e7eb;
+  border-color: #4b5563;
+}
+
+body.dark-mode .rbc-toolbar button:hover {
+  background: #4b5563;
+  border-color: #6366f1;
+}
+
+body.dark-mode .rbc-toolbar button.rbc-active {
+  background: #6366f1;
+  color: white;
+}
+
+body.dark-mode .rbc-toolbar-label {
+  color: #f9fafb;
+}
+
+/* Modals */
+body.dark-mode .modal-content {
+  background: #1f2937;
+  color: #e5e7eb;
+}
+
+body.dark-mode .modal-header {
+  background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+  border-bottom-color: #4b5563;
+}
+
+body.dark-mode .modal-body {
+  background: #1f2937;
+}
+
+body.dark-mode .modal-footer {
+  border-top-color: #4b5563;
+}
+
+/* Task cards */
+body.dark-mode .task-card {
+  background: #374151;
+  border-left-color: #6366f1;
+}
+
+body.dark-mode .task-points,
+body.dark-mode .task-recurring {
+  background: #1f2937;
+}
+
+/* Inventory cards */
+body.dark-mode .character-card {
+  background: #374151;
+}
+
+body.dark-mode .character-card.rarity-5 {
+  background: linear-gradient(135deg, #78350f 0%, #92400e 100%);
+}
+
+body.dark-mode .character-card.rarity-4 {
+  background: linear-gradient(135deg, #4c1d95 0%, #5b21b6 100%);
+}
+
+body.dark-mode .character-card.rarity-3 {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+}
+
+/* Empty states */
+body.dark-mode .empty-agenda,
+body.dark-mode .empty-state {
+  color: #e5e7eb;
+}
+
+body.dark-mode .empty-agenda p,
+body.dark-mode .empty-state p {
+  color: #9ca3af;
+}
+
+/* Profile menu */
+body.dark-mode .profile-menu__dropdown {
+  background: #1f2937;
+  border-color: #4b5563;
+}
+
+body.dark-mode .profile-menu__item {
+  color: #e5e7eb;
+}
+
+body.dark-mode .profile-menu__item:hover {
+  background: #374151;
+}
+
+body.dark-mode .profile-menu__divider {
+  background: #4b5563;
+}
+
+/* Stat boxes */
+body.dark-mode .stat-box {
+  background: rgba(31, 41, 55, 0.5);
+}
+
+/* Gradients preview in settings */
+body.dark-mode .gradient-option.selected {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px #6366f1;
+}
+
+/* Preview thumbnail */
+body.dark-mode .preview-thumbnail {
+  border-color: #4b5563;
+}
+
+body.dark-mode .preview-overlay {
+  background: rgba(0, 0, 0, 0.8);
+}

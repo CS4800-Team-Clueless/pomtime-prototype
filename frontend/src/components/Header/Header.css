@@ -5,6 +5,9 @@
   background: #fff !important;
   border-bottom: 1px solid #f9fcff;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  left: 0;
+  right: 0;
 }
 
 .pt-header-inner {
@@ -14,7 +17,6 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  background: #fff;
 }
 
 .pt-brand {

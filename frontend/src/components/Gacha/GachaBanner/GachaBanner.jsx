@@ -63,7 +63,7 @@ export default function GachaBanner({ setResults, setShowOverlay }) {
   return (
     <div className="banner">
       <div className="points-display">
-        <span className="points-icon">💎</span>
+        <span className="points-icon">🐶</span>
         <span className="points-value">{points}</span>
         <span className="points-label">Pom Prisms</span>
       </div>
@@ -77,19 +77,19 @@ export default function GachaBanner({ setResults, setShowOverlay }) {
           onClick={() => wish(1)}
           disabled={loading || points < 1}
         >
-          Wish x1 <span className="cost">(1 💎)</span>
+          Wish x1 <span className="cost">(1 🐶)</span>
         </button>
         <button
           className="ten-btn"
           onClick={() => wish(10)}
           disabled={loading || points < 10}
         >
-          Wish x10 <span className="cost">(10 💎)</span>
+          Wish x10 <span className="cost">(10 🐶)</span>
         </button>
       </div>
 
       <p className="warning-text">
-        Complete tasks in the calendar to earn more points!
+        Complete tasks in the calendar to earn more Pom Prisms!
       </p>
     </div>
   );

@@ -267,7 +267,7 @@
   align-items: center;
   gap: 16px;
   padding: 20px;
-  background: white;
+  background: #f9fafb;
   border: 1px solid #e5e7eb;
   border-radius: 12px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -282,17 +282,19 @@
   flex: 1;
 }
 
-.stat-number {
+.home .stat-number,
+.stat-box .stat-number {
   font-size: 1.75rem;
   font-weight: 700;
-  color: #374151;
+  color: #000000 !important;
   line-height: 1;
   margin-bottom: 4px;
 }
 
-.stat-label {
+.home .stat-label,
+.stat-box .stat-label {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: #000000 !important;
   font-weight: 500;
 }
 

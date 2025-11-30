@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import './Inventory.css';
+import './InventoryPage.css';
 
 // Character rarity mapping
 const CHARACTER_RARITY = {
@@ -91,15 +91,15 @@ export default function Inventory() {
           <h1 className="inventory-title">🐕 My Collection</h1>
           <div className="inventory-stats">
             <div className="stat-card">
-              <div className="stat-value">{totalCharacters}</div>
+              <div className="points-value">{totalCharacters}</div>
               <div className="stat-label">Total Pomeranians</div>
             </div>
             <div className="stat-card">
-              <div className="stat-value">{uniqueCharacters}</div>
+              <div className="points-value">{uniqueCharacters}</div>
               <div className="stat-label">Unique Characters</div>
             </div>
             <div className="stat-card">
-              <div className="stat-value">{Object.keys(CHARACTER_RARITY).length}</div>
+              <div className="points-value">{Object.keys(CHARACTER_RARITY).length}</div>
               <div className="stat-label">Total Available</div>
             </div>
           </div>

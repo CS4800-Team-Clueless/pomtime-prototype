@@ -63,8 +63,8 @@ export default function GachaBanner({ setResults, setShowOverlay }) {
   return (
     <div className="banner">
       <div className="points-display">
-        <span className="points-icon">🐶</span>
-        <span className="points-value">{points}</span>
+        <span className="points-icon"></span>
+        <span className="points-value">{Math.floor(points)}🐕</span>
         <span className="points-label">Pom Prisms</span>
       </div>
 

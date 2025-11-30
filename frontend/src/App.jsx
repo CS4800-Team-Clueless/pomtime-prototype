@@ -6,7 +6,8 @@ import Gacha from "./pages/GachaPage/GachaPage";
 import CalendarPage from "./pages/Calendar/Calendar";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import ProfileSettings from "./pages/ProfileSettings/ProfileSettings";
-import Inventory from "./pages/Inventory/Inventory";
+import Inventory from "./pages/InventoryPage/InventoryPage";
+import PomodoroPage from "./pages/PomodoroPage/PomodoroPage";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 function AppRoutes() {
@@ -22,6 +23,7 @@ function AppRoutes() {
         <Route index element={<Home />} />
         <Route path="gacha" element={<Gacha />} />
         <Route path="calendar" element={<CalendarPage />} />
+        <Route path="pomodoro" element={<PomodoroPage />} />
         <Route path="inventory" element={<Inventory />} />
         <Route path="profile-settings" element={<ProfileSettings />} />
       </Route>

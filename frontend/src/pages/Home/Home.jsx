@@ -126,7 +126,7 @@ export default function Home() {
                   <p className="task-time">{formatDateTime(task.start)}</p>
                 </div>
                 <div className="task-meta">
-                  <span className="task-points">🐶 {task.points} Pom Prisms</span>
+                  <span className="task-points">{task.points}🐕 Pom Prisms</span>
                   {task.recurring && (
                     <span className="task-recurring">🔄 Daily</span>
                   )}

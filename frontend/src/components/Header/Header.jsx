@@ -19,7 +19,7 @@ export default function Header() {
           <NavLink to="/inventory" className="pt-link">
             Inventory
           </NavLink>
-          <NavLink to="/timer" className="pt-link">
+          <NavLink to="/pomodoro" className="pt-link">
             Timer
           </NavLink>
           <NavLink to="/settings" className="pt-link">

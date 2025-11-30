@@ -233,7 +233,28 @@
 }
 
 .task-points {
-  color: #dc2626;
+  background: linear-gradient(90deg,
+    #e91e63 0%,
+    #9c27b0 20%,
+    #673ab7 40%,
+    #3f51b5 60%,
+    #2196f3 80%,
+    #e91e63 100%);
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rainbow-shift 6s linear infinite;
+  font-weight: 600;
+}
+
+@keyframes rainbow-shift {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
 }
 
 .task-recurring {

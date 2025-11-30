@@ -203,6 +203,43 @@ def get_points():
     return jsonify({'error': 'User not found'}), 404
 
 
+@app.route('/api/pomodoro/complete', methods=['POST'])
+@require_auth
+def complete_pomodoro():
+    """Complete a pomodoro session and award points"""
+    user_id = request.user['user_id']
+    data = request.get_json()
+
+    duration_minutes = data.get('duration_minutes', 25)
+    session_type = data.get('session_type', 'work')  # 'work' or 'break'
+
+    # Only award points for work sessions
+    if session_type == 'work':
+        # Award 2 points per 25-minute work session
+        points_earned = ( duration_minutes / 25 ) * 2
+
+        # Award points to user
+        users_collection.update_one(
+            {'_id': ObjectId(user_id)},
+            {'$inc': {'points': points_earned}}
+        )
+
+        # Get updated user points
+        user = users_collection.find_one({'_id': ObjectId(user_id)})
+
+        return jsonify({
+            'success': True,
+            'points_earned': points_earned,
+            'total_points': user.get('points', 0)
+        })
+
+    # Break sessions don't award points
+    return jsonify({
+        'success': True,
+        'points_earned': 0,
+        'message': 'Break completed'
+    })
+
 # ==================== TASK ROUTES ====================
 
 @app.route('/api/tasks', methods=['GET'])

@@ -86,7 +86,7 @@ export default function Home() {
           visualize your progress.
         </p>
         <div className="home-actions">
-          <a href="/timer" className="btn-primary">
+          <a href="/pomodoro" className="btn-primary">
             Start Timer
           </a>
           <a href="/calendar" className="btn-primary">

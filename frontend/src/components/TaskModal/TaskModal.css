@@ -1,0 +1,56 @@
+/* TaskModal specific styles */
+.task-modal .modal-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.task-modal .modal-title {
+  font-weight: 600;
+}
+
+.task-modal .btn-close {
+  filter: brightness(0) invert(1);
+}
+
+.task-modal .form-label {
+  font-weight: 500;
+  color: #374151;
+}
+
+.task-modal .form-control:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
+}
+
+.task-modal .btn-success {
+  background-color: #10b981;
+  border-color: #10b981;
+}
+
+.task-modal .btn-success:hover {
+  background-color: #059669;
+  border-color: #059669;
+}
+
+/* Center button layout */
+.task-modal .button-container {
+  text-align: center;
+}
+
+.task-modal .button-group {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.task-modal .button-group .btn {
+  flex: 0 1 auto;
+  min-width: 80px;
+  white-space: nowrap;
+}
+
+.task-modal .complete-section {
+  margin-bottom: 1rem;
+}

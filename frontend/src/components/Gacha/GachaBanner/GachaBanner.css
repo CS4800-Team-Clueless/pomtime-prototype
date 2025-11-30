@@ -1,52 +1,179 @@
+/* Updated GachaBanner.css */
+
+/* --- Banner Background: Blue Gradient --- */
 .banner {
-  background: linear-gradient(135deg, #f6ede4, #faf7f2);
-  border: 1px solid #e4d4c3;
-  border-radius: 16px;
-  padding: 30px;
-  box-shadow: 0 2px 8px rgba(120, 100, 80, 0.15);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 85vh;
+  padding: 2rem;
+  background: linear-gradient(135deg, #06b6d4 0%, #1d4ed8 100%);
 }
 
-.banner-title {
-  font-size: 2rem;
+/* --- Points Display TOP RIGHT --- */
+.points-display {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  padding: 1rem 1.5rem;
+  border-radius: 1rem;
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Icons & Text */
+.points-icon {
+  font-size: 1.5rem;
+}
+
+.points-value {
+  font-size: 1.5rem;
   font-weight: 700;
-  color: #7c5e45;
-  margin: 0;
+}
+
+.points-label {
+  font-size: 0.875rem;
+  opacity: 0.9;
+}
+
+/* --- Titles --- */
+.banner-title {
+  font-size: 3rem;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .banner-sub {
-  color: #a8927b;
-  margin-bottom: 20px;
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 3rem;
 }
 
+/* --- Button Container --- */
 .banner-actions {
   display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 12px;
+  margin-bottom: 1.5rem;
 }
 
-/* Buttons */
-.ten-btn {
-  padding: 10px 16px;
-  border-radius: 6px;
-  border: 1px solid #d5c3ac;
-  background: #fff9f0;
+/* --- Buttons --- */
+.btn {
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
   font-weight: 600;
+  border: none;
+  border-radius: 0.75rem;
   cursor: pointer;
-  transition: all 0.2s ease;
-  color: #705e4a;
+  transition: all 0.2s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  min-width: 180px;
 }
 
-.ten-btn:hover {
-  background: #f0e3d4;
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
+/* 1x Button - White with Purple Text */
 .btn.primary {
-  background: #d4a373;
-  color: #fff;
-  border-color: #c49260;
+  background: white;
+  color: #6366f1;
 }
 
-.btn.primary:hover {
-  background: #bb8a56;
-  color: #fff;
+.btn.primary:hover:not(:disabled) {
+  background: #f5f5ff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn.primary:active:not(:disabled) {
+  background: #ebebff;
+}
+
+/* 10x Button - Gold with Brown Text and White Border */
+.ten-btn {
+  background: #fbbf24;
+  color: #78350f;
+  border-radius: 0.75rem;
+  border: 2px solid white;
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  min-width: 180px;
+}
+
+.ten-btn:hover:not(:disabled) {
+  background: #f59e0b;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.ten-btn:active:not(:disabled) {
+  background: #d97706;
+}
+
+.cost {
+  font-size: 0.875rem;
+  opacity: 0.8;
+}
+
+/* --- Warning Text --- */
+.warning-text {
+  position: relative;
+  z-index: 10;
+  margin: 0;
+  padding: 1rem;
+  color: #fde047;
+  font-weight: 500;
+  text-align: center;
+  font-size: 1.125rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 0.5rem;
+  max-width: 400px;
+  line-height: 1.5;
+}
+
+/* --- Mobile --- */
+@media (max-width: 768px) {
+  .points-display {
+    top: 1rem;
+    right: 1rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .banner-title {
+    font-size: 2rem;
+  }
+
+  .banner-sub {
+    font-size: 1rem;
+  }
+
+  .banner-actions {
+    flex-direction: column;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .warning-text {
+    font-size: 1rem;
+    padding: 0.75rem;
+  }
 }

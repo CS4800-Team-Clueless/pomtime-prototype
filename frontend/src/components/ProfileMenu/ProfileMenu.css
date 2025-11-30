@@ -53,7 +53,7 @@
 
 .profile-menu__header {
   padding: 1rem;
-  background: linear-gradient(135deg, #0ea5e9, #3b82f6, #6366f1);
+  background: linear-gradient(135deg, #d38312, #a83279);
   color: white;
 }
 
@@ -136,4 +136,4 @@
   height: 1px;
   background-color: #e5e7eb;
   margin: 0.5rem 0;
-}
+}x

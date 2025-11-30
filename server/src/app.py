@@ -9,6 +9,7 @@ import secrets
 from datetime import datetime, timedelta
 from functools import wraps
 import certifi
+from bson.objectid import ObjectId
 
 # Load variables from .env
 load_dotenv()
@@ -24,6 +25,8 @@ client = MongoClient(
 )
 db = client[DB_NAME]
 users_collection = db['users']
+tasks_collection = db['tasks']
+gacha_history_collection = db['gacha_history']
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', secrets.token_hex(32))
@@ -102,6 +105,7 @@ def google_auth():
                 'email': email,
                 'name': name,
                 'picture': picture,
+                'points': 0,  # Initialize with 0 points
                 'created_at': datetime.utcnow(),
                 'last_login': datetime.utcnow()
             }
@@ -175,8 +179,6 @@ def logout():
 def get_current_user():
     """Get current user's full profile from database"""
     user_id = request.user['user_id']
-
-    from bson.objectid import ObjectId
     user = users_collection.find_one({'_id': ObjectId(user_id)})
 
     if user:
@@ -186,16 +188,271 @@ def get_current_user():
     return jsonify({'error': 'User not found'}), 404
 
 
-# ==================== EXAMPLE PROTECTED ROUTE ====================
+# ==================== POINTS ROUTES ====================
 
-@app.route('/api/example', methods=['GET'])
+@app.route('/api/points', methods=['GET'])
 @require_auth
-def example_protected_route():
-    """Example of a protected route that requires authentication"""
+def get_points():
+    """Get user's current points"""
+    user_id = request.user['user_id']
+    user = users_collection.find_one({'_id': ObjectId(user_id)})
+
+    if user:
+        return jsonify({'points': user.get('points', 0)})
+
+    return jsonify({'error': 'User not found'}), 404
+
+
+# ==================== TASK ROUTES ====================
+
+@app.route('/api/tasks', methods=['GET'])
+@require_auth
+def get_tasks():
+    """Get all tasks for the current user"""
+    user_id = request.user['user_id']
+
+    tasks = list(tasks_collection.find({'user_id': user_id}))
+
+    # Convert ObjectId to string
+    for task in tasks:
+        task['_id'] = str(task['_id'])
+
+    return jsonify({'tasks': tasks})
+
+
+@app.route('/api/tasks', methods=['POST'])
+@require_auth
+def create_task():
+    """Create a new task"""
+    user_id = request.user['user_id']
+    data = request.get_json()
+
+    # Calculate points based on duration (30 min = 1 point)
+    duration_minutes = data.get('duration_minutes', 30)
+    calculated_points = duration_minutes / 30
+
+    task = {
+        'user_id': user_id,
+        'title': data.get('title'),
+        'start': datetime.fromisoformat(data.get('start').replace('Z', '+00:00')),
+        'end': datetime.fromisoformat(data.get('end').replace('Z', '+00:00')),
+        'duration_minutes': duration_minutes,
+        'points': data.get('points', calculated_points),  # Allow custom points
+        'recurring': data.get('recurring', False),
+        'completed': False,
+        'created_at': datetime.utcnow()
+    }
+
+    result = tasks_collection.insert_one(task)
+    task['_id'] = str(result.inserted_id)
+    task['start'] = task['start'].isoformat()
+    task['end'] = task['end'].isoformat()
+    task['created_at'] = task['created_at'].isoformat()
+
+    return jsonify({'success': True, 'task': task}), 201
+
+
+@app.route('/api/tasks/<task_id>', methods=['PUT'])
+@require_auth
+def update_task(task_id):
+    """Update a task"""
+    user_id = request.user['user_id']
+    data = request.get_json()
+
+    # Verify task belongs to user
+    task = tasks_collection.find_one({'_id': ObjectId(task_id), 'user_id': user_id})
+    if not task:
+        return jsonify({'error': 'Task not found'}), 404
+
+    update_data = {}
+    if 'title' in data:
+        update_data['title'] = data['title']
+    if 'start' in data:
+        update_data['start'] = datetime.fromisoformat(data['start'].replace('Z', '+00:00'))
+    if 'end' in data:
+        update_data['end'] = datetime.fromisoformat(data['end'].replace('Z', '+00:00'))
+    if 'duration_minutes' in data:
+        update_data['duration_minutes'] = data['duration_minutes']
+        # Recalculate points if not custom
+        if 'points' not in data:
+            update_data['points'] = data['duration_minutes'] / 30
+    if 'points' in data:
+        update_data['points'] = data['points']
+    if 'recurring' in data:
+        update_data['recurring'] = data['recurring']
+
+    tasks_collection.update_one(
+        {'_id': ObjectId(task_id)},
+        {'$set': update_data}
+    )
+
+    return jsonify({'success': True})
+
+
+@app.route('/api/tasks/<task_id>/complete', methods=['POST'])
+@require_auth
+def complete_task(task_id):
+    """Mark a task as complete and award points"""
+    user_id = request.user['user_id']
+
+    # Verify task belongs to user and not already completed
+    task = tasks_collection.find_one({'_id': ObjectId(task_id), 'user_id': user_id})
+    if not task:
+        return jsonify({'error': 'Task not found'}), 404
+
+    if task.get('completed'):
+        return jsonify({'error': 'Task already completed'}), 400
+
+    # Mark task as completed
+    tasks_collection.update_one(
+        {'_id': ObjectId(task_id)},
+        {'$set': {'completed': True, 'completed_at': datetime.utcnow()}}
+    )
+
+    # Award points to user
+    points = task.get('points', 1)
+    users_collection.update_one(
+        {'_id': ObjectId(user_id)},
+        {'$inc': {'points': points}}
+    )
+
+    # If recurring, create a new instance for tomorrow
+    if task.get('recurring'):
+        start = task['start'] + timedelta(days=1)
+        end = task['end'] + timedelta(days=1)
+
+        new_task = {
+            'user_id': user_id,
+            'title': task['title'],
+            'start': start,
+            'end': end,
+            'duration_minutes': task.get('duration_minutes', 30),
+            'points': task.get('points', 1),
+            'recurring': True,
+            'completed': False,
+            'created_at': datetime.utcnow()
+        }
+        tasks_collection.insert_one(new_task)
+
+    # Get updated points
+    user = users_collection.find_one({'_id': ObjectId(user_id)})
+
     return jsonify({
-        'message': f'Hello {request.user["name"]}!',
-        'user_email': request.user['email']
+        'success': True,
+        'points_earned': points,
+        'total_points': user.get('points', 0)
     })
+
+
+@app.route('/api/tasks/<task_id>', methods=['DELETE'])
+@require_auth
+def delete_task(task_id):
+    """Delete a task"""
+    user_id = request.user['user_id']
+
+    result = tasks_collection.delete_one({'_id': ObjectId(task_id), 'user_id': user_id})
+
+    if result.deleted_count == 0:
+        return jsonify({'error': 'Task not found'}), 404
+
+    return jsonify({'success': True})
+
+
+# ==================== GACHA ROUTES ====================
+
+# Gacha pools
+FIVE_STAR_POOL = ["King", "Angel", "Dragon"]
+FOUR_STAR_POOL = ["Snow", "Prince", "Moon", "Autumn"]
+THREE_STAR_POOL = ["White", "Brown", "Orange", "Black", "Cream", "Gray", "Tan", "Beige"]
+
+
+def perform_gacha_roll():
+    """Perform a single gacha roll"""
+    import random
+    roll = random.random()
+
+    if roll < 0.006:  # 0.6% for 5-star
+        return {
+            'name': random.choice(FIVE_STAR_POOL),
+            'stars': 5
+        }
+    elif roll < 0.056:  # 5% for 4-star
+        return {
+            'name': random.choice(FOUR_STAR_POOL),
+            'stars': 4
+        }
+    else:  # 94.4% for 3-star
+        return {
+            'name': random.choice(THREE_STAR_POOL),
+            'stars': 3
+        }
+
+
+@app.route('/api/gacha/roll', methods=['POST'])
+@require_auth
+def gacha_roll():
+    """Perform gacha roll(s)"""
+    user_id = request.user['user_id']
+    data = request.get_json()
+    count = data.get('count', 1)  # 1 or 10
+
+    if count not in [1, 10]:
+        return jsonify({'error': 'Invalid roll count'}), 400
+
+    # Check if user has enough points
+    user = users_collection.find_one({'_id': ObjectId(user_id)})
+    current_points = user.get('points', 0)
+
+    if current_points < count:
+        return jsonify({
+            'error': 'Insufficient points',
+            'required': count,
+            'current': current_points
+        }), 400
+
+    # Deduct points
+    users_collection.update_one(
+        {'_id': ObjectId(user_id)},
+        {'$inc': {'points': -count}}
+    )
+
+    # Perform rolls
+    results = []
+    for i in range(count):
+        roll = perform_gacha_roll()
+        results.append(roll)
+
+    # Save to gacha history
+    gacha_history_collection.insert_one({
+        'user_id': user_id,
+        'rolls': results,
+        'count': count,
+        'timestamp': datetime.utcnow()
+    })
+
+    # Get updated points
+    updated_user = users_collection.find_one({'_id': ObjectId(user_id)})
+
+    return jsonify({
+        'success': True,
+        'results': results,
+        'remaining_points': updated_user.get('points', 0)
+    })
+
+
+@app.route('/api/gacha/history', methods=['GET'])
+@require_auth
+def gacha_history():
+    """Get user's gacha history"""
+    user_id = request.user['user_id']
+
+    history = list(gacha_history_collection.find({'user_id': user_id}).sort('timestamp', -1).limit(50))
+
+    for record in history:
+        record['_id'] = str(record['_id'])
+        record['timestamp'] = record['timestamp'].isoformat()
+
+    return jsonify({'history': history})
 
 
 # ==================== HEALTH CHECK ====================
@@ -210,5 +467,7 @@ if __name__ == '__main__':
     # Create indexes for better query performance
     users_collection.create_index('google_id', unique=True)
     users_collection.create_index('email')
+    tasks_collection.create_index([('user_id', 1), ('start', 1)])
+    gacha_history_collection.create_index([('user_id', 1), ('timestamp', -1)])
 
     app.run(debug=True, host='0.0.0.0', port=5000)

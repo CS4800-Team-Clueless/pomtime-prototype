@@ -26,7 +26,6 @@ client = MongoClient(
 db = client[DB_NAME]
 users_collection = db['users']
 tasks_collection = db['tasks']
-gacha_history_collection = db['gacha_history']
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', secrets.token_hex(32))
@@ -106,6 +105,7 @@ def google_auth():
                 'name': name,
                 'picture': picture,
                 'points': 0,  # Initialize with 0 points
+                'collection': {},  # Initialize empty collection
                 'created_at': datetime.utcnow(),
                 'last_login': datetime.utcnow()
             }
@@ -391,7 +391,7 @@ def perform_gacha_roll():
 @app.route('/api/gacha/roll', methods=['POST'])
 @require_auth
 def gacha_roll():
-    """Perform gacha roll(s)"""
+    """Perform gacha roll(s) and add to collection"""
     user_id = request.user['user_id']
     data = request.get_json()
     count = data.get('count', 1)  # 1 or 10
@@ -418,41 +418,48 @@ def gacha_roll():
 
     # Perform rolls
     results = []
+    collection_updates = {}
+
     for i in range(count):
         roll = perform_gacha_roll()
         results.append(roll)
 
-    # Save to gacha history
-    gacha_history_collection.insert_one({
-        'user_id': user_id,
-        'rolls': results,
-        'count': count,
-        'timestamp': datetime.utcnow()
-    })
+        # Count each character for collection update
+        char_name = roll['name']
+        collection_updates[char_name] = collection_updates.get(char_name, 0) + 1
 
-    # Get updated points
+    # Update user's collection
+    update_operations = {}
+    for char_name, count_increment in collection_updates.items():
+        update_operations[f'collection.{char_name}'] = count_increment
+
+    users_collection.update_one(
+        {'_id': ObjectId(user_id)},
+        {'$inc': update_operations}
+    )
+
+    # Get updated user data
     updated_user = users_collection.find_one({'_id': ObjectId(user_id)})
 
     return jsonify({
         'success': True,
         'results': results,
-        'remaining_points': updated_user.get('points', 0)
+        'remaining_points': updated_user.get('points', 0),
+        'collection': updated_user.get('collection', {})
     })
 
 
-@app.route('/api/gacha/history', methods=['GET'])
+@app.route('/api/collection', methods=['GET'])
 @require_auth
-def gacha_history():
-    """Get user's gacha history"""
+def get_collection():
+    """Get user's character collection"""
     user_id = request.user['user_id']
+    user = users_collection.find_one({'_id': ObjectId(user_id)})
 
-    history = list(gacha_history_collection.find({'user_id': user_id}).sort('timestamp', -1).limit(50))
+    if user:
+        return jsonify({'collection': user.get('collection', {})})
 
-    for record in history:
-        record['_id'] = str(record['_id'])
-        record['timestamp'] = record['timestamp'].isoformat()
-
-    return jsonify({'history': history})
+    return jsonify({'error': 'User not found'}), 404
 
 
 # ==================== HEALTH CHECK ====================
@@ -468,6 +475,5 @@ if __name__ == '__main__':
     users_collection.create_index('google_id', unique=True)
     users_collection.create_index('email')
     tasks_collection.create_index([('user_id', 1), ('start', 1)])
-    gacha_history_collection.create_index([('user_id', 1), ('timestamp', -1)])
 
     app.run(debug=True, host='0.0.0.0', port=5000)

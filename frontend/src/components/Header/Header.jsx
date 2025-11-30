@@ -7,7 +7,7 @@ export default function Header() {
     <header className="pt-header">
       <div className="pt-header-inner">
         <NavLink to="/" className="pt-brand">
-          PomTime
+          PomTime!
         </NavLink>
         <nav className="pt-nav">
           <NavLink to="/calendar" className="pt-link">
@@ -16,11 +16,11 @@ export default function Header() {
           <NavLink to="/gacha" className="pt-link">
             Gacha
           </NavLink>
+          <NavLink to="/inventory" className="pt-link">
+            Inventory
+          </NavLink>
           <NavLink to="/timer" className="pt-link">
             Timer
-          </NavLink>
-          <NavLink to="/Inventory" className="pt-link">
-            Inventory
           </NavLink>
           <NavLink to="/settings" className="pt-link">
             Settings

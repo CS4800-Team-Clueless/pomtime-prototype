@@ -1,6 +1,6 @@
 :root {
   --brand: #5685a5; /* bootstrap primary-like */
-  --bg: #d3dee9;
+  --bg: #d3dee9;    /* fallback color if gradient fails */
   --text: #384a63;
 }
 
@@ -18,9 +18,10 @@ body,
 body {
   margin: 0;
   color: var(--text);
-  background: var(--bg);
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
-    sans-serif;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+
+  background: linear-gradient(135deg, #3a1c71 0%, #d76d77 50%, #ffaf7b 100%);
+  background-attachment: fixed;
 }
 
 .app-root {

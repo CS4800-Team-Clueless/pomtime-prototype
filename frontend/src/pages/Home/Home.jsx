@@ -5,7 +5,7 @@ export default function Home() {
     <section className="home">
       <div className="home-hero">
         <h1>
-          Welcome to <span>PomTime</span>
+          Welcome to <span>PomTime!</span>
         </h1>
         <p>
           Focus hard, rest smart. Track sessions, earn gacha rewards, and

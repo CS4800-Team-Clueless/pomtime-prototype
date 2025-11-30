@@ -1,0 +1,81 @@
+.login-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  padding: 20px;
+}
+
+.login-container {
+  background-color: white;
+  padding: 60px 50px;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  max-width: 450px;
+  width: 100%;
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.login-container h1 {
+  margin-bottom: 12px;
+  color: #1a202c;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.login-container p {
+  margin-bottom: 40px;
+  color: #718096;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* Style for the Google button container */
+.login-container > div {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+/* Add a subtle animation on hover */
+.login-container > div:hover {
+  transform: scale(1.02);
+  transition: transform 0.2s ease;
+}
+
+/* Footer text */
+.login-footer {
+  margin-top: 30px;
+  font-size: 13px;
+  color: #a0aec0;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 40px 30px;
+  }
+
+  .login-container h1 {
+    font-size: 26px;
+  }
+
+  .login-container p {
+    font-size: 14px;
+  }
+}

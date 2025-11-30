@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+import { Modal, Button, Form, Alert } from 'react-bootstrap';
 import { useAuth } from '../../contexts/AuthContext';
 import './TaskModal.css';
 
@@ -13,6 +13,9 @@ export default function TaskModal({ show, onHide, task, slot, onSave }) {
         recurring: false
     });
     const [calculatedPoints, setCalculatedPoints] = useState(1);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
 
     useEffect(() => {
         if (task) {
@@ -34,6 +37,9 @@ export default function TaskModal({ show, onHide, task, slot, onSave }) {
                 recurring: false
             });
         }
+        // Reset states when modal opens/closes
+        setShowDeleteConfirm(false);
+        setShowSuccessMessage(false);
     }, [task, slot, show]);
 
     // Calculate points based on duration
@@ -105,12 +111,13 @@ export default function TaskModal({ show, onHide, task, slot, onSave }) {
     };
 
     const handleDelete = async () => {
-        if (!task || !window.confirm('Are you sure you want to delete this task?')) return;
+        if (!task) return;
 
         try {
             await fetchWithAuth(`${API_URL}/api/tasks/${task._id}`, {
                 method: 'DELETE'
             });
+            setShowDeleteConfirm(false);
             onSave();
         } catch (error) {
             console.error('Error deleting task:', error);
@@ -127,8 +134,12 @@ export default function TaskModal({ show, onHide, task, slot, onSave }) {
             });
             const data = await response.json();
 
-            alert(`Task completed! You earned ${data.points_earned} points! Total: ${data.total_points}`);
-            onSave();
+            setSuccessMessage(`Task completed! You earned ${data.points_earned} points! Total: ${data.total_points}`);
+            setShowSuccessMessage(true);
+
+            setTimeout(() => {
+                onSave();
+            }, 2000);
         } catch (error) {
             console.error('Error completing task:', error);
             alert('Failed to complete task');
@@ -136,102 +147,121 @@ export default function TaskModal({ show, onHide, task, slot, onSave }) {
     };
 
     return (
-        <Modal show={show} onHide={onHide} centered className="task-modal">
+        <Modal show={show} onHide={onHide} centered>
             <Modal.Header closeButton>
                 <Modal.Title>{task ? 'Edit Task' : 'Create Task'}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form onSubmit={handleSubmit}>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Task Title</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name="title"
-                            value={formData.title}
-                            onChange={handleChange}
-                            placeholder="Enter task title"
-                            required
-                        />
-                    </Form.Group>
+                {showSuccessMessage && (
+                    <Alert variant="success" className="mb-3">
+                        {successMessage}
+                    </Alert>
+                )}
 
-                    <Form.Group className="mb-3">
-                        <Form.Label>Start Time</Form.Label>
-                        <Form.Control
-                            type="datetime-local"
-                            name="start"
-                            value={formData.start}
-                            onChange={handleChange}
-                            required
-                        />
-                    </Form.Group>
+                {showDeleteConfirm ? (
+                    <div className="delete-confirmation">
+                        <Alert variant="danger">
+                            <Alert.Heading>Delete Task?</Alert.Heading>
+                            <p>Are you sure you want to delete "{task?.title}"? This action cannot be undone.</p>
+                            <div className="d-flex gap-2 justify-content-end mt-3">
+                                <Button variant="secondary" onClick={() => setShowDeleteConfirm(false)}>
+                                    Cancel
+                                </Button>
+                                <Button variant="danger" onClick={handleDelete}>
+                                    Delete Permanently
+                                </Button>
+                            </div>
+                        </Alert>
+                    </div>
+                ) : (
+                    <Form onSubmit={handleSubmit}>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Task Title</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="title"
+                                value={formData.title}
+                                onChange={handleChange}
+                                placeholder="Enter task title"
+                                required
+                            />
+                        </Form.Group>
 
-                    <Form.Group className="mb-3">
-                        <Form.Label>End Time</Form.Label>
-                        <Form.Control
-                            type="datetime-local"
-                            name="end"
-                            value={formData.end}
-                            onChange={handleChange}
-                            required
-                        />
-                    </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Start Time</Form.Label>
+                            <Form.Control
+                                type="datetime-local"
+                                name="start"
+                                value={formData.start}
+                                onChange={handleChange}
+                                required
+                            />
+                        </Form.Group>
 
-                    <Form.Group className="mb-3">
-                        <Form.Label>
-                            Points (Default: {calculatedPoints} based on duration)
-                        </Form.Label>
-                        <Form.Control
-                            type="number"
-                            name="points"
-                            value={formData.points}
-                            onChange={handleChange}
-                            placeholder={`Auto: ${calculatedPoints} points`}
-                            min="0"
-                            step="0.5"
-                        />
-                        <Form.Text className="text-muted">
-                            Leave blank for auto-calculation (30 min = 1 point)
-                        </Form.Text>
-                    </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>End Time</Form.Label>
+                            <Form.Control
+                                type="datetime-local"
+                                name="end"
+                                value={formData.end}
+                                onChange={handleChange}
+                                required
+                            />
+                        </Form.Group>
 
-                    <Form.Group className="mb-3">
-                        <Form.Check
-                            type="checkbox"
-                            name="recurring"
-                            label="Recurring (daily)"
-                            checked={formData.recurring}
-                            onChange={handleChange}
-                        />
-                    </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>
+                                Points (Default: {calculatedPoints} based on duration)
+                            </Form.Label>
+                            <Form.Control
+                                type="number"
+                                name="points"
+                                value={formData.points}
+                                onChange={handleChange}
+                                placeholder={`Auto: ${calculatedPoints} points`}
+                                min="0"
+                                step="0.5"
+                            />
+                            <Form.Text className="text-muted">
+                                Leave blank for auto-calculation (30 min = 1 point)
+                            </Form.Text>
+                        </Form.Group>
 
-                    <div className="button-container">
-                        {task && !task.completed && (
-                            <div className="complete-section">
-                                <Button variant="success" onClick={handleComplete}>
+                        <Form.Group className="mb-3">
+                            <Form.Check
+                                type="checkbox"
+                                name="recurring"
+                                label="Recurring (daily)"
+                                checked={formData.recurring}
+                                onChange={handleChange}
+                            />
+                        </Form.Group>
+
+                        <div className="task-modal-actions">
+                            {task && !task.completed && (
+                                <Button variant="success" onClick={handleComplete} className="complete-btn">
                                     ✓ Complete Task
                                 </Button>
-                            </div>
-                        )}
-                        {task && task.completed && (
-                            <div className="complete-section">
-                                <span className="text-success fw-bold">✓ Completed</span>
-                            </div>
-                        )}
-                        <div className="button-group">
-                            {task && (
-                                <Button variant="danger" onClick={handleDelete}>
-                                    Delete
-                                </Button>
                             )}
-                            <Button variant="secondary" onClick={onHide}>
-                                Cancel
-                            </Button>
-                            <Button variant="primary" type="submit">
-                                {task ? 'Update' : 'Create'}
-                            </Button>
+                            {task && task.completed && (
+                                <span className="text-success fw-bold completed-badge">✓ Completed</span>
+                            )}
+                            <div className="action-buttons">
+                                {task && (
+                                    <Button variant="danger" onClick={() => setShowDeleteConfirm(true)}>
+                                        Delete
+                                    </Button>
+                                )}
+                                <Button variant="secondary" onClick={onHide}>
+                                    Cancel
+                                </Button>
+                                <Button variant="primary" type="submit">
+                                    {task ? 'Update' : 'Create'}
+                                </Button>
+                            </div>
                         </div>
-                    </div>
-                </Form>
+                    </Form>
+                )}
             </Modal.Body>
         </Modal>
     );

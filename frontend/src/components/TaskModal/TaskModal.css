@@ -32,25 +32,49 @@
   border-color: #059669;
 }
 
-/* Center button layout */
-.task-modal .button-container {
+.delete-confirmation {
+  padding: 1rem;
+}
+
+.delete-confirmation .alert-heading {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.delete-confirmation p {
+  margin-bottom: 0;
+}
+
+.task-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.task-modal-actions .complete-btn,
+.task-modal-actions .completed-badge {
+  width: 100%;
   text-align: center;
 }
 
-.task-modal .button-group {
+.action-buttons {
   display: flex;
   gap: 0.5rem;
-  justify-content: center;
-  flex-wrap: wrap;
-  align-items: center;
+  justify-content: stretch;
 }
 
-.task-modal .button-group .btn {
-  flex: 0 1 auto;
-  min-width: 80px;
-  white-space: nowrap;
+.action-buttons .btn {
+  flex: 1;
+  min-width: 0;
 }
 
-.task-modal .complete-section {
-  margin-bottom: 1rem;
+@media (max-width: 576px) {
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .action-buttons .btn {
+    width: 100%;
+  }
 }

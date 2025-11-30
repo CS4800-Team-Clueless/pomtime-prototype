@@ -6,6 +6,10 @@
   border-bottom: 1px solid #f9fcff;
 }
 
+.pt-header {
+  background: red !important;
+}
+
 .pt-header-inner {
   max-width: 1100px;
   margin: 0 auto;

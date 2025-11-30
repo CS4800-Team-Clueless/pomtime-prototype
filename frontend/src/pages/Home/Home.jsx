@@ -157,7 +157,7 @@ export default function Home() {
             <div className="stat-number">
               {weekTasks.reduce((sum, task) => sum + (task.points || 0), 0)}
             </div>
-            <div className="stat-label">Potential Points</div>
+            <div className="stat-label">Potential Pom Prisms</div>
           </div>
         </div>
       </div>

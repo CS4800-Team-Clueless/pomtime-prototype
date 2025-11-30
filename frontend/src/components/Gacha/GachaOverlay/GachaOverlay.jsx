@@ -20,8 +20,15 @@ export default function GachaOverlay({ show, pulls = [], onClose }) {
       </Modal.Header>
 
       <Modal.Body className={isSingle ? "single-pull" : "grid-pull"}>
-        {pulls.map((pull, i) => (
-          <div key={i} className={`character-card stars-${pull.stars}`}>
+        {pulls.map((pull) => (
+          <div key={pull.id} className={`character-card stars-${pull.stars}`}>
+            <div className="character-image-wrapper">
+              <img
+                src={pull.image}
+                alt={pull.name}
+                className="character-image"
+              />
+            </div>
             <div className="name">{pull.name}</div>
             <div className="stars">{"★".repeat(pull.stars)}</div>
           </div>

@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
 import "./GachaBanner.css";
+import { GACHA_ART, DEFAULT_ART } from "../GachaArt";
 
 export default function GachaBanner({ setResults, setShowOverlay }) {
   const { fetchWithAuth, API_URL } = useAuth();
@@ -17,26 +18,28 @@ export default function GachaBanner({ setResults, setShowOverlay }) {
       const data = await response.json();
       setPoints(data.points);
     } catch (error) {
-      console.error('Error fetching points:', error);
+      console.error("Error fetching points:", error);
     }
   };
 
   const wish = async (count) => {
     if (points < count) {
-      alert(`Insufficient points! You need ${count} points but only have ${points}.`);
+      alert(
+        `Insufficient points! You need ${count} points but only have ${points}.`
+      );
       return;
     }
 
     setLoading(true);
     try {
       const response = await fetchWithAuth(`${API_URL}/api/gacha/roll`, {
-        method: 'POST',
-        body: JSON.stringify({ count })
+        method: "POST",
+        body: JSON.stringify({ count }),
       });
 
       if (!response.ok) {
         const error = await response.json();
-        alert(error.error || 'Failed to perform gacha roll');
+        alert(error.error || "Failed to perform gacha roll");
         return;
       }
 
@@ -46,15 +49,15 @@ export default function GachaBanner({ setResults, setShowOverlay }) {
       const resultsWithIds = data.results.map((r, i) => ({
         id: `${Date.now()}-${i}-${r.name}`,
         ...r,
-        image: undefined
+        image: GACHA_ART[r.name] || DEFAULT_ART,
       }));
 
       setResults(resultsWithIds);
       setShowOverlay(true);
       setPoints(data.remaining_points);
     } catch (error) {
-      console.error('Error performing gacha:', error);
-      alert('Failed to perform gacha roll');
+      console.error("Error performing gacha:", error);
+      alert("Failed to perform gacha roll");
     } finally {
       setLoading(false);
     }

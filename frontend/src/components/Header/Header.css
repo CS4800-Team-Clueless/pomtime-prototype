@@ -1,42 +1,50 @@
+/* Header container similar to footer */
 .pt-header {
-  background: #ffffff !important;
+  background-color: #ffffff; /* solid background like footer */
+  padding: 16px 0;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   position: sticky;
   top: 0;
   z-index: 50;
   width: 100%;
   left: 0;
   right: 0;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
+/* Inner container to center content */
 .pt-header-inner {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 12px 16px;
+  padding: 0 16px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 16px;
 }
 
+/* Brand with purple gradient */
 .pt-brand {
   font-weight: 800;
   font-size: 1.25rem;
   text-decoration: none;
 
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #a855f7 0%, #c084fc 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-
-  color: #a855f7;
+  background-clip: text;
+  color: #a855f7; /* fallback */
 }
 
+/* Navigation links */
 .pt-nav {
-  margin-left: auto;
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
+  align-items: center;
 }
 
+/* Nav link styles */
 .pt-link {
   text-decoration: none;
   color: #4b5563;
@@ -55,19 +63,26 @@
   font-weight: 600;
 }
 
+/* Profile menu */
 .pt-profile-menu {
   display: flex;
   align-items: center;
   margin-left: 16px;
 }
 
-/* Mobile responsive */
+/* Mobile responsiveness */
 @media (max-width: 768px) {
+  .pt-header-inner {
+    flex-direction: column;
+    gap: 8px;
+  }
+
   .pt-nav {
+    justify-content: center;
     margin-left: 0;
   }
 
   .pt-profile-menu {
-    margin-left: auto;
+    margin-left: 0;
   }
 }

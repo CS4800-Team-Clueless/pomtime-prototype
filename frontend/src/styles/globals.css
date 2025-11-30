@@ -1,7 +1,9 @@
 :root {
-  --brand: #5685a5; /* bootstrap primary-like */
-  --bg: #d3dee9;    /* fallback color if gradient fails */
-  --text: #384a63;
+  --brand: ##b36e53; /* bootstrap primary-like */
+  --bg: #f7e6d9; /* fallback color if gradient fails */
+  --text: #724a3a;
+  --active-bg: #ebc1a1;
+  --hover-bg: #f8ddc8;
 }
 
 * {
@@ -18,7 +20,8 @@ body,
 body {
   margin: 0;
   color: var(--text);
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+    sans-serif;
 
   background: linear-gradient(135deg, #3a1c71 0%, #d76d77 50%, #ffaf7b 100%);
   background-attachment: fixed;
@@ -27,13 +30,15 @@ body {
 .points-value {
   font-size: 2rem;
   font-weight: 700;
-  background: linear-gradient(90deg,
+  background: linear-gradient(
+    90deg,
     #e91e63 0%,
     #9c27b0 20%,
     #673ab7 40%,
     #3f51b5 60%,
     #2196f3 80%,
-    #e91e63 100%);
+    #e91e63 100%
+  );
   background-size: 200% auto;
   background-clip: text;
   -webkit-background-clip: text;

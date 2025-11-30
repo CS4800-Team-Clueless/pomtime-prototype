@@ -6,7 +6,7 @@
 }
 
 .pt-header {
-  background: white !important;
+  background: var(--bg);
 }
 
 .pt-header-inner {
@@ -20,13 +20,17 @@
 
 .pt-brand {
   font-weight: 800;
-  font-size: 1.25rem;
+  font-size: 2rem;
   text-decoration: none;
 
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #b36e53;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .pt-nav {
@@ -38,17 +42,22 @@
 
 .pt-link {
   text-decoration: none;
-  color: #4b5563;
+  color: var(--text);
   padding: 8px 10px;
   border-radius: 10px;
   transition: background 0.15s, color 0.15s;
 }
 
+.pt-logo {
+  height: 4rem;
+  width: auto;
+}
+
 .pt-link:hover {
-  background: #f3f4f6;
+  background: var(--hover-bg);
 }
 .pt-link.active {
-  background: #e7f1ff;
+  background: var(--active-bg);
   color: var(--brand);
   font-weight: 600;
 }

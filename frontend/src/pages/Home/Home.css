@@ -4,6 +4,7 @@
   padding: 24px 16px;
   min-height: 80vh;
 }
+
 .home-hero {
   text-align: center;
   margin: 40px 0 24px;
@@ -55,6 +56,7 @@
   color: white;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
+
 .btn-primary:hover {
   background: linear-gradient(135deg, #5568d3 0%, #65408b 100%);
   color: white;
@@ -84,4 +86,263 @@
   color: #6b7280;
   margin: 0;
   font-size: 0.95rem;
+}
+
+/* Agenda Preview Section */
+.agenda-section {
+  margin-top: 48px;
+  background: white;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.agenda-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.agenda-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #374151;
+  margin: 0;
+}
+
+.view-all-link {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: color 0.2s;
+}
+
+.view-all-link:hover {
+  color: #5568d3;
+}
+
+.agenda-loading {
+  text-align: center;
+  padding: 48px 24px;
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+/* Empty State */
+.empty-agenda {
+  text-align: center;
+  padding: 48px 24px;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 16px;
+}
+
+.empty-agenda h3 {
+  font-size: 1.5rem;
+  color: #374151;
+  margin: 0 0 8px;
+}
+
+.empty-agenda p {
+  color: #6b7280;
+  margin: 0 0 24px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.add-task-btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.add-task-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* Task List */
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.task-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  transition: all 0.2s;
+}
+
+.task-card:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+  transform: translateX(4px);
+}
+
+.task-info {
+  flex: 1;
+}
+
+.task-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 4px;
+}
+
+.task-time {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.task-meta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.task-points,
+.task-recurring {
+  font-size: 0.875rem;
+  padding: 4px 12px;
+  border-radius: 8px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.task-points {
+  color: #dc2626;
+}
+
+.task-recurring {
+  color: #667eea;
+}
+
+.view-more-link {
+  display: block;
+  text-align: center;
+  padding: 12px;
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.view-more-link:hover {
+  color: #5568d3;
+}
+
+/* Quick Stats */
+.quick-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.stat-box {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.stat-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.stat-content {
+  flex: 1;
+}
+
+.stat-number {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #374151;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .home {
+    padding: 16px 12px;
+  }
+
+  .home-hero {
+    padding: 32px 20px;
+    margin: 24px 0 20px;
+  }
+
+  .home-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-primary {
+    text-align: center;
+  }
+
+  .home-cards {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .agenda-section {
+    padding: 24px 16px;
+    margin-top: 32px;
+  }
+
+  .agenda-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .task-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .task-meta {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .quick-stats {
+    grid-template-columns: 1fr;
+  }
 }

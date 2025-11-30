@@ -7,7 +7,7 @@ export default function Header() {
     <header className="pt-header">
       <div className="pt-header-inner">
         <NavLink to="/" className="pt-brand">
-          PomTime!
+           Pom🐕Time!
         </NavLink>
         <nav className="pt-nav">
           <NavLink to="/calendar" className="pt-link">

@@ -2,12 +2,8 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  background: #fff;
   border-bottom: 1px solid #f9fcff;
-}
-
-.pt-header {
-  background: red !important;
+  background: #f9fcff !important;
 }
 
 .pt-header-inner {
@@ -22,8 +18,12 @@
 .pt-brand {
   font-weight: 800;
   font-size: 1.25rem;
-  color: var(--brand);
   text-decoration: none;
+
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .pt-nav {

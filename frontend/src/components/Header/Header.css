@@ -4,10 +4,6 @@
   z-index: 50;
   background: #fff;
   border-bottom: 1px solid #f9fcff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  left: 0;
-  right: 0;
 }
 
 .pt-header-inner {
@@ -44,27 +40,8 @@
 .pt-link:hover {
   background: #f3f4f6;
 }
-
 .pt-link.active {
   background: #e7f1ff;
   color: var(--brand);
   font-weight: 600;
-}
-
-/* Profile Menu Styles - ADD THESE */
-.pt-profile-menu {
-  display: flex;
-  align-items: center;
-  margin-left: 16px;
-}
-
-/* Mobile responsive */
-@media (max-width: 768px) {
-  .pt-nav {
-    margin-left: 0;
-  }
-
-  .pt-profile-menu {
-    margin-left: auto;
-  }
 }

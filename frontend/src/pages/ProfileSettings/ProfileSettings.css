@@ -1,0 +1,148 @@
+.profile-settings {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem 1rem;
+}
+
+.profile-settings__container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.profile-settings__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s;
+  margin-bottom: 1.5rem;
+}
+
+.profile-settings__back:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.profile-settings__back svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.profile-settings__title {
+  color: white;
+  font-size: 2.5rem;
+  margin: 0 0 2rem 0;
+  font-weight: 700;
+}
+
+.profile-settings__card {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.profile-settings__section {
+  margin-bottom: 2rem;
+}
+
+.profile-settings__section:last-child {
+  margin-bottom: 0;
+}
+
+.profile-settings__section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 1.5rem 0;
+}
+
+.profile-settings__avatar-section {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.profile-settings__avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 3px solid #6366f1;
+  object-fit: cover;
+}
+
+.profile-settings__name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 0.25rem 0;
+}
+
+.profile-settings__email {
+  color: #6b7280;
+  margin: 0;
+}
+
+.profile-settings__divider {
+  height: 1px;
+  background: #e5e7eb;
+  margin: 2rem 0;
+}
+
+.profile-settings__field {
+  margin-bottom: 1.5rem;
+}
+
+.profile-settings__label {
+  display: block;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.profile-settings__input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  color: #1f2937;
+  background: #f9fafb;
+}
+
+.profile-settings__input:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.profile-settings__note {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin: 1rem 0 0 0;
+  font-style: italic;
+}
+
+.profile-settings__coming-soon {
+  color: #6b7280;
+  font-style: italic;
+}
+
+@media (max-width: 640px) {
+  .profile-settings__title {
+    font-size: 2rem;
+  }
+
+  .profile-settings__card {
+    padding: 1.5rem;
+  }
+
+  .profile-settings__avatar-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

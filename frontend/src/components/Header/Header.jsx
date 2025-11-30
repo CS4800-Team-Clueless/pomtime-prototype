@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import ProfileMenu from "../ProfileMenu/ProfileMenu";
 import "./Header.css";
 
 export default function Header() {
@@ -25,6 +26,10 @@ export default function Header() {
             Settings
           </NavLink>
         </nav>
+        {/* Profile Menu in top right */}
+        <div className="pt-profile-menu">
+          <ProfileMenu />
+        </div>
       </div>
     </header>
   );

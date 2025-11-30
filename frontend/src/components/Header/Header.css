@@ -40,8 +40,27 @@
 .pt-link:hover {
   background: #f3f4f6;
 }
+
 .pt-link.active {
   background: #e7f1ff;
   color: var(--brand);
   font-weight: 600;
+}
+
+/* Profile Menu Styles - ADD THESE */
+.pt-profile-menu {
+  display: flex;
+  align-items: center;
+  margin-left: 16px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .pt-nav {
+    margin-left: 0;
+  }
+
+  .pt-profile-menu {
+    margin-left: auto;
+  }
 }

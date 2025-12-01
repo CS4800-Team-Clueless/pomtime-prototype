@@ -57,12 +57,21 @@
 .level-section {
   max-width: 600px;
   margin: 0 auto 2rem;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
+
+  /* stronger white tint */
+  background: rgba(255, 255, 255, 0.28);
+
+  /* stronger blur */
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
   padding: 1.5rem;
   border-radius: 1rem;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+
+  /* slightly brighter border to match the stronger tint */
+  border: 2px solid rgba(255, 255, 255, 0.45);
 }
+
 
 .level-display {
   display: flex;

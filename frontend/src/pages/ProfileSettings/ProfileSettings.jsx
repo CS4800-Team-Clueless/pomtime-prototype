@@ -221,7 +221,7 @@ export default function ProfileSettings() {
           <div className="profile-settings__section">
             <div className="displayed-header">
               <h2 className="profile-settings__section-title">
-                Displayed Characters
+                Displayed Pomeranians
               </h2>
               <button
                 type="button"

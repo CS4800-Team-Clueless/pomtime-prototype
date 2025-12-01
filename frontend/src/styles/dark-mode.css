@@ -278,6 +278,18 @@ body.dark-mode .points-value {
   animation: rainbow-shift 6s linear infinite;
 }
 
+body.dark-mode .level-section {
+  max-width: 600px;
+  margin: 0 auto 2rem;
+
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  padding: 0.75rem 1.25rem;
+  border-radius: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
 /* Inventory cards */
 body.dark-mode .character-card {
   background: #374151;

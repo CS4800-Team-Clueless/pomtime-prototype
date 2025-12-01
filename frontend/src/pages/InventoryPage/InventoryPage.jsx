@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
+import GACHA_ART, { DEFAULT_ART } from '../../components/Gacha/GachaArt';
 import './InventoryPage.css';
 
 // Character rarity mapping
@@ -139,7 +140,11 @@ export default function Inventory() {
               className={`character-card rarity-${char.stars} ${char.count === 0 ? 'not-owned' : ''}`}
             >
               <div className="character-image">
-                <div className="character-icon">🐕</div>
+                <img
+                  src={GACHA_ART[char.name] || DEFAULT_ART}
+                  alt={char.name}
+                  className="character-artwork"
+                />
               </div>
               <div className="character-info">
                 <div className="character-name">{char.name}</div>

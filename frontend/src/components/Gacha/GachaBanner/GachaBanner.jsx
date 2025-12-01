@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
 import "./GachaBanner.css";
-import { GACHA_ART, DEFAULT_ART } from "../GachaArt";
+import GACHA_ART, { DEFAULT_ART } from "../GachaArt";
 
 export default function GachaBanner({ setResults, setShowOverlay }) {
   const { fetchWithAuth, API_URL } = useAuth();

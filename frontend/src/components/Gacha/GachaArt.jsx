@@ -1,9 +1,8 @@
-import.meta.glob;
 import pomIcon from "../../assets/icons/PomIcon.png";
 
-// gachaArt.js
+// Import all pomeranian character images
 const modules = import.meta.glob(
-  "../assets/gacha/characters/pomeranian/*.png",
+  "../../assets/gacha/characters/pomeranian/*.png",
   { eager: true }
 );
 
@@ -13,7 +12,7 @@ for (const path in modules) {
   const img = modules[path];
 
   // Extract file name from path:
-  // "../assets/.../Snow.png" → "Snow"
+  // "../../assets/.../Snow.png" → "Snow"
   const name = path.split("/").pop().replace(".png", "");
 
   // Store image in the map using the name
@@ -21,5 +20,4 @@ for (const path in modules) {
 }
 
 export default GACHA_ART;
-
 export const DEFAULT_ART = pomIcon;

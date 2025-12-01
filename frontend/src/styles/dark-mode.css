@@ -64,7 +64,7 @@ body.dark-mode .session-label,
 body.dark-mode .counter-text,
 body.dark-mode .pt-footer-link,
 body.dark-mode ul li,
-body.dark-mode p {
+body.dark-mode p:not(.profile-menu__name):not(.profile-menu__email) {
   color: var(--dark-secondary-color);
 }
 

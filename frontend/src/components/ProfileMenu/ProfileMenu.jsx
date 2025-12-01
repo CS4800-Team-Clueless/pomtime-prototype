@@ -2,12 +2,14 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import './ProfileMenu.css';
+import { useSettings } from "../../contexts/SettingsContext";
 
 export default function ProfileMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const menuRef = useRef(null);
+  const { getBackgroundStyle } = useSettings();
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -56,7 +58,7 @@ export default function ProfileMenu() {
       {isOpen && (
         <div className="profile-menu__dropdown">
           {/* User Info Section */}
-          <div className="profile-menu__header">
+          <div className="profile-menu__header" style={getBackgroundStyle()}>
             <div className="profile-menu__user-info">
               <img
                 src={user.picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || user.email)}&size=128&background=6366f1&color=fff`}

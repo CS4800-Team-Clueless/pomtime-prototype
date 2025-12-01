@@ -136,48 +136,63 @@ export const useSettings = () => {
 // Predefined gradients
 export const gradients = {
   'gradient-1': {
-    background: 'linear-gradient(135deg, #667eea 0%, #2d1b69 100%)'
+    background: 'linear-gradient(135deg, #667eea 0%, #2d1b69 100%)',
+    color: '#f9fafb'
   },
   'gradient-2': {
-    background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
+    background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+    color: '#f9fafb'
   },
   'gradient-3': {
-    background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
+    background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+    color: '#1f2937'
   },
   'gradient-4': {
-    background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)'
+    background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+    color: '#1f2937'
   },
   'gradient-5': {
-    background: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)'
+    background: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+    color: '#1f2937'
   },
   'gradient-6': {
-    background: 'linear-gradient(135deg, #30cfd0 0%, #330867 100%)'
+    background: 'linear-gradient(135deg, #30cfd0 0%, #330867 100%)',
+    color: '#f9fafb'
   },
   'gradient-7': {
-    background: 'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)'
+    background: 'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)',
+    color: '#1f2937'
   },
   'gradient-8': {
-    background: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)'
+    background: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)',
+    color: '#1f2937'
   },
   'gradient-9': {
-    background: 'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)'
+    background: 'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)',
+    color: '#1f2937'
   },
   'gradient-10': {
-    background: 'linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%)'
+    background: 'linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%)',
+    color: '#1f2937'
   },
   'gradient-11': {
-    background: 'linear-gradient(135deg, #fdcbf1 0%, #e6dee9 100%)'
+    background: 'linear-gradient(135deg, #fdcbf1 0%, #e6dee9 100%)',
+    color: '#1f2937'
   },
   'gradient-12': {
-    background: 'linear-gradient(135deg, #ff0844 0%, #ffb199 100%)'
+    background: 'linear-gradient(135deg, #ff0844 0%, #ffb199 100%)',
+    color: '#f9fafb'
   },
   'gradient-13': {
-    background: 'linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%)'
+    background: 'linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%)',
+    color: '#f9fafb'
   },
   'gradient-14': {
-    background: 'linear-gradient(135deg, #f83600 0%, #f9d423 100%)'
+    background: 'linear-gradient(135deg, #f83600 0%, #f9d423 100%)',
+    color: '#f9fafb'
   },
   'gradient-15': {
-    background: 'linear-gradient(135deg, #4568dc 0%, #b06ab3 100%)'
+    background: 'linear-gradient(135deg, #4568dc 0%, #b06ab3 100%)',
+    color: '#f9fafb'
   }
 };

@@ -2,17 +2,19 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import './ProfileSettings.css';
+import { useSettings } from '../../contexts/SettingsContext';
 
 export default function ProfileSettings() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { getBackgroundStyle } = useSettings();
 
   const handleBack = () => {
     navigate('/');
   };
 
   return (
-    <div className="profile-settings">
+    <div className="profile-settings" style={getBackgroundStyle()}>
       <div className="profile-settings__container">
         <button onClick={handleBack} className="profile-settings__back">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

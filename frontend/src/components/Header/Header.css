@@ -7,6 +7,7 @@
 
 .pt-header {
   background: var(--bg);
+  border-bottom: none;
 }
 
 .pt-header-inner {
@@ -23,10 +24,7 @@
   font-size: 2rem;
   text-decoration: none;
 
-  background: #b36e53;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--brand);
 
   display: flex;
   align-items: center;
@@ -58,6 +56,6 @@
 }
 .pt-link.active {
   background: var(--active-bg);
-  color: var(--brand);
-  font-weight: 600;
+  color: var(--active-text);
+  font-weight: bold;
 }

@@ -1,10 +1,12 @@
 :root {
-  --brand: ##b36e53; /* bootstrap primary-like */
-  --bg: #f7e6d9; /* fallback color if gradient fails */
-  --text: #724a3a;
-  --hover-text: rgb(59, 40, 32);
-  --active-bg: #ebc1a1;
-  --hover-bg: #f8ddc8;
+  --brand: #b36e53; /* bootstrap primary-like */
+  --bg: #ffffff; /* fallback color if gradient fails */
+  --text: #353f4e;
+  --hover-text: #2e3642;
+  --active-text: #222e41;
+  --active-bg: #e0e3e7;
+  --hover-bg: #e7eaee;
+  --card-bg: #ffffff;
 }
 
 * {

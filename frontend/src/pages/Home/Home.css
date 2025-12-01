@@ -307,7 +307,7 @@
 .stat-box .stat-number {
   font-size: 1.75rem;
   font-weight: 700;
-  color: #000000 !important;
+  color: #000000;
   line-height: 1;
   margin-bottom: 4px;
 }
@@ -315,7 +315,7 @@
 .home .stat-label,
 .stat-box .stat-label {
   font-size: 0.875rem;
-  color: #000000 !important;
+  color: #000000;
   font-weight: 500;
 }
 

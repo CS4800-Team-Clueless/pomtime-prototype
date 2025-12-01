@@ -1,5 +1,10 @@
 /* Dark Mode Styles - Add to src/styles/dark-mode.css */
 
+:root {
+  --dark-primary-color: #f9fafb;
+  --dark-secondary-color: #b3b7be;
+}
+
 /* Light mode defaults (no class needed) */
 body {
   color: #1f2937;
@@ -14,6 +19,9 @@ body.dark-mode {
 /* Cards and containers */
 body.dark-mode .settings-card,
 body.dark-mode .agenda-section,
+body.dark-mode .home-hero,
+body.dark-mode .timer-section,
+body.dark-mode .info-section,
 body.dark-mode .stat-card,
 body.dark-mode .calendar-container,
 body.dark-mode .task-card,
@@ -28,24 +36,36 @@ body.dark-mode .settings-card {
 }
 
 /* Text colors */
+
+/* Primary Color */
 body.dark-mode .settings-section-title,
 body.dark-mode .agenda-title,
 body.dark-mode .task-title,
 body.dark-mode .character-name,
 body.dark-mode .toggle-label,
+body.dark-mode .stat-label,
+body.dark-mode .stat-number,
+body.dark-mode .pt-footer-text,
+body.dark-mode .time,
 body.dark-mode h1,
 body.dark-mode h2,
 body.dark-mode h3 {
-  color: #f9fafb;
+  color: var(--dark-primary-color);
 }
 
+ /* Secondary Color */
 body.dark-mode .settings-section-desc,
 body.dark-mode .toggle-desc,
 body.dark-mode .task-time,
 body.dark-mode .upload-hint,
 body.dark-mode .character-count,
+body.dark-mode .home-hero p,
+body.dark-mode .session-label,
+body.dark-mode .counter-text,
+body.dark-mode .pt-footer-link,
+body.dark-mode ul li,
 body.dark-mode p {
-  color: #9ca3af;
+  color: var(--dark-secondary-color);
 }
 
 /* Inputs and forms */
@@ -101,7 +121,7 @@ body.dark-mode .pt-header {
 }
 
 body.dark-mode .pt-link {
-  color: #9ca3af;
+  color: var(--dark-secondary-color);
 }
 
 body.dark-mode .pt-link:hover {
@@ -111,17 +131,21 @@ body.dark-mode .pt-link:hover {
 
 body.dark-mode .pt-link.active {
   background: #374151;
-  color: #6366f1;
+  color: #a7a8e2;
 }
 
 /* Footer */
-body.dark-mode .footer {
+body.dark-mode .pt-footer {
   background: #1f2937;
   border-top-color: #374151;
 }
 
-body.dark-mode .footer__text {
-  color: #9ca3af;
+/* Home Page */
+body.dark-mode .home-hero h1 span {
+  background: linear-gradient(135deg, #8899e4 0%, #bd96e5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* Calendar */
@@ -171,7 +195,7 @@ body.dark-mode .rbc-toolbar button.rbc-active {
 }
 
 body.dark-mode .rbc-toolbar-label {
-  color: #f9fafb;
+  color: var(--dark-primary-color);
 }
 
 /* Modals */
@@ -204,6 +228,27 @@ body.dark-mode .task-recurring {
   background: #1f2937;
 }
 
+/* Inventory Stats */
+body.dark-mode .points-value {
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(
+    90deg,
+  #f48fb1 0%,
+  #ce93d8 20%,
+  #ad8ce6 40%,
+  #8fa3f0 60%,
+  #6fbafc 80%,
+  #f48fb1 100%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.25rem;
+  animation: rainbow-shift 6s linear infinite;
+}
+
 /* Inventory cards */
 body.dark-mode .character-card {
   background: #374151;
@@ -225,11 +270,6 @@ body.dark-mode .character-card.rarity-3 {
 body.dark-mode .empty-agenda,
 body.dark-mode .empty-state {
   color: #e5e7eb;
-}
-
-body.dark-mode .empty-agenda p,
-body.dark-mode .empty-state p {
-  color: #9ca3af;
 }
 
 /* Profile menu */
@@ -268,4 +308,22 @@ body.dark-mode .preview-thumbnail {
 
 body.dark-mode .preview-overlay {
   background: rgba(0, 0, 0, 0.8);
+}
+
+/* TIMER PAGE */
+
+body.dark-mode .session-type-selector {
+  background: #374151;
+}
+
+body.dark-mode .session-type-selector .type-btn {
+  color: #e5e7eb;
+}
+
+body.dark-mode .session-type-selector .type-btn.active {
+  background-color: rgb(94, 116, 213);
+}
+
+body.dark-mode .session-type-selector .type-btn:hover:not(.active) {
+  background-color: #2d3542;
 }

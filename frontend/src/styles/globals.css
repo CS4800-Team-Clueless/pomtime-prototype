@@ -2,6 +2,7 @@
   --brand: ##b36e53; /* bootstrap primary-like */
   --bg: #f7e6d9; /* fallback color if gradient fails */
   --text: #724a3a;
+  --hover-text: rgb(59, 40, 32);
   --active-bg: #ebc1a1;
   --hover-bg: #f8ddc8;
 }

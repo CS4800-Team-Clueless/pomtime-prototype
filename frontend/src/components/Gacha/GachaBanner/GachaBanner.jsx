@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
 import "./GachaBanner.css";
-import { GACHA_ART, DEFAULT_ART } from "../GachaArt";
+import GACHA_ART, { DEFAULT_ART } from "../GachaArt";
+import pomBanner from "../../../assets/gacha/banners/Pomeranian_Banner.png";
 
 export default function GachaBanner({ setResults, setShowOverlay }) {
   const { fetchWithAuth, API_URL } = useAuth();
@@ -65,35 +66,54 @@ export default function GachaBanner({ setResults, setShowOverlay }) {
 
   return (
     <div className="banner">
-      <div className="points-display">
-        <span className="points-icon"></span>
-        <span className="points-value">{Math.floor(points)}🐕</span>
-        <span className="points-label">Pom Prisms</span>
+      {/* Top Bar: Title on Left, Points on Right */}
+      <div className="banner-top">
+        <div className="banner-titles">
+          <h1 className="banner-title">Pomeranian Banner</h1>
+          <p className="banner-sub">Featured 5★: King, Angel, Dragon</p>
+        </div>
+
+        <div className="points-display">
+          <span className="points-icon"></span>
+          <span className="points-value">{Math.floor(points)}🐕</span>
+          <span className="points-label">Pom Prisms</span>
+        </div>
       </div>
 
-      <h1 className="banner-title">Pomeranian Banner</h1>
-      <p className="banner-sub">Featured 5★: King, Angel, Dragon</p>
-
-      <div className="banner-actions">
-        <button
-          className="btn primary"
-          onClick={() => wish(1)}
-          disabled={loading || points < 1}
-        >
-          Wish x1 <span className="cost">(1 🐶)</span>
-        </button>
-        <button
-          className="ten-btn"
-          onClick={() => wish(10)}
-          disabled={loading || points < 10}
-        >
-          Wish x10 <span className="cost">(10 🐶)</span>
-        </button>
+      {/* Banner Art - Centered */}
+      <div className="banner-inner">
+        <div className="banner-art">
+          <img
+            src={pomBanner}
+            alt="Pomeranian Gacha Banner"
+            className="banner-art-image"
+          />
+        </div>
       </div>
 
-      <p className="warning-text">
-        Complete tasks in the calendar to earn more Pom Prisms!
-      </p>
+      {/* Bottom: Buttons and Warning */}
+      <div className="banner-info">
+        <p className="warning-text">
+          Complete tasks in the calendar to earn more Pom Prisms!
+        </p>
+
+        <div className="banner-actions">
+          <button
+            className="btn primary"
+            onClick={() => wish(1)}
+            disabled={loading || points < 1}
+          >
+            Wish x1 <span className="cost">(1 🐶)</span>
+          </button>
+          <button
+            className="ten-btn"
+            onClick={() => wish(10)}
+            disabled={loading || points < 10}
+          >
+            Wish x10 <span className="cost">(10 🐶)</span>
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

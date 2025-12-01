@@ -1,0 +1,78 @@
+.character-overlay__info {
+  font-size: 0.9rem;
+  color: #d0d4dc;
+  margin-bottom: 4px;
+}
+
+.character-overlay__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.character-overlay__card {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 8px;
+  background: #151922;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.character-overlay__card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.6);
+}
+
+.character-overlay__card--selected {
+  border-color: #f6d073;
+  box-shadow: 0 0 0 1px rgba(246, 208, 115, 0.5);
+}
+
+.character-overlay__image-wrapper {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #1b222c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.character-overlay__image {
+  width: 90%;
+  height: auto;
+  object-fit: contain;
+}
+
+.character-overlay__check {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: #f6d073;
+  color: #1a1c22;
+  border-radius: 999px;
+  width: 20px;
+  height: 20px;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.character-overlay__name {
+  font-size: 0.85rem;
+  color: #f5f5f5;
+}
+
+.character-overlay__count {
+  font-size: 0.75rem;
+  color: #a5acbd;
+}

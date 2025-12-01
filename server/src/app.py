@@ -26,6 +26,7 @@ client = MongoClient(
 db = client[DB_NAME]
 users_collection = db['users']
 tasks_collection = db['tasks']
+pomodoro_collection = db['pomodoro_sessions']
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', secrets.token_hex(32))
@@ -105,6 +106,7 @@ def google_auth():
                 'name': name,
                 'picture': picture,
                 'points': 0,  # Initialize with 0 points
+                'pomodoro_sessions': 0,  # Initialize session count
                 'collection': {},  # Initialize empty collection
                 'settings': {  # Initialize default settings
                     'background_type': 'gradient',
@@ -467,6 +469,75 @@ def get_collection():
     return jsonify({'error': 'User not found'}), 404
 
 
+# ====================== POMODORO ROUTES ======================
+@app.route('/api/pomodoro/complete', methods=['POST'])
+@require_auth
+def complete_timer():
+    """
+    Mark a pomodoro timer as complete:
+    - increments user points
+    - increments pomodoro_sessions count
+    - updates a collection entry
+    - logs the session in pomodoro_collection
+    """
+    user_id = request.user['user_id']
+    data = request.get_json()
+
+    # You can send these from the frontend
+    duration_minutes = data.get('duration_minutes', 25)
+    label = data.get('label', 'Pomodoro Session')
+    # simple points rule: 2 point per 25 minutes
+    points = data.get('points', max(2, round(duration_minutes / 25)))
+
+    # Update user doc: points, pomodoro_sessions, and collection
+    update_fields = {
+        'points': points,
+        'pomodoro_sessions': 1,
+        'collection.Pomodoro': 1,   # or any key name you like
+    }
+
+    users_collection.update_one(
+        {'_id': ObjectId(user_id)},
+        {'$inc': update_fields}
+    )
+
+    # Insert a row into pomodoro_collection for history
+    pomodoro_session = {
+        'user_id': user_id,
+        'label': label,
+        'duration_minutes': duration_minutes,
+        'points_earned': points,
+        'completed_at': datetime.utcnow(),
+    }
+
+    pomodoro_collection.insert_one(pomodoro_session)
+
+    # Return updated user info
+    user = users_collection.find_one({'_id': ObjectId(user_id)})
+
+    return jsonify({
+        'success': True,
+        'points_earned': points,
+        'total_points': user.get('points', 0),
+        'pomodoro_sessions': user.get('pomodoro_sessions', 0),
+        'collection': user.get('collection', {})
+    })
+
+@app.route('/api/pomodoro/sessions', methods=['GET'])
+@require_auth
+def get_sessions():
+    """Get user's pomodoro sessions history"""
+    user_id = request.user['user_id']
+
+    sessions = list(pomodoro_collection.find({'user_id': user_id}))
+
+    # Convert ObjectId to string
+    for session in sessions:
+        session['_id'] = str(session['_id'])
+
+    return jsonify({'sessions': sessions})
+
+
 # ==================== SETTINGS ROUTES ====================
 
 @app.route('/api/settings', methods=['GET'])
@@ -544,6 +615,73 @@ def upload_background_image():
         'success': True,
         'image_url': data_uri
     })
+
+
+# =================== PROFILE SETTINGS ====================
+@app.route('/api/user/displayed-characters', methods=['GET'])
+@require_auth
+def get_displayed_characters():
+    """Get user's displayed characters"""
+    user_id = request.user['user_id']
+    
+    try:
+        user = users_collection.find_one({'_id': ObjectId(user_id)})
+        
+        if not user:
+            return jsonify({'error': 'User not found'}), 404
+        
+        displayed_characters = user.get('displayed_characters', [])
+        
+        return jsonify({
+            'displayed_characters': displayed_characters
+        }), 200
+        
+    except Exception as e:
+        print(f"Error fetching displayed characters: {e}")
+        return jsonify({'error': 'Failed to fetch displayed characters'}), 500
+
+
+@app.route('/api/user/displayed-characters', methods=['PUT'])
+@require_auth
+def update_displayed_characters():
+    """Update user's displayed characters"""
+    user_id = request.user['user_id']
+    data = request.get_json()
+    
+    displayed_characters = data.get('displayed_characters', [])
+    
+    # Validate max limit (6)
+    MAX_DISPLAY_LIMIT = 6
+    if len(displayed_characters) > MAX_DISPLAY_LIMIT:
+        return jsonify({
+            'error': f'Cannot display more than {MAX_DISPLAY_LIMIT} characters'
+        }), 400
+    
+    try:
+        # Verify all characters are in user's collection
+        user = users_collection.find_one({'_id': ObjectId(user_id)})
+        collection = user.get('collection', {})
+        
+        for character_name in displayed_characters:
+            if character_name not in collection:
+                return jsonify({
+                    'error': f'{character_name} is not in your collection'
+                }), 400
+        
+        # Update displayed characters
+        users_collection.update_one(
+            {'_id': ObjectId(user_id)},
+            {'$set': {'displayed_characters': displayed_characters}}
+        )
+        
+        return jsonify({
+            'success': True,
+            'displayed_characters': displayed_characters
+        }), 200
+        
+    except Exception as e:
+        print(f"Error updating displayed characters: {e}")
+        return jsonify({'error': 'Failed to update displayed characters'}), 500
 
 
 # ==================== HEALTH CHECK ====================

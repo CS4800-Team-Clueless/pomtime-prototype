@@ -1,9 +1,11 @@
 /* Dark Mode Styles - Add to src/styles/dark-mode.css */
 
-:root.dark-mode {
+:root {
   --dark-primary-color: #f9fafb;
   --dark-secondary-color: #b3b7be;
+}
 
+:root.dark-mode {
   --brand: #c47d61; /* bootstrap primary-like */
   --bg: #1f2937; /* fallback color if gradient fails */
   --text: #e5e7eb;
@@ -71,8 +73,7 @@ body.dark-mode .home-hero p,
 body.dark-mode .session-label,
 body.dark-mode .counter-text,
 body.dark-mode .pt-footer-link,
-body.dark-mode ul li,
-body.dark-mode p:not(.profile-menu__name):not(.profile-menu__email) {
+body.dark-mode ul li {
   color: var(--dark-secondary-color);
 }
 
@@ -282,15 +283,21 @@ body.dark-mode .character-card {
   background: #374151;
 }
 
-body.dark-mode .character-card.rarity-5 {
+body.dark-mode .character-card.rarity-5,
+body.dark-mode .displayed-character-card.rarity-5,
+body.dark-mode .character-overlay__card.rarity-5 {
   background: linear-gradient(135deg, #78350f 0%, #92400e 100%);
 }
 
-body.dark-mode .character-card.rarity-4 {
+body.dark-mode .character-card.rarity-4,
+body.dark-mode .displayed-character-card.rarity-4,
+body.dark-mode .character-overlay__card.rarity-4 {
   background: linear-gradient(135deg, #4c1d95 0%, #5b21b6 100%);
 }
 
-body.dark-mode .character-card.rarity-3 {
+body.dark-mode .character-card.rarity-3,
+body.dark-mode .displayed-character-card.rarity-3,
+body.dark-mode .character-overlay__card.rarity-3 {
   background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
 }
 

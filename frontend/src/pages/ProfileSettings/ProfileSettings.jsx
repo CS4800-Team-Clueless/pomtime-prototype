@@ -4,9 +4,32 @@ import { useAuth } from "../../contexts/AuthContext";
 import GACHA_ART, { DEFAULT_ART } from "../../components/Gacha/GachaArt";
 import CharacterDisplayOverlay from "../../components/ProfileSettings/CharacterDisplayOverlay/CharacterDisplayOverlay";
 import "./ProfileSettings.css";
-import { set } from "date-fns";
+
+import pomIcon from "../../assets/icons/PomIcon.png";
 
 const MAX_DISPLAY_LIMIT = 6;
+
+// Character rarity mapping
+const CHARACTER_RARITY = {
+  // 5-star
+  King: 5,
+  Angel: 5,
+  Dragon: 5,
+  // 4-star
+  Snow: 4,
+  Prince: 4,
+  Moon: 4,
+  Autumn: 4,
+  // 3-star
+  White: 3,
+  Brown: 3,
+  Orange: 3,
+  Black: 3,
+  Cream: 3,
+  Gray: 3,
+  Tan: 3,
+  Beige: 3,
+};
 
 export default function ProfileSettings() {
   const { user, fetchWithAuth, API_URL } = useAuth();
@@ -34,21 +57,28 @@ export default function ProfileSettings() {
       const response = await fetchWithAuth(`${API_URL}/api/collection`);
       const data = await response.json();
 
-      const collection = data.collection || {};
+      const rawCollection = data.collection || {};
 
-      const total_characters = Object.values(collection).reduce(
+      const enhancedCollection = Object.fromEntries(
+        Object.entries(rawCollection).map(([name, count]) => [
+          name,
+          {
+            count,
+            rarity: CHARACTER_RARITY[name] || 3, // default 3-star
+          },
+        ])
+      );
+
+      const total_characters = Object.values(rawCollection).reduce(
         (sum, val) => sum + val,
-
         0
       );
-      const unique_character = Object.keys(collection).length;
+      const unique_character = Object.keys(rawCollection).length;
 
-      setCollection(data.collection || {});
+      setCollection(enhancedCollection);
       setStats((prev) => ({
         ...prev,
-
         total_characters,
-
         unique_character,
       }));
     } catch (error) {
@@ -71,6 +101,8 @@ export default function ProfileSettings() {
       }));
     } catch (error) {
       console.error("Error fetching points:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -83,6 +115,8 @@ export default function ProfileSettings() {
       setDisplayedCharacters(data.displayed_characters || []);
     } catch (error) {
       console.error("Error fetching displayed characters:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -105,49 +139,18 @@ export default function ProfileSettings() {
     } catch (err) {
       console.error("Error updating displayed characters:", err);
       alert("Failed to update displayed characters.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleBack = () => {
-    navigate("/");
-  };
-
-  // Helper to get rarity from character pools
-  const FIVE_STAR_POOL = ["King", "Angel", "Dragon"];
-  const FOUR_STAR_POOL = ["Snow", "Prince", "Moon", "Autumn"];
-
   const getCharacterRarity = (name) => {
-    if (FIVE_STAR_POOL.includes(name)) return 5;
-    if (FOUR_STAR_POOL.includes(name)) return 4;
-    return 3;
-  };
-
-  const getRarityClass = (rarity) => {
-    if (rarity === 5) return "character-card__rarity--5star";
-    if (rarity === 4) return "character-card__rarity--4star";
-    if (rarity === 3) return "character-card__rarity--3star";
-    return "";
-  };
-
-  const getRarityStars = (rarity) => {
-    return "★".repeat(rarity);
+    return CHARACTER_RARITY[name] || 3; // Default to 3-star if not found
   };
 
   return (
     <div className="profile-settings">
       <div className="profile-settings__container">
-        <button onClick={handleBack} className="profile-settings__back">
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <path d="M19 12H5M12 19l-7-7 7-7" />
-          </svg>
-          Back
-        </button>
-
         <h1 className="profile-settings__title">Profile Settings</h1>
 
         <div className="profile-settings__card">
@@ -183,23 +186,31 @@ export default function ProfileSettings() {
           <div className="profile-settings__section">
             <h2 className="profile-settings__section-title">Statistics</h2>
 
-            <div className="stats-grid">
-              <div className="stat-card">
-                <div className="stat-card__icon">🍅</div>
-                <p className="stat-card__value">{stats.total_sessions}</p>
-                <p className="stat-card__label">Pomodoro Sessions</p>
+            <div className="profile-stats-grid">
+              <div className="profile-stat-card">
+                <div className="profile-stat-card__icon">🍅</div>
+                <p className="profile-stat-card__value">
+                  {stats.total_sessions}
+                </p>
+                <p className="profile-stat-card__label">Pomodoro Sessions</p>
               </div>
 
-              <div className="stat-card">
-                <div className="stat-card__icon">🐕</div>
-                <p className="stat-card__value">{stats.total_characters}</p>
-                <p className="stat-card__label">Total Pomeranians</p>
+              <div className="profile-stat-card">
+                <div className="profile-stat-card__icon">
+                  <img src={pomIcon} alt="Pomeranian Icon" />
+                </div>
+                <p className="profile-stat-card__value">
+                  {stats.total_characters}
+                </p>
+                <p className="profile-stat-card__label">Total Pomeranians</p>
               </div>
 
-              <div className="stat-card">
-                <div className="stat-card__icon">✨</div>
-                <p className="stat-card__value">{stats.unique_character}</p>
-                <p className="stat-card__label">Unique Collected</p>
+              <div className="profile-stat-card">
+                <div className="profile-stat-card__icon">✨</div>
+                <p className="profile-stat-card__value">
+                  {stats.unique_character}
+                </p>
+                <p className="profile-stat-card__label">Unique Collected</p>
               </div>
             </div>
           </div>
@@ -230,28 +241,23 @@ export default function ProfileSettings() {
               </button>
             </div>
 
-            <p className="displayed-count">
-              {displayedCharacters.length} / {MAX_DISPLAY_LIMIT} selected
-            </p>
-
             {displayedCharacters.length > 0 ? (
               <div className="displayed-grid">
-                {displayedCharacters.map((name, index) => {
+                {displayedCharacters.map((name) => {
                   const rarity = getCharacterRarity(name);
                   return (
-                    <div key={`${name}-${index}`} className="displayed-card">
+                    <div
+                      key={name}
+                      className={`displayed-character-card rarity-${rarity}`}
+                    >
                       <img
                         src={GACHA_ART[name] || DEFAULT_ART}
                         alt={name}
-                        className="displayed-card__image"
+                        className="displayed-character-image"
                       />
-                      <p className="displayed-card__name">{name}</p>
-                      <p
-                        className={`displayed-card__rarity ${getRarityClass(
-                          rarity
-                        )}`}
-                      >
-                        {getRarityStars(rarity)}
+                      <p className="displayed-character-name">{name}</p>
+                      <p className={`displayed-character-stars`}>
+                        {"★".repeat(rarity)}
                       </p>
                     </div>
                   );
@@ -260,14 +266,12 @@ export default function ProfileSettings() {
             ) : (
               <div className="displayed-empty">
                 <p>No characters displayed yet.</p>
-                <button
-                  className="displayed-empty-button"
-                  onClick={() => setShowCharacterOverlay(true)}
-                >
-                  Select Characters to Display
-                </button>
               </div>
             )}
+
+            <p className="displayed-count">
+              {displayedCharacters.length} / {MAX_DISPLAY_LIMIT} selected
+            </p>
           </div>
 
           <div className="profile-settings__divider"></div>

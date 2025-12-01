@@ -13,6 +13,5 @@ for (const path in modules) {
   GACHA_ART[name] = img.default || img;
 }
 
-console.log("Final GACHA_ART:", GACHA_ART);
 export default GACHA_ART;
 export const DEFAULT_ART = pomIcon;

@@ -38,25 +38,25 @@ export default function CalendarPage() {
         {
             title: 'Christmas Eve',
             start: new Date(2025, 11, 24, 0, 0),
-            end: new Date(2025, 11, 24, 23, 59),
+            end: new Date(2025, 11, 25, 0, 0),
             isHoliday: true
         },
         {
             title: 'Christmas Day',
             start: new Date(2025, 11, 25, 0, 0),
-            end: new Date(2025, 11, 25, 23, 59),
+            end: new Date(2025, 11, 26, 0, 0),
             isHoliday: true
         },
         {
             title: "New Year's Eve",
             start: new Date(2025, 11, 31, 0, 0),
-            end: new Date(2025, 11, 31, 23, 59),
+            end: new Date(2026, 0, 1, 0, 0),
             isHoliday: true
         },
         {
             title: "New Year's Day",
             start: new Date(2026, 0, 1, 0, 0),
-            end: new Date(2026, 0, 1, 23, 59),
+            end: new Date(2026, 0, 2, 0, 0),
             isHoliday: true
         }
     ];
@@ -122,6 +122,7 @@ export default function CalendarPage() {
             return {
                 style: {
                     backgroundColor: '#fbbf24',
+                    color: 'black',
                     border: 'none',
                     opacity: 0.8
                 }
@@ -131,7 +132,8 @@ export default function CalendarPage() {
         if (event.completed) {
             return {
                 style: {
-                    backgroundColor: '#10b981',
+                    backgroundColor: '#72d6b5ff',
+                    color: 'white',
                     border: 'none',
                     textDecoration: 'line-through'
                 }
@@ -140,16 +142,17 @@ export default function CalendarPage() {
 
         // Generate random color for each task based on task ID
         const colors = [
-            '#6366f1', // Indigo
-            '#8b5cf6', // Purple
-            '#ec4899', // Pink
-            '#f59e0b', // Amber
-            '#10b981', // Emerald
-            '#06b6d4', // Cyan
-            '#3b82f6', // Blue
-            '#f43f5e', // Rose
-            '#8b5cf6', // Violet
-            '#14b8a6', // Teal
+            '#7986cb', // Indigo
+            '#9c6edc', // Purple
+            '#f06292', // Pink
+            '#ffb300', // Amber
+            '#66bb6a', // Emerald
+            '#4fc3f7', // Cyan
+            '#64b5f6', // Blue
+            '#f06292', // Rose
+            '#9c6edc', // Violet
+            '#66c8b1'  // Teal
+
         ];
 
         // Use task ID to consistently assign same color to same task
@@ -160,6 +163,7 @@ export default function CalendarPage() {
         return {
             style: {
                 backgroundColor: colors[colorIndex],
+                color: 'black',
                 border: 'none'
             }
         };

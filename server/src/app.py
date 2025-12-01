@@ -34,7 +34,8 @@ app.secret_key = os.getenv('SECRET_KEY', secrets.token_hex(32))
 CORS(app, supports_credentials=True, origins=[
     'http://localhost:5173',
     os.getenv('FRONTEND_URL', 'http://localhost:5173')
-])
+], methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+     allow_headers=['Content-Type', 'Authorization'])
 
 # Google OAuth settings
 GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
@@ -106,6 +107,8 @@ def google_auth():
                 'picture': picture,
                 'points': 0,  # Initialize with 0 points
                 'collection': {},  # Initialize empty collection
+                'level': 1,  # Initialize at level 1
+                'experience': 0,  # Initialize with 0 XP
                 'settings': {  # Initialize default settings
                     'background_type': 'gradient',
                     'background_value': 'gradient-1',
@@ -466,6 +469,177 @@ def get_collection():
 
     return jsonify({'error': 'User not found'}), 404
 
+
+# ==================== LEVEL/EXPERIENCE ROUTES ====================
+
+def calculate_level_from_xp(xp):
+    """Calculate level based on total XP (100 XP per level)"""
+    return max(1, int(xp // 100) + 1)
+
+
+def xp_for_next_level(current_level):
+    """Calculate XP needed for next level"""
+    return current_level * 100
+
+
+def get_xp_for_rarity(stars):
+    """Get XP reward based on rarity"""
+    xp_rewards = {
+        3: 25,  # 3-star = 25 XP
+        4: 75,  # 4-star = 75 XP
+        5: 200  # 5-star = 200 XP
+    }
+    return xp_rewards.get(stars, 25)
+
+
+@app.route('/api/profile/stats', methods=['GET'])
+@require_auth
+def get_profile_stats():
+    """Get user's level and experience"""
+    user_id = request.user['user_id']
+    user = users_collection.find_one({'_id': ObjectId(user_id)})
+
+    if user:
+        # Initialize level and experience if they don't exist (for existing users)
+        if 'level' not in user:
+            users_collection.update_one(
+                {'_id': ObjectId(user_id)},
+                {'$set': {'level': 1, 'experience': 0}}
+            )
+            user['level'] = 1
+            user['experience'] = 0
+
+        level = user.get('level', 1)
+        experience = user.get('experience', 0)
+
+        # Calculate progress to next level
+        current_level_xp = (level - 1) * 100
+        xp_in_current_level = experience - current_level_xp
+        xp_needed_for_next = 100
+
+        return jsonify({
+            'level': level,
+            'experience': experience,
+            'xp_in_current_level': xp_in_current_level,
+            'xp_needed_for_next': xp_needed_for_next
+        })
+
+    return jsonify({'error': 'User not found'}), 404
+
+
+@app.route('/api/collection/release', methods=['OPTIONS'])
+def handle_release_options():
+    """Handle OPTIONS preflight for release endpoint"""
+    response = jsonify({'status': 'ok'})
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'POST,OPTIONS')
+    return response, 200
+
+
+@app.route('/api/collection/release', methods=['POST'])
+@require_auth
+def release_character():
+    """Release a character for XP"""
+    user_id = request.user['user_id']
+    data = request.get_json()
+
+    char_name = data.get('character')
+    release_count = data.get('count', 1)  # Allow releasing multiple
+
+    if not char_name:
+        return jsonify({'error': 'Character name required'}), 400
+
+    if release_count < 1:
+        return jsonify({'error': 'Invalid count'}), 400
+
+    # Get character rarity
+    char_rarity = None
+    all_chars = (
+            [(name, 5) for name in FIVE_STAR_POOL] +
+            [(name, 4) for name in FOUR_STAR_POOL] +
+            [(name, 3) for name in THREE_STAR_POOL]
+    )
+
+    for name, stars in all_chars:
+        if name == char_name:
+            char_rarity = stars
+            break
+
+    if not char_rarity:
+        return jsonify({'error': 'Invalid character'}), 400
+
+    # Check if user owns this character
+    user = users_collection.find_one({'_id': ObjectId(user_id)})
+    collection = user.get('collection', {})
+
+    current_count = collection.get(char_name, 0)
+    if current_count < release_count:
+        return jsonify({'error': f'Only own {current_count}, cannot release {release_count}'}), 400
+
+    # Calculate XP reward
+    xp_per_char = get_xp_for_rarity(char_rarity)
+    total_xp_gained = xp_per_char * release_count
+
+    # Remove copies of the character
+    new_count = current_count - release_count
+
+    # Initialize level/xp if not exists
+    if 'level' not in user:
+        users_collection.update_one(
+            {'_id': ObjectId(user_id)},
+            {'$set': {'level': 1, 'experience': 0}}
+        )
+        user['level'] = 1
+        user['experience'] = 0
+
+    # Update user's collection and experience
+    if new_count == 0:
+        users_collection.update_one(
+            {'_id': ObjectId(user_id)},
+            {
+                '$unset': {f'collection.{char_name}': ''},
+                '$inc': {'experience': total_xp_gained}
+            }
+        )
+    else:
+        users_collection.update_one(
+            {'_id': ObjectId(user_id)},
+            {
+                '$set': {f'collection.{char_name}': new_count},
+                '$inc': {'experience': total_xp_gained}
+            }
+        )
+
+    # Get updated user data
+    updated_user = users_collection.find_one({'_id': ObjectId(user_id)})
+    new_experience = updated_user.get('experience', 0)
+    old_level = updated_user.get('level', 1)
+    new_level = calculate_level_from_xp(new_experience)
+
+    leveled_up = new_level > old_level
+
+    # Update level if leveled up
+    if leveled_up:
+        users_collection.update_one(
+            {'_id': ObjectId(user_id)},
+            {'$set': {'level': new_level}}
+        )
+
+    # Calculate progress
+    current_level_xp = (new_level - 1) * 100
+    xp_in_current_level = new_experience - current_level_xp
+
+    return jsonify({
+        'success': True,
+        'xp_gained': total_xp_gained,
+        'total_xp': new_experience,
+        'level': new_level,
+        'leveled_up': leveled_up,
+        'xp_in_current_level': xp_in_current_level,
+        'xp_needed_for_next': 100,
+        'collection': updated_user.get('collection', {})
+    })
 
 # ==================== SETTINGS ROUTES ====================
 

@@ -1,12 +1,43 @@
 .inventory-page {
   min-height: 100vh;
-  background: ] linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 2rem 1rem;
 }
-#667eea 0%, #764ba2 100%);
+
 .inventory-container {
   max-width: 1200px;
   margin: 0 auto;
+  position: relative;
+}
+
+/* Level Up Notification */
+.level-up-notification {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: white;
+  padding: 2rem 3rem;
+  border-radius: 1rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  z-index: 1000;
+  box-shadow: 0 10px 40px rgba(251, 191, 36, 0.5);
+  animation: levelUpPop 0.5s ease-out;
+}
+
+@keyframes levelUpPop {
+  0% {
+    transform: translateX(-50%) scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: translateX(-50%) scale(1.1);
+  }
+  100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
+  }
 }
 
 .inventory-header {
@@ -18,8 +49,68 @@
   font-size: 3rem;
   font-weight: 800;
   color: white;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Level Section */
+.level-section {
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  padding: 1.5rem;
+  border-radius: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.level-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.level-label {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+}
+
+.level-number {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #fbbf24;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.xp-bar-container {
+  position: relative;
+}
+
+.xp-bar-bg {
+  width: 100%;
+  height: 30px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 15px;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.xp-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+  transition: width 0.5s ease-out;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
+
+.xp-text {
+  text-align: center;
+  color: white;
+  font-weight: 600;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
 }
 
 .inventory-stats {
@@ -38,7 +129,7 @@
   min-width: 150px;
 }
 
-.stat-value {
+.points-value {
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
@@ -47,7 +138,7 @@
 .stat-label {
   font-size: 0.875rem;
   opacity: 0.9;
-  color: #ffffff
+  color: #ffffff;
 }
 
 .filter-tabs {
@@ -144,18 +235,8 @@
   transition: transform 0.3s ease;
 }
 
-.character-icon {
-  font-size: 4rem;
-  animation: float 3s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
+.character-card:hover .character-artwork {
+  transform: scale(1.1);
 }
 
 .character-info {
@@ -179,6 +260,47 @@
   font-size: 0.875rem;
   font-weight: 600;
   color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+/* Release Button */
+.release-btn {
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+.release-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(239, 68, 68, 0.4);
+}
+
+.release-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Modal Styling */
+.modal-content {
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.modal-header {
+  border-bottom: none;
+}
+
+.modal-footer {
+  border-top: none;
+  padding: 1rem 1.5rem 1.5rem;
 }
 
 .locked-overlay {
@@ -228,12 +350,16 @@
     font-size: 2rem;
   }
 
+  .level-number {
+    font-size: 2rem;
+  }
+
   .stat-card {
     min-width: 120px;
     padding: 1rem 1.5rem;
   }
 
-  .stat-value {
+  .points-value {
     font-size: 2rem;
   }
 
@@ -244,10 +370,6 @@
 
   .character-card {
     padding: 1rem;
-  }
-
-  .character-icon {
-    font-size: 3rem;
   }
 
   .character-name {

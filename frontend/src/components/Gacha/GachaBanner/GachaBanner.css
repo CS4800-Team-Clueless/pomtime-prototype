@@ -9,7 +9,7 @@
   justify-content: center;
   padding: 2rem;
   gap: 1.5rem;
-  background-image: url('frontend/src/assets/gacha/banners/pomeranian_banner_background.jpg');
+  background-image: url('frontend/src/assets/gacha/banners/pomeranian_fantasy_background.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -124,6 +124,7 @@
   height: 100%;
   object-fit: cover;
   object-position: center;
+  opacity: 0.8;
 }
 
 /* --- Bottom Section (Buttons and Warning) --- */

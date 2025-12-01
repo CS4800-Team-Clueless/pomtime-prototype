@@ -1,7 +1,7 @@
 import { Modal, Button } from "react-bootstrap";
 import "./GachaOverlay.css";
 
-// pulls: Array<{ name: string, stars: number }>
+// pulls: Array<{ name: string, stars: number, image: string }>
 export default function GachaOverlay({ show, pulls = [], onClose }) {
   const isSingle = pulls.length === 1;
 
@@ -23,11 +23,21 @@ export default function GachaOverlay({ show, pulls = [], onClose }) {
         {pulls.map((pull) => (
           <div key={pull.id} className={`character-card stars-${pull.stars}`}>
             <div className="character-image-wrapper">
-              <img
-                src={pull.image}
-                alt={pull.name}
-                className="character-image"
-              />
+              {pull.image ? (
+                <img
+                  src={pull.image}
+                  alt={pull.name}
+                  className="character-image"
+                  onError={(e) => {
+                    console.error(`Failed to load image for ${pull.name}:`, pull.image);
+                    e.target.style.display = 'none';
+                  }}
+                />
+              ) : (
+                <div className="character-placeholder">
+                  🐕
+                </div>
+              )}
             </div>
             <div className="name">{pull.name}</div>
             <div className="stars">{"★".repeat(pull.stars)}</div>

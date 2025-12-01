@@ -1,4 +1,3 @@
-import.meta.glob;
 import pomIcon from "../../assets/icons/PomIcon.png";
 
 const modules = import.meta.glob(

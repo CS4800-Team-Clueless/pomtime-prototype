@@ -3,7 +3,7 @@ import { useAuth } from "../../../contexts/AuthContext";
 import "./GachaBanner.css";
 import GACHA_ART, { DEFAULT_ART } from "../GachaArt";
 import pomBanner from "../../../assets/gacha/banners/Pomeranian_Banner.png";
-import pomBannerBackground from "../../../assets/gacha/banners/Pomeranian_banner_background.jpg";
+import pomBannerBackground from "../../../assets/gacha/banners/pomeranian_banner_background.jpg";
 
 export default function GachaBanner({ setResults, setShowOverlay }) {
   const { fetchWithAuth, API_URL } = useAuth();

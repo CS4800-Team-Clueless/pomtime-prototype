@@ -1,5 +1,5 @@
 .pt-footer {
-  background: var(--bg);
+  background-color: var(--bg);
   padding: 16px 0;
   text-align: center;
 }

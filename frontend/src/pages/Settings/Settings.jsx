@@ -14,7 +14,8 @@ export default function Settings() {
     setSelectedGradient(gradientKey);
     const success = await updateSettings({
       background_type: 'gradient',
-      background_value: gradientKey
+      background_value: gradientKey,
+      dark_mode: settings.dark_mode
     });
     if (success) {
       // Success feedback

@@ -1,8 +1,16 @@
 /* Dark Mode Styles - Add to src/styles/dark-mode.css */
 
-:root {
+:root.dark-mode {
   --dark-primary-color: #f9fafb;
   --dark-secondary-color: #b3b7be;
+
+  --brand: #c47d61; /* bootstrap primary-like */
+  --bg: #1f2937; /* fallback color if gradient fails */
+  --text: #e5e7eb;
+  --hover-text: #d7d8db;
+  --active-bg: #333e4e;
+  --hover-bg: #1f2937;
+  --card-bg: #1f2937;
 }
 
 /* Light mode defaults (no class needed) */
@@ -53,7 +61,7 @@ body.dark-mode h3 {
   color: var(--dark-primary-color);
 }
 
- /* Secondary Color */
+/* Secondary Color */
 body.dark-mode .settings-section-desc,
 body.dark-mode .toggle-desc,
 body.dark-mode .task-time,
@@ -233,12 +241,12 @@ body.dark-mode .task-recurring {
   background: #1f2937;
   background: linear-gradient(
     90deg,
-  #f48fb1 0%,
-  #ce93d8 20%,
-  #ad8ce6 40%,
-  #8fa3f0 60%,
-  #6fbafc 80%,
-  #f48fb1 100%
+    #f48fb1 0%,
+    #ce93d8 20%,
+    #ad8ce6 40%,
+    #8fa3f0 60%,
+    #6fbafc 80%,
+    #f48fb1 100%
   );
   background-size: 200% auto;
   background-clip: text;
@@ -254,12 +262,12 @@ body.dark-mode .points-value {
   font-weight: 700;
   background: linear-gradient(
     90deg,
-  #f48fb1 0%,
-  #ce93d8 20%,
-  #ad8ce6 40%,
-  #8fa3f0 60%,
-  #6fbafc 80%,
-  #f48fb1 100%
+    #f48fb1 0%,
+    #ce93d8 20%,
+    #ad8ce6 40%,
+    #8fa3f0 60%,
+    #6fbafc 80%,
+    #f48fb1 100%
   );
   background-size: 200% auto;
   background-clip: text;

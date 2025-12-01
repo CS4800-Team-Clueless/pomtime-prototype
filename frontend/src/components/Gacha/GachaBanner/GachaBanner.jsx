@@ -66,12 +66,13 @@ export default function GachaBanner({ setResults, setShowOverlay }) {
   };
 
   return (
-    <div className="banner"
-    style={{
+    <div
+      className="banner"
+      style={{
         backgroundImage: `url(${pomBannerBackground})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-    }}
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
     >
       {/* Top Bar: Title on Left, Points on Right */}
       <div className="banner-top">
@@ -82,8 +83,7 @@ export default function GachaBanner({ setResults, setShowOverlay }) {
 
         <div className="points-display">
           <span className="points-icon"></span>
-          <span className="points-value">{Math.floor(points)}🐕</span>
-          <span className="points-label">Pom Prisms</span>
+          <span className="points-value">{Math.floor(points)}🦴</span>
         </div>
       </div>
 
@@ -101,7 +101,7 @@ export default function GachaBanner({ setResults, setShowOverlay }) {
       {/* Bottom: Buttons and Warning */}
       <div className="banner-info">
         <p className="warning-text">
-          Complete tasks in the calendar to earn more Pom Prisms!
+          Complete tasks in the calendar to earn more Pom Treats!
         </p>
 
         <div className="banner-actions">
@@ -110,14 +110,14 @@ export default function GachaBanner({ setResults, setShowOverlay }) {
             onClick={() => wish(1)}
             disabled={loading || points < 1}
           >
-            Wish x1 <span className="cost">(1 🐶)</span>
+            Wish x1
           </button>
           <button
             className="ten-btn"
             onClick={() => wish(10)}
             disabled={loading || points < 10}
           >
-            Wish x10 <span className="cost">(10 🐶)</span>
+            Wish x10
           </button>
         </div>
       </div>

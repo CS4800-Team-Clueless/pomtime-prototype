@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
-import { Link } from 'react-router-dom';
-import './Home.css';
+import { useState, useEffect } from "react";
+import { useAuth } from "../../contexts/AuthContext";
+import { Link } from "react-router-dom";
+import "./Home.css";
 
 export default function Home() {
   const { user, fetchWithAuth, API_URL } = useAuth();
@@ -27,7 +27,7 @@ export default function Home() {
       weekEnd.setDate(weekStart.getDate() + 7);
 
       const thisWeekTasks = data.tasks
-        .filter(task => {
+        .filter((task) => {
           const taskDate = new Date(task.start);
           return taskDate >= weekStart && taskDate < weekEnd && !task.completed;
         })
@@ -36,7 +36,7 @@ export default function Home() {
 
       setWeekTasks(thisWeekTasks);
     } catch (error) {
-      console.error('Error fetching tasks:', error);
+      console.error("Error fetching tasks:", error);
     } finally {
       setLoading(false);
     }
@@ -51,27 +51,27 @@ export default function Home() {
     const isToday = date.toDateString() === today.toDateString();
     const isTomorrow = date.toDateString() === tomorrow.toDateString();
 
-    const timeStr = date.toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true
+    const timeStr = date.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
     });
 
     if (isToday) return `Today at ${timeStr}`;
     if (isTomorrow) return `Tomorrow at ${timeStr}`;
 
-    return date.toLocaleDateString('en-US', {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: '2-digit'
+    return date.toLocaleDateString("en-US", {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
     });
   };
 
   const getFirstName = (fullName) => {
-    if (!fullName) return 'there';
-    return fullName.split(' ')[0];
+    if (!fullName) return "there";
+    return fullName.split(" ")[0];
   };
 
   return (
@@ -95,8 +95,6 @@ export default function Home() {
         </div>
       </div>
 
-
-
       {/* NEW: Agenda Preview Section */}
       <div className="agenda-section">
         <div className="agenda-header">
@@ -112,21 +110,24 @@ export default function Home() {
           <div className="empty-agenda">
             <div className="empty-icon">🎉</div>
             <h3>All clear!</h3>
-            <p>You have no pending tasks this week. Great job staying on top of things!</p>
+            <p>
+              You have no pending tasks this week. Great job staying on top of
+              things!
+            </p>
             <Link to="/calendar" className="add-task-btn">
               Add New Task
             </Link>
           </div>
         ) : (
           <div className="task-list">
-            {weekTasks.map(task => (
+            {weekTasks.map((task) => (
               <div key={task._id} className="task-card">
                 <div className="task-info">
                   <h3 className="task-title">{task.title}</h3>
                   <p className="task-time">{formatDateTime(task.start)}</p>
                 </div>
                 <div className="task-meta">
-                  <span className="task-points">{task.points}🐕 Pom Prisms</span>
+                  <span className="task-points">{task.points}🦴</span>
                   {task.recurring && (
                     <span className="task-recurring">🔄 Daily</span>
                   )}
@@ -157,7 +158,7 @@ export default function Home() {
             <div className="stat-number">
               {weekTasks.reduce((sum, task) => sum + (task.points || 0), 0)}
             </div>
-            <div className="stat-label">Potential Pom Prisms</div>
+            <div className="stat-label">Potential Pom Treats</div>
           </div>
         </div>
       </div>

@@ -3,6 +3,7 @@ import { useAuth } from "../../../contexts/AuthContext";
 import "./GachaBanner.css";
 import GACHA_ART, { DEFAULT_ART } from "../GachaArt";
 import pomBanner from "../../../assets/gacha/banners/Pomeranian_Banner.png";
+import pomBannerBackground from "../../../assets/gacha/banners/Pomeranian_banner_background.jpg";
 
 export default function GachaBanner({ setResults, setShowOverlay }) {
   const { fetchWithAuth, API_URL } = useAuth();
@@ -65,11 +66,17 @@ export default function GachaBanner({ setResults, setShowOverlay }) {
   };
 
   return (
-    <div className="banner">
+    <div className="banner"
+    style={{
+        backgroundImage: `url(${pomBannerBackground})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+    }}
+    >
       {/* Top Bar: Title on Left, Points on Right */}
       <div className="banner-top">
         <div className="banner-titles">
-          <h1 className="banner-title">Pomeranian Banner</h1>
+          <h1 className="banner-title">Pomeranian Banner: Fantasy</h1>
           <p className="banner-sub">Featured 5★: King, Angel, Dragon</p>
         </div>
 

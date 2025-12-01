@@ -166,12 +166,17 @@ body.dark-mode .rbc-time-view {
   border-color: #4b5563;
 }
 
+body.dark-mode .rbc-label,
+body.dark-mode .rbc-row {
+  color: var(--dark-primary-color);
+}
+
 body.dark-mode .rbc-day-bg {
   border-color: #4b5563;
 }
 
 body.dark-mode .rbc-today {
-  background-color: rgba(99, 102, 241, 0.1);
+  background-color: rgba(81, 123, 212, 0.5);
 }
 
 body.dark-mode .rbc-off-range-bg {

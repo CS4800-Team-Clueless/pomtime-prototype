@@ -233,7 +233,7 @@ export default function Inventory() {
             </div>
             <div className="stat-card">
               <div className="points-value">{uniqueCharacters}</div>
-              <div className="stat-label">Unique Characters</div>
+              <div className="stat-label">Unique Pomeranians</div>
             </div>
             <div className="stat-card">
               <div className="points-value">{Object.keys(CHARACTER_RARITY).length}</div>
@@ -387,7 +387,7 @@ export default function Inventory() {
               )}
 
               <p style={{ fontSize: '1.125rem', marginBottom: '0.5rem' }}>
-                Release {releaseCount} {selectedCharacter.name}{releaseCount > 1 ? 's' : ''} to gain:
+                Release {releaseCount} {selectedCharacter.name} Pomeranian{releaseCount > 1 ? 's' : ''} to gain:
               </p>
               <div style={{
                 fontSize: '2rem',

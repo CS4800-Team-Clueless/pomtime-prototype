@@ -42,6 +42,7 @@ export default function ProfileSettings() {
     total_characters: 0,
     unique_character: 0,
     total_sessions: 0,
+    level: 0,
   });
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -50,7 +51,22 @@ export default function ProfileSettings() {
     fetchCollection();
     fetchDisplayedCharacters();
     fetchPomodoroSessions();
+    fetchUser();
   }, []);
+
+  const fetchUser = async () => {
+    try {
+      const response = await fetchWithAuth(`${API_URL}/api/profile/stats`);
+      const data = await response.json();
+
+      setStats((prev) => ({
+        ...prev,
+        level: data.level,
+      }));
+    } catch (e) {
+      console.error("Error fetching user:", e);
+    }
+  };
 
   const fetchCollection = async () => {
     try {
@@ -184,7 +200,10 @@ export default function ProfileSettings() {
 
           {/* Stats Section */}
           <div className="profile-settings__section">
-            <h2 className="profile-settings__section-title">Statistics</h2>
+            <div className="statistics-header">
+              <h2 className="profile-settings__section-title">Statistics</h2>
+              <p className="statistics-level">Level: {stats.level}</p>
+            </div>
 
             <div className="profile-stats-grid">
               <div className="profile-stat-card">

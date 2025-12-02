@@ -635,11 +635,11 @@ def xp_for_next_level(current_level):
 def get_xp_for_rarity(stars):
     """Get XP reward based on rarity"""
     xp_rewards = {
-        3: 25,  # 3-star = 25 XP
-        4: 75,  # 4-star = 75 XP
-        5: 200  # 5-star = 200 XP
+        3: 15,  # 3-star = 10 XP
+        4: 100,  # 4-star = 100 XP
+        5: 1500  # 5-star = 1500 XP
     }
-    return xp_rewards.get(stars, 25)
+    return xp_rewards[stars]
 
 
 @app.route('/api/profile/stats', methods=['GET'])

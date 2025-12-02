@@ -151,7 +151,7 @@ export default function Inventory() {
   };
 
   const getXPForRarity = (stars) => {
-    const xpMap = { 3: 25, 4: 75, 5: 200 };
+    const xpMap = { 3: 15, 4: 100, 5: 1500 };
     return xpMap[stars] || 25;
   };
 

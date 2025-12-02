@@ -134,7 +134,7 @@ export default function Home() {
                 <div className="task-meta">
                   <span className="task-points">{task.points}🦴</span>
                   {task.recurring && (
-                    <span className="task-recurring">🔄 Daily</span>
+                    <span className="task-recurring">Daily</span>
                   )}
                 </div>
               </div>

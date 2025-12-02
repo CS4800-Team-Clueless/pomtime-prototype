@@ -59,6 +59,18 @@ body {
   }
 }
 
+.level-section {
+  max-width: 600px;
+  margin: 0 auto 2rem;
+
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  padding: 0.75rem 1.25rem;
+  border-radius: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
 .app-root {
   min-height: 100%;
   display: flex;

@@ -43,6 +43,7 @@ export default function ProfileSettings() {
     unique_character: 0,
     total_sessions: 0,
     level: 0,
+    experience: 0,
   });
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -62,6 +63,7 @@ export default function ProfileSettings() {
       setStats((prev) => ({
         ...prev,
         level: data.level,
+        experience: data.experience,
       }));
     } catch (e) {
       console.error("Error fetching user:", e);
@@ -197,12 +199,34 @@ export default function ProfileSettings() {
           </div>
 
           <div className="profile-settings__divider"></div>
+            {/* XP Bar */}
+            <div className="profile-settings__section">
+              <h2 className="profile-settings__section-title">Level & Experience</h2>
+              <div className="level-section">
+                <div className="level-display">
+                  <span className="level-label">Level</span>
+                  <span className="level-number">{stats.level}</span>
+                </div>
+                <div className="xp-bar-container">
+                  <div className="xp-bar-bg">
+                    <div
+                      className="xp-bar-fill"
+                      style={{
+                        width: `${((stats.experience % 100) / 100) * 100}%`
+                      }}
+                    ></div>
+                  </div>
+                  <div className="xp-text">
+                    {stats.experience % 100} / 100 XP
+                  </div>
+                </div>
+              </div>
+            </div>
 
           {/* Stats Section */}
           <div className="profile-settings__section">
             <div className="statistics-header">
               <h2 className="profile-settings__section-title">Statistics</h2>
-              <p className="statistics-level">Level: {stats.level}</p>
             </div>
 
             <div className="profile-stats-grid">

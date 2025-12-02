@@ -1,4 +1,7 @@
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
+import { pageview } from "./analytics";
 import { AuthProvider } from "./contexts/AuthContext";
 import { SettingsProvider } from "./contexts/SettingsContext";
 import Home from "./pages/Home/Home";
@@ -30,13 +33,18 @@ function AppRoutes() {
         <Route path="inventory" element={<Inventory />} />
         <Route path="settings" element={<Settings />} />
         <Route path="profile-settings" element={<ProfileSettings />} />
-        <Route path="Leaderboard" element={<Leaderboard />} />
+        <Route path="leaderboard" element={<Leaderboard />} />
       </Route>
     </Routes>
   );
 }
 
-function App() {
+function App() {const location = useLocation(); // <-- ADD THIS
+  useEffect(() => {
+    // Fire GA pageview on every route change
+    pageview(location.pathname + location.search);
+  }, [location]);
+
   return (
     <AuthProvider>
       <SettingsProvider>

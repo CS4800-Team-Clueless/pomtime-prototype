@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { useAuth } from '../../contexts/AuthContext';
 import GACHA_ART, { DEFAULT_ART } from '../../components/Gacha/GachaArt';
 import './InventoryPage.css';
+import releaseSfx from '../../assets/sound_effects/release_effect.wav';
 
 // Character rarity mapping
 const CHARACTER_RARITY = {
@@ -42,6 +43,12 @@ export default function Inventory() {
   const [showReleaseModal, setShowReleaseModal] = useState(false);
   const [selectedCharacter, setSelectedCharacter] = useState(null);
   const [releaseCount, setReleaseCount] = useState(1);
+
+  const releaseAudioRef = useRef(null);
+  useEffect(() => {
+    releaseAudioRef.current = new Audio(releaseSfx)
+  }, []
+  );
 
   useEffect(() => {
     fetchData();
@@ -95,6 +102,14 @@ export default function Inventory() {
     const { name: charName, stars } = selectedCharacter;
     setReleasingChar(charName);
     setShowReleaseModal(false);
+
+    if(releaseAudioRef.current){
+      releaseAudioRef.current.currentTime =0;
+      releaseAudioRef.current.play().catch((err) => {
+        console.error("Error playing effect",err);
+      }
+      );
+    }
 
     try {
       const response = await fetchWithAuth(`${API_URL}/api/collection/release`, {

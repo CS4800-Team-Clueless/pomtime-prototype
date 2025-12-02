@@ -69,13 +69,6 @@
   border: none !important;
 }
 
-.task-modal .points-earn-label {
-    font-size: 1.25rem;
-    color: #111111;
-    font-weight: 400;
-    margin-bottom: 0.5rem;
-}
-
 .points-display {
   display: flex;
   flex-direction: column;
@@ -104,6 +97,11 @@
   color: #1e3a8a;
 }
 
+.delete-confirmation .alert {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 0.5rem;
+}
 
 .text-muted {
   color: #6b7280
@@ -147,14 +145,6 @@
   border-color: #dc2626;
   transform: translateY(-1px);
   box-shadow: 0 4px 6px rgba(239, 68, 68, 0.3);
-}
-
-.task-modal .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border: none;
-  color: white;
-  font-weight: 600;
-  transition: all 0.2s;
 }
 
 .task-modal .btn-primary:hover {

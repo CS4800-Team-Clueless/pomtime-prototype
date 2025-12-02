@@ -115,8 +115,6 @@
 }
 
 .type-btn.active {
-  background: #667eea;
-  color: white;
   box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
 }
 
@@ -322,7 +320,7 @@
 .setting-item {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.5 rem;
 }
 
 .setting-item label {
@@ -346,8 +344,6 @@
 
 .apply-btn {
   padding: 0.875rem 1.5rem;
-  background: #667eea;
-  color: white;
   border: none;
   border-radius: 12px;
   font-weight: 600;
@@ -358,7 +354,6 @@
 }
 
 .apply-btn:hover {
-  background: #5568d3;
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
 }

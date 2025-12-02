@@ -36,6 +36,9 @@ body.dark-mode .stat-card,
 body.dark-mode .calendar-container,
 body.dark-mode .task-card,
 body.dark-mode .character-card,
+body.dark-mode .settings-btn,
+body.dark-mode .settings-panel,
+body.dark-mode .setting-item label,
 body.dark-mode .banner {
   background: #1f2937;
   color: #e5e7eb;
@@ -124,14 +127,7 @@ body.dark-mode .dark-mode-toggle {
 }
 
 /* Header */
-body.dark-mode .pt-header {
-  background: #1f2937;
-  border-bottom-color: #374151;
-}
 
-body.dark-mode .pt-link {
-  color: var(--dark-secondary-color);
-}
 
 body.dark-mode .pt-link:hover {
   background: #374151;
@@ -218,11 +214,6 @@ body.dark-mode .modal-content {
   color: #e5e7eb;
 }
 
-body.dark-mode .modal-header {
-  background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
-  border-bottom-color: #4b5563;
-}
-
 body.dark-mode .modal-body {
   background: #1f2937;
 }
@@ -237,6 +228,7 @@ body.dark-mode .task-card {
   border-left-color: #6366f1;
 }
 
+body.dark-mode .points-value,
 body.dark-mode .task-points,
 body.dark-mode .task-recurring {
   background: #1f2937;
@@ -256,28 +248,6 @@ body.dark-mode .task-recurring {
   margin-bottom: 0.25rem;
   animation: rainbow-shift 6s linear infinite;
 }
-
-/* Inventory Stats */
-body.dark-mode .points-value {
-  font-size: 2rem;
-  font-weight: 700;
-  background: linear-gradient(
-    90deg,
-    #f48fb1 0%,
-    #ce93d8 20%,
-    #ad8ce6 40%,
-    #8fa3f0 60%,
-    #6fbafc 80%,
-    #f48fb1 100%
-  );
-  background-size: 200% auto;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 0.25rem;
-  animation: rainbow-shift 6s linear infinite;
-}
-
 
 /* Inventory cards */
 body.dark-mode .character-card {
@@ -328,7 +298,7 @@ body.dark-mode .profile-menu__divider {
 
 /* Stat boxes */
 body.dark-mode .stat-box {
-  background: rgba(31, 41, 55, 0.5);
+  background: rgb(31 41 55);
 }
 
 /* Gradients preview in settings */
@@ -525,10 +495,6 @@ body.dark-mode .task-modal .modal-content {
     color: #e5e7eb;
 }
 
-body.dark-mode .task-modal .modal-header {
-    background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
-    color: #e5e7eb;
-}
 
 body.dark-mode .task-modal .modal-title {
     color: #f9fafb;
@@ -605,17 +571,6 @@ body.dark-mode .task-modal .btn-danger {
     background-color: #dc2626;
 }
 
-body.dark-mode .task-modal .btn-primary {
-    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-}
-
 body.dark-mode .task-modal .btn-secondary {
     background-color: #4b5563;
-}
-
-/* Delete confirmation */
-body.dark-mode .task-modal .delete-confirmation .alert {
-    background-color: #7f1d1d;
-    border-color: #b91c1c;
-    color: #fee2e2;
 }

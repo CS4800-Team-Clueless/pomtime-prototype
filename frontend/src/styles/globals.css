@@ -81,3 +81,14 @@ body {
   flex: 1;
   padding: 24px;
 }
+
+/* GRADIENT FOR HEADER, BUTTONS, ETC */
+body.dark-mode .session-type-selector .type-btn.active,
+.task-modal .modal-header,
+.btn-primary,
+.apply-btn,
+.type-btn.active {
+    border: 1px solid #667eea;
+    color: white;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}

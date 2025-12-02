@@ -213,6 +213,84 @@ def get_points():
     return jsonify({'error': 'User not found'}), 404
 
 
+# ==================== DAILY CHECK-IN ROUTES ====================
+
+@app.route('/api/checkin/status', methods=['GET'])
+@require_auth
+def check_in_status():
+    """Check if user can check in today"""
+    user_id = request.user['user_id']
+    user = users_collection.find_one({'_id': ObjectId(user_id)})
+
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+
+    last_checkin = user.get('last_checkin')
+    can_check_in = True
+
+    if last_checkin:
+        # Check if last check-in was today
+        last_checkin_date = last_checkin.date() if isinstance(last_checkin, datetime) else datetime.fromisoformat(
+            str(last_checkin)).date()
+        today = datetime.utcnow().date()
+
+        if last_checkin_date >= today:
+            can_check_in = False
+
+    return jsonify({
+        'can_check_in': can_check_in,
+        'already_checked_in': not can_check_in,
+        'total_points': user.get('points', 0),
+        'last_checkin': last_checkin.isoformat() if last_checkin else None
+    })
+
+
+@app.route('/api/checkin', methods=['POST'])
+@require_auth
+def daily_check_in():
+    """Perform daily check-in and award 5 points"""
+    user_id = request.user['user_id']
+    user = users_collection.find_one({'_id': ObjectId(user_id)})
+
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+
+    # Check if already checked in today
+    last_checkin = user.get('last_checkin')
+
+    if last_checkin:
+        last_checkin_date = last_checkin.date() if isinstance(last_checkin, datetime) else datetime.fromisoformat(
+            str(last_checkin)).date()
+        today = datetime.utcnow().date()
+
+        if last_checkin_date >= today:
+            return jsonify({
+                'error': 'Already checked in today',
+                'can_check_in': False
+            }), 400
+
+    # Award 5 points and update last check-in
+    CHECKIN_POINTS = 5
+
+    users_collection.update_one(
+        {'_id': ObjectId(user_id)},
+        {
+            '$inc': {'points': CHECKIN_POINTS},
+            '$set': {'last_checkin': datetime.utcnow()}
+        }
+    )
+
+    # Get updated user data
+    updated_user = users_collection.find_one({'_id': ObjectId(user_id)})
+
+    return jsonify({
+        'success': True,
+        'points_earned': CHECKIN_POINTS,
+        'total_points': updated_user.get('points', 0),
+        'message': 'Daily check-in successful!'
+    })
+
+
 # ==================== TASK ROUTES ====================
 
 @app.route('/api/tasks', methods=['GET'])

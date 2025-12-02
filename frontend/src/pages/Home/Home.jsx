@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { Link } from "react-router-dom";
+import DailyCheckIn from "../../components/DailyCheckIn/DailyCheckIn";
 import "./Home.css";
 
 export default function Home() {
@@ -76,7 +77,7 @@ export default function Home() {
 
   return (
     <section className="home">
-      {/* Original Hero Section with User Greeting */}
+      {/* Hero Section with User Greeting */}
       <div className="home-hero">
         <h1>
           Welcome back, <span>{getFirstName(user?.name)}</span>!
@@ -85,6 +86,10 @@ export default function Home() {
           Focus hard, rest smart. Track sessions, earn gacha rewards, and
           visualize your progress.
         </p>
+
+        {/* Daily Check-In Component */}
+        <DailyCheckIn />
+
         <div className="home-actions">
           <a href="/pomodoro" className="btn-primary">
             Start Timer
@@ -95,7 +100,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* NEW: Agenda Preview Section */}
+      {/* Agenda Preview Section */}
       <div className="agenda-section">
         <div className="agenda-header">
           <h2 className="agenda-title">📅 Your Week Ahead</h2>
@@ -143,7 +148,7 @@ export default function Home() {
         )}
       </div>
 
-      {/* NEW: Quick Stats */}
+      {/* Quick Stats */}
       <div className="quick-stats">
         <div className="stat-box">
           <div className="stat-icon">📋</div>

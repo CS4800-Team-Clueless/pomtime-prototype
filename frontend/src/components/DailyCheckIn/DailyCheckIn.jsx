@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import './DailyCheckIn.css';
 
@@ -8,6 +8,7 @@ export default function DailyCheckIn() {
     const [loading, setLoading] = useState(true);
     const [checking, setChecking] = useState(false);
     const [timeRemaining, setTimeRemaining] = useState(null);
+    const nextCheckinTimeRef = useRef(null);
 
     useEffect(() => {
         fetchCheckInStatus();
@@ -15,25 +16,21 @@ export default function DailyCheckIn() {
 
     // Update countdown timer every second
     useEffect(() => {
-        if (!checkInData?.can_check_in && checkInData?.hours_remaining > 0) {
-            const interval = setInterval(() => {
-                fetchCheckInStatus();
-            }, 60000); // Refresh every minute
-
-            // Update display every second
+        if (nextCheckinTimeRef.current) {
             const timer = setInterval(() => {
-                setTimeRemaining(prev => {
-                    if (prev && prev > 0) {
-                        return prev - 1;
-                    }
-                    return 0;
-                });
+                const now = new Date();
+                const diff = nextCheckinTimeRef.current - now;
+
+                if (diff <= 0) {
+                    setTimeRemaining(0);
+                    // Refresh status when time runs out
+                    fetchCheckInStatus();
+                } else {
+                    setTimeRemaining(Math.floor(diff / 1000));
+                }
             }, 1000);
 
-            return () => {
-                clearInterval(interval);
-                clearInterval(timer);
-            };
+            return () => clearInterval(timer);
         }
     }, [checkInData]);
 
@@ -43,9 +40,15 @@ export default function DailyCheckIn() {
             const data = await response.json();
             setCheckInData(data);
 
-            // Set initial time remaining in seconds
-            if (data.hours_remaining) {
-                setTimeRemaining(Math.floor(data.hours_remaining * 3600));
+            // Store the absolute next check-in time
+            if (data.next_checkin_time) {
+                nextCheckinTimeRef.current = new Date(data.next_checkin_time);
+                const now = new Date();
+                const diff = nextCheckinTimeRef.current - now;
+                setTimeRemaining(Math.floor(diff / 1000));
+            } else {
+                nextCheckinTimeRef.current = null;
+                setTimeRemaining(null);
             }
         } catch (error) {
             console.error('Error fetching check-in status:', error);
@@ -65,14 +68,19 @@ export default function DailyCheckIn() {
             const data = await response.json();
 
             if (data.success) {
+                // Set next check-in time to 24 hours from now
+                const nextTime = new Date();
+                nextTime.setHours(nextTime.getHours() + 24);
+                nextCheckinTimeRef.current = nextTime;
+
                 setCheckInData({
                     can_check_in: false,
                     already_checked_in: true,
                     points_earned: data.points_earned,
                     total_points: data.total_points,
-                    hours_remaining: 24
+                    next_checkin_time: nextTime.toISOString()
                 });
-                setTimeRemaining(24 * 3600); // 24 hours in seconds
+                setTimeRemaining(24 * 3600);
             }
         } catch (error) {
             console.error('Error checking in:', error);
@@ -128,10 +136,10 @@ export default function DailyCheckIn() {
                 </button>
             ) : (
                 <div className="checkin-completed">
-                    <span className="checkin-icon">🐶</span>
+                    <span className="checkin-icon">✨</span>
                     <div className="checkin-text">
                         <div className="checkin-status">Daily Gift Claimed!</div>
-                        {timeRemaining > 0 && (
+                        {timeRemaining !== null && timeRemaining > 0 && (
                             <div className="checkin-timer">
                                 Next gift in: <strong>{formatTimeRemaining(timeRemaining)}</strong>
                             </div>

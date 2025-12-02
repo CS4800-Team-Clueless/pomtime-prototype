@@ -214,6 +214,7 @@ def get_points():
 
 
 # ==================== DAILY CHECK-IN ROUTES ====================
+# Add these routes to your server.py file, after the POINTS ROUTES section
 
 @app.route('/api/checkin/status', methods=['GET'])
 @require_auth
@@ -228,26 +229,30 @@ def check_in_status():
     last_checkin = user.get('last_checkin')
     can_check_in = True
     hours_remaining = 0
+    next_checkin_time = None
 
     if last_checkin:
         # Ensure last_checkin is a datetime object
         if not isinstance(last_checkin, datetime):
             last_checkin = datetime.fromisoformat(str(last_checkin))
 
-        # Calculate hours since last check-in
-        time_diff = datetime.utcnow() - last_checkin
-        hours_since_checkin = time_diff.total_seconds() / 3600
+        # Calculate the exact time when next check-in is available (24 hours after last)
+        next_checkin_time = last_checkin + timedelta(hours=24)
 
-        if hours_since_checkin < 24:
+        # Check if we've passed that time
+        now = datetime.utcnow()
+        if now < next_checkin_time:
             can_check_in = False
-            hours_remaining = 24 - hours_since_checkin
+            time_diff = next_checkin_time - now
+            hours_remaining = time_diff.total_seconds() / 3600
 
     return jsonify({
         'can_check_in': can_check_in,
         'already_checked_in': not can_check_in,
         'total_points': user.get('points', 0),
         'last_checkin': last_checkin.isoformat() if last_checkin else None,
-        'hours_remaining': round(hours_remaining, 1) if hours_remaining > 0 else 0
+        'next_checkin_time': next_checkin_time.isoformat() if next_checkin_time else None,
+        'hours_remaining': round(hours_remaining, 4) if hours_remaining > 0 else 0
     })
 
 
@@ -269,16 +274,17 @@ def daily_check_in():
         if not isinstance(last_checkin, datetime):
             last_checkin = datetime.fromisoformat(str(last_checkin))
 
-        # Calculate hours since last check-in
-        time_diff = datetime.utcnow() - last_checkin
-        hours_since_checkin = time_diff.total_seconds() / 3600
+        # Calculate exact time when next check-in is available
+        next_checkin_time = last_checkin + timedelta(hours=24)
+        now = datetime.utcnow()
 
-        if hours_since_checkin < 24:
-            hours_remaining = 24 - hours_since_checkin
+        if now < next_checkin_time:
+            time_diff = next_checkin_time - now
+            hours_remaining = time_diff.total_seconds() / 3600
             return jsonify({
                 'error': 'Must wait 24 hours between check-ins',
                 'can_check_in': False,
-                'hours_remaining': round(hours_remaining, 1)
+                'hours_remaining': round(hours_remaining, 4)
             }), 400
 
     # Award 5 points and update last check-in

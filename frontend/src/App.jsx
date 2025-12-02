@@ -6,6 +6,7 @@ import BasePage from "./pages/BasePage";
 import Gacha from "./pages/GachaPage/GachaPage";
 import CalendarPage from "./pages/Calendar/Calendar";
 import LoginPage from "./pages/LoginPage/LoginPage";
+import Leaderboard from "./pages/Leaderboard/Leaderboard";
 import ProfileSettings from "./pages/ProfileSettings/ProfileSettings";
 import Inventory from "./pages/InventoryPage/InventoryPage";
 import PomodoroPage from "./pages/PomodoroPage/PomodoroPage";
@@ -29,6 +30,7 @@ function AppRoutes() {
         <Route path="inventory" element={<Inventory />} />
         <Route path="settings" element={<Settings />} />
         <Route path="profile-settings" element={<ProfileSettings />} />
+        <Route path="Leaderboard" element={<Leaderboard />} />
       </Route>
     </Routes>
   );

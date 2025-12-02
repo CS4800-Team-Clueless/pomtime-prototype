@@ -496,7 +496,7 @@ def complete_timer():
     update_fields = {
         'points': points,
         'pomodoro_sessions': 1,
-        'collection.Pomodoro': 1,   # or any key name you like
+        'collection.Pomodoro': 1,  # or any key name you like
     }
 
     users_collection.update_one(
@@ -525,6 +525,7 @@ def complete_timer():
         'pomodoro_sessions': user.get('pomodoro_sessions', 0),
         'collection': user.get('collection', {})
     })
+
 
 @app.route('/api/pomodoro/sessions', methods=['GET'])
 @require_auth
@@ -712,6 +713,7 @@ def release_character():
         'collection': updated_user.get('collection', {})
     })
 
+
 # ==================== SETTINGS ROUTES ====================
 
 @app.route('/api/settings', methods=['GET'])
@@ -797,19 +799,19 @@ def upload_background_image():
 def get_displayed_characters():
     """Get user's displayed characters"""
     user_id = request.user['user_id']
-    
+
     try:
         user = users_collection.find_one({'_id': ObjectId(user_id)})
-        
+
         if not user:
             return jsonify({'error': 'User not found'}), 404
-        
+
         displayed_characters = user.get('displayed_characters', [])
-        
+
         return jsonify({
             'displayed_characters': displayed_characters
         }), 200
-        
+
     except Exception as e:
         print(f"Error fetching displayed characters: {e}")
         return jsonify({'error': 'Failed to fetch displayed characters'}), 500
@@ -821,42 +823,252 @@ def update_displayed_characters():
     """Update user's displayed characters"""
     user_id = request.user['user_id']
     data = request.get_json()
-    
+
     displayed_characters = data.get('displayed_characters', [])
-    
+
     # Validate max limit (6)
     MAX_DISPLAY_LIMIT = 6
     if len(displayed_characters) > MAX_DISPLAY_LIMIT:
         return jsonify({
             'error': f'Cannot display more than {MAX_DISPLAY_LIMIT} characters'
         }), 400
-    
+
     try:
         # Verify all characters are in user's collection
         user = users_collection.find_one({'_id': ObjectId(user_id)})
         collection = user.get('collection', {})
-        
+
         for character_name in displayed_characters:
             if character_name not in collection:
                 return jsonify({
                     'error': f'{character_name} is not in your collection'
                 }), 400
-        
+
         # Update displayed characters
         users_collection.update_one(
             {'_id': ObjectId(user_id)},
             {'$set': {'displayed_characters': displayed_characters}}
         )
-        
+
         return jsonify({
             'success': True,
             'displayed_characters': displayed_characters
         }), 200
-        
+
     except Exception as e:
         print(f"Error updating displayed characters: {e}")
         return jsonify({'error': 'Failed to update displayed characters'}), 500
 
+
+# ==================== LEADERBOARD & PUBLIC PROFILE ROUTES ====================
+
+@app.route('/api/leaderboard', methods=['GET'])
+@require_auth
+def get_leaderboard():
+    """Get top users by level/experience (public data only)"""
+    # Get top 100 users by level, then by experience
+    top_users = list(users_collection.find(
+        {},
+        {
+            'name': 1,
+            'picture': 1,
+            'level': 1,
+            'experience': 1,
+            'email': 1,
+            '_id': 0
+        }
+    ).sort([('level', -1), ('experience', -1)]).limit(100))
+
+    # Sanitize data - only show email domain, not full email
+    for user in top_users:
+        if 'email' in user:
+            email_parts = user['email'].split('@')
+            if len(email_parts) == 2:
+                # Show first letter + *** @ domain
+                user['email_display'] = f"{email_parts[0][0]}***@{email_parts[1]}"
+            else:
+                user['email_display'] = "***"
+            del user['email']  # Remove full email
+
+        # Ensure level/xp exist
+        user['level'] = user.get('level', 1)
+        user['experience'] = user.get('experience', 0)
+
+    return jsonify({'leaderboard': top_users})
+
+
+@app.route('/api/user/public-profile', methods=['POST'])
+@require_auth
+def get_public_profile():
+    """Get another user's public profile by email"""
+    data = request.get_json()
+    search_email = data.get('email', '').strip().lower()
+
+    if not search_email:
+        return jsonify({'error': 'Email required'}), 400
+
+    # Find user by email
+    user = users_collection.find_one(
+        {'email': search_email},
+        {
+            'name': 1,
+            'picture': 1,
+            'level': 1,
+            'experience': 1,
+            'collection': 1,
+            'displayed_characters': 1,
+            '_id': 0
+        }
+    )
+
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+
+    # Get displayed characters for this user
+    displayed_chars = user.get('displayed_characters', [])
+
+    # Calculate stats
+    collection = user.get('collection', {})
+    total_poms = sum(collection.values())
+    unique_poms = len(collection)
+
+    # Sanitize email - only show domain
+    email_parts = search_email.split('@')
+    email_display = f"{email_parts[0][0]}***@{email_parts[1]}" if len(email_parts) == 2 else "***"
+
+    return jsonify({
+        'profile': {
+            'name': user.get('name', 'User'),
+            'picture': user.get('picture'),
+            'email_display': email_display,
+            'level': user.get('level', 1),
+            'experience': user.get('experience', 0),
+            'displayed_characters': displayed_chars,
+            'stats': {
+                'total_pomeranians': total_poms,
+                'unique_pomeranians': unique_poms
+            }
+        }
+    })
+
+
+# ==================== FRIENDS/LEADERBOARD ROUTES ====================
+
+@app.route('/api/friends', methods=['GET'])
+@require_auth
+def get_friends():
+    """Get user's friends list"""
+    user_id = request.user['user_id']
+    user = users_collection.find_one({'_id': ObjectId(user_id)})
+
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+
+    friends = user.get('friends', [])
+    return jsonify({'friends': friends})
+
+
+@app.route('/api/friends', methods=['POST'])
+@require_auth
+def add_friend():
+    """Add a friend to user's friends list"""
+    user_id = request.user['user_id']
+    data = request.get_json()
+
+    friend_email = data.get('email', '').strip().lower()
+
+    if not friend_email:
+        return jsonify({'error': 'Email required'}), 400
+
+    # Get current user
+    current_user = users_collection.find_one({'_id': ObjectId(user_id)})
+
+    # Prevent adding yourself
+    if current_user.get('email', '').lower() == friend_email:
+        return jsonify({'error': 'Cannot add yourself as a friend'}), 400
+
+    # Check if friend exists
+    friend = users_collection.find_one({'email': friend_email})
+    if not friend:
+        return jsonify({'error': 'User not found'}), 404
+
+    # Get current friends list
+    friends = current_user.get('friends', [])
+
+    # Check if already friends
+    if friend_email in friends:
+        return jsonify({'error': 'Already in your friends list'}), 400
+
+    # Add friend to list
+    users_collection.update_one(
+        {'_id': ObjectId(user_id)},
+        {'$push': {'friends': friend_email}}
+    )
+
+    return jsonify({
+        'success': True,
+        'message': f'{friend.get("name")} added to friends'
+    }), 201
+
+
+@app.route('/api/friends/<email>', methods=['DELETE'])
+@require_auth
+def remove_friend(email):
+    """Remove a friend from user's friends list"""
+    user_id = request.user['user_id']
+    friend_email = email.strip().lower()
+
+    # Remove friend from list
+    result = users_collection.update_one(
+        {'_id': ObjectId(user_id)},
+        {'$pull': {'friends': friend_email}}
+    )
+
+    if result.modified_count == 0:
+        return jsonify({'error': 'Friend not found in list'}), 404
+
+    return jsonify({
+        'success': True,
+        'message': 'Friend removed'
+    })
+
+
+@app.route('/api/friends/leaderboard', methods=['GET'])
+@require_auth
+def get_friends_leaderboard():
+    """Get leaderboard of user's friends only"""
+    user_id = request.user['user_id']
+    user = users_collection.find_one({'_id': ObjectId(user_id)})
+
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+
+    friends = user.get('friends', [])
+
+    if not friends:
+        return jsonify({'leaderboard': []})
+
+    # Get all friends' profiles
+    friends_data = list(users_collection.find(
+        {'email': {'$in': friends}},
+        {
+            'name': 1,
+            'picture': 1,
+            'level': 1,
+            'experience': 1,
+            'email': 1,
+            '_id': 0
+        }
+    ).sort([('level', -1), ('experience', -1)]))
+
+    # Format the data - keep full email for frontend to use
+    for friend in friends_data:
+        friend['level'] = friend.get('level', 1)
+        friend['experience'] = friend.get('experience', 0)
+        # Store full email as email_display for consistency with frontend
+        friend['email_display'] = friend['email']
+
+    return jsonify({'leaderboard': friends_data})
 
 # ==================== HEALTH CHECK ====================
 

@@ -15,14 +15,17 @@ export default function Header() {
           <NavLink to="/calendar" className="pt-link">
             Calendar
           </NavLink>
+          <NavLink to="/pomodoro" className="pt-link">
+            Timer
+          </NavLink>
           <NavLink to="/gacha" className="pt-link">
             Gacha
           </NavLink>
           <NavLink to="/inventory" className="pt-link">
             Inventory
           </NavLink>
-          <NavLink to="/pomodoro" className="pt-link">
-            Timer
+          <NavLink to="/leaderboard" className="pt-link">
+            Leaderboard
           </NavLink>
           <NavLink to="/settings" className="pt-link">
             Settings

@@ -1,50 +1,204 @@
 /* TaskModal specific styles */
 .task-modal .modal-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
   color: white;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
 }
 
 .task-modal .modal-title {
   font-weight: 600;
+  color: white;
 }
 
 .task-modal .btn-close {
   filter: brightness(0) invert(1);
+  opacity: 0.9;
+}
+
+.task-modal .btn-close:hover {
+  opacity: 1;
 }
 
 .task-modal .form-label {
-  font-weight: 500;
+  font-weight: 600;
   color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.task-modal .form-control {
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  padding: 0.625rem 0.75rem;
+  transition: all 0.2s;
 }
 
 .task-modal .form-control:focus {
-  border-color: #6366f1;
-  box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+  outline: none;
 }
 
+.task-modal .form-check-input:checked {
+  background-color: #667eea;
+  border-color: #667eea;
+}
+
+.task-modal .form-check-input:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+.task-modal .form-check-label {
+  color: #374151;
+  font-weight: 500;
+}
+
+/* Alert styling for points display */
+.task-modal .points-alert {
+  background-color: transparent !important;
+  border: none !important;
+  color: #1e40af;
+  border-radius: 0.5rem;
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+
+.task-modal .points-alert.alert-info {
+  background-color: transparent !important;
+  border: none !important;
+}
+
+.task-modal .points-earn-label {
+    font-size: 1.25rem;
+    color: #111111;
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+}
+
+.points-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.points-value {
+  /* Override the gradient text effect for better visibility on dark background */
+  background: none;
+  -webkit-text-fill-color: white;
+}
+
+.task-modal .points-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.task-modal .alert-info strong {
+  color: #1e3a8a;
+}
+
+
+.text-muted {
+  color: #6b7280
+  font-size: 0.75rem;
+  display: block;
+}
+
+/* Success alert */
+.task-modal .alert-success {
+  background-color: #f0fdf4;
+  border: 1px solid #86efac;
+  color: #166534;
+  border-radius: 0.5rem;
+}
+
+/* Button styling */
 .task-modal .btn-success {
-  background-color: #10b981;
-  border-color: #10b981;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border: none;
+  color: white;
+  font-weight: 600;
+  transition: all 0.2s;
 }
 
 .task-modal .btn-success:hover {
-  background-color: #059669;
-  border-color: #059669;
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(16, 185, 129, 0.3);
 }
 
+.task-modal .btn-danger {
+  background-color: #ef4444;
+  border-color: #ef4444;
+  color: white;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.task-modal .btn-danger:hover {
+  background-color: #dc2626;
+  border-color: #dc2626;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(239, 68, 68, 0.3);
+}
+
+.task-modal .btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: white;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.task-modal .btn-primary:hover {
+  background: linear-gradient(135deg, #5568d3 0%, #65408b 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(102, 126, 234, 0.3);
+}
+
+.task-modal .btn-secondary {
+  background-color: #6b7280;
+  border-color: #6b7280;
+  color: white;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.task-modal .btn-secondary:hover {
+  background-color: #4b5563;
+  border-color: #4b5563;
+}
+
+/* Delete confirmation */
 .delete-confirmation {
   padding: 1rem;
+}
+
+.delete-confirmation .alert {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 0.5rem;
 }
 
 .delete-confirmation .alert-heading {
   font-size: 1.25rem;
   font-weight: 700;
+  color: #991b1b;
 }
 
 .delete-confirmation p {
   margin-bottom: 0;
+  color: #7f1d1d;
 }
 
+/* Task modal actions layout */
 .task-modal-actions {
   display: flex;
   flex-direction: column;
@@ -52,10 +206,23 @@
   margin-top: 1rem;
 }
 
-.task-modal-actions .complete-btn,
+.task-modal-actions .complete-btn {
+  width: 100%;
+  text-align: center;
+  padding: 0.75rem;
+  font-size: 1rem;
+}
+
 .task-modal-actions .completed-badge {
   width: 100%;
   text-align: center;
+  padding: 0.75rem;
+  background-color: #f0fdf4;
+  border: 2px solid #86efac;
+  border-radius: 0.5rem;
+  color: #166534;
+  font-size: 1rem;
+  display: inline-block;
 }
 
 .action-buttons {
@@ -67,14 +234,29 @@
 .action-buttons .btn {
   flex: 1;
   min-width: 0;
+  padding: 0.625rem 1rem;
+  border-radius: 0.5rem;
 }
 
-@media (max-width: 576px) {
-  .action-buttons {
-    flex-direction: column;
-  }
 
-  .action-buttons .btn {
-    width: 100%;
-  }
+/* Modal backdrop and animation */
+.task-modal .modal-content {
+  border: none;
+  border-radius: 0.75rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.task-modal .modal-body {
+  padding: 1.5rem;
+}
+
+/* Form spacing improvements */
+.task-modal .mb-3 {
+  margin-bottom: 1rem !important;
+}
+
+.task-modal .form-text {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
 }

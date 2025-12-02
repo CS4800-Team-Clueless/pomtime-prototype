@@ -9,7 +9,6 @@ export default function TaskModal({ show, onHide, task, slot, onSave }) {
         title: '',
         start: '',
         end: '',
-        points: '',
         recurring: false
     });
     const [calculatedPoints, setCalculatedPoints] = useState(1);
@@ -24,7 +23,6 @@ export default function TaskModal({ show, onHide, task, slot, onSave }) {
                 title: task.title || '',
                 start: formatDateTimeLocal(task.start),
                 end: formatDateTimeLocal(task.end),
-                points: task.points || '',
                 recurring: task.recurring || false
             });
         } else if (slot) {
@@ -33,7 +31,6 @@ export default function TaskModal({ show, onHide, task, slot, onSave }) {
                 title: '',
                 start: formatDateTimeLocal(slot.start),
                 end: formatDateTimeLocal(slot.end),
-                points: '',
                 recurring: false
             });
         }
@@ -85,7 +82,7 @@ export default function TaskModal({ show, onHide, task, slot, onSave }) {
             start: start.toISOString(),
             end: end.toISOString(),
             duration_minutes: durationMinutes,
-            points: formData.points ? parseFloat(formData.points) : calculatedPoints,
+            points: calculatedPoints, // Always use calculated points
             recurring: formData.recurring
         };
 
@@ -147,7 +144,7 @@ export default function TaskModal({ show, onHide, task, slot, onSave }) {
     };
 
     return (
-        <Modal show={show} onHide={onHide} centered>
+        <Modal show={show} onHide={onHide} centered className="task-modal">
             <Modal.Header closeButton>
                 <Modal.Title>{task ? 'Edit Task' : 'Create Task'}</Modal.Title>
             </Modal.Header>
@@ -209,23 +206,12 @@ export default function TaskModal({ show, onHide, task, slot, onSave }) {
                             />
                         </Form.Group>
 
-                        <Form.Group className="mb-3">
-                            <Form.Label>
-                                Points (Default: {calculatedPoints} based on duration)
-                            </Form.Label>
-                            <Form.Control
-                                type="number"
-                                name="points"
-                                value={formData.points}
-                                onChange={handleChange}
-                                placeholder={`Auto: ${calculatedPoints} points`}
-                                min="0"
-                                step="0.5"
-                            />
-                            <Form.Text className="text-muted">
-                                Leave blank for auto-calculation (30 min = 1 point)
-                            </Form.Text>
-                        </Form.Group>
+                        <div className="points-alert mb-3">
+                            <div className="points-earn-label">You can earn:</div>
+                                <div className="points-value">{calculatedPoints}🦴 Pom Treats</div>
+                                <div className="points-label"></div>
+                            <small className="calc-info">Every 30 minutes = 1 Pom Treat</small>
+                        </div>
 
                         <Form.Group className="mb-3">
                             <Form.Check

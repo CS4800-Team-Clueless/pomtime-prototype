@@ -142,13 +142,34 @@
   background: #f3f4f6;
 }
 
-.leaderboard-item.top-three {
-  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+/* First Place - Gold */
+.leaderboard-item.rank-1 {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
   border: 2px solid #fbbf24;
 }
 
-.leaderboard-item.top-three:hover {
-  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+.leaderboard-item.rank-1:hover {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+}
+
+/* Second Place - Silver */
+.leaderboard-item.rank-2 {
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  border: 2px solid #9ca3af;
+}
+
+.leaderboard-item.rank-2:hover {
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+}
+
+/* Third Place - Bronze */
+.leaderboard-item.rank-3 {
+  background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%);
+  border: 2px solid #f97316;
+}
+
+.leaderboard-item.rank-3:hover {
+  background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%);
 }
 
 .leaderboard-item.current-user {
@@ -432,6 +453,181 @@
   padding: 4rem;
 }
 
+/* ============================================
+   DARK MODE STYLES
+   ============================================ */
+
+body.dark-mode .search-section {
+  background: #1f2937;
+  color: #e5e7eb;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .search-title {
+  color: var(--dark-primary-color);
+}
+
+body.dark-mode .search-hint {
+  color: var(--dark-secondary-color);
+}
+
+body.dark-mode .search-input {
+  background: #374151;
+  color: #e5e7eb;
+  border-color: #4b5563;
+}
+
+body.dark-mode .search-input:focus {
+  border-color: #6366f1;
+  background: #374151;
+}
+
+body.dark-mode .empty-leaderboard {
+  background: #1f2937;
+  color: #e5e7eb;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .empty-leaderboard h3 {
+  color: var(--dark-primary-color);
+}
+
+body.dark-mode .empty-leaderboard p {
+  color: var(--dark-secondary-color);
+}
+
+body.dark-mode .leaderboard-list {
+  background: #1f2937;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .list-title {
+  color: var(--dark-primary-color);
+}
+
+body.dark-mode .leaderboard-item {
+  background: #374151;
+}
+
+body.dark-mode .leaderboard-item:hover {
+  background: #4b5563;
+}
+
+/* Dark Mode - First Place - Gold */
+body.dark-mode .leaderboard-item.rank-1 {
+  background: linear-gradient(135deg, #78350f 0%, #92400e 100%);
+  border-color: #fbbf24;
+}
+
+body.dark-mode .leaderboard-item.rank-1:hover {
+  background: linear-gradient(135deg, #78350f 0%, #92400e 100%);
+}
+
+/* Dark Mode - Second Place - Silver */
+body.dark-mode .leaderboard-item.rank-2 {
+  background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
+  border-color: #9ca3af;
+}
+
+body.dark-mode .leaderboard-item.rank-2:hover {
+  background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
+}
+
+/* Dark Mode - Third Place - Bronze */
+body.dark-mode .leaderboard-item.rank-3 {
+  background: linear-gradient(135deg, #7c2d12 0%, #9a3412 100%);
+  border-color: #f97316;
+}
+
+body.dark-mode .leaderboard-item.rank-3:hover {
+  background: linear-gradient(135deg, #7c2d12 0%, #9a3412 100%);
+}
+
+body.dark-mode .leaderboard-item.current-user {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+  border-color: #3b82f6;
+}
+
+body.dark-mode .leaderboard-item.current-user:hover {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+}
+
+body.dark-mode .player-name {
+  color: var(--dark-primary-color);
+}
+
+body.dark-mode .player-email {
+  color: var(--dark-secondary-color);
+}
+
+body.dark-mode .player-clickable:hover {
+  background: rgba(99, 102, 241, 0.2);
+}
+
+body.dark-mode .xp-badge {
+  background: #1f2937;
+  color: #d1d5db;
+}
+
+body.dark-mode .loading {
+  color: var(--dark-primary-color);
+}
+
+/* Dark Mode - Modal */
+body.dark-mode .profile-header {
+  border-bottom-color: #4b5563;
+}
+
+body.dark-mode .profile-details h3 {
+  color: var(--dark-primary-color);
+}
+
+body.dark-mode .profile-email {
+  color: var(--dark-secondary-color);
+}
+
+body.dark-mode .xp-text {
+  color: var(--dark-secondary-color);
+}
+
+body.dark-mode .profile-stat-card {
+  background: #374151;
+  border-color: #4b5563;
+}
+
+body.dark-mode .profile-stat-card .stat-value {
+  color: var(--dark-primary-color);
+}
+
+body.dark-mode .profile-stat-card .stat-label {
+  color: var(--dark-secondary-color);
+}
+
+body.dark-mode .displayed-section h4 {
+  color: var(--dark-primary-color);
+}
+
+body.dark-mode .displayed-char {
+  background: #374151;
+}
+
+body.dark-mode .displayed-char.rarity-5 {
+  background: linear-gradient(135deg, #78350f 0%, #92400e 100%);
+}
+
+body.dark-mode .displayed-char.rarity-4 {
+  background: linear-gradient(135deg, #4c1d95 0%, #5b21b6 100%);
+}
+
+body.dark-mode .displayed-char.rarity-3 {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+}
+
+body.dark-mode .displayed-char-name {
+  color: var(--dark-primary-color);
+}
+
+/* Responsive */
 @media (max-width: 768px) {
   .leaderboard-title {
     font-size: 2rem;

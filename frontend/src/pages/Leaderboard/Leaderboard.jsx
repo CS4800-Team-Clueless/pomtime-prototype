@@ -180,7 +180,7 @@ export default function Leaderboard() {
                 key={player.email_display}
                 className={`leaderboard-item ${
                   player.email_display === user?.email ? 'current-user' : ''
-                } ${index < 3 ? 'top-three' : ''}`}
+                } ${index === 0 ? 'rank-1' : index === 1 ? 'rank-2' : index === 2 ? 'rank-3' : ''}`}
               >
                 <div className="rank">{getRankEmoji(index)}</div>
                 <div

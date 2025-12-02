@@ -2,14 +2,14 @@ import { useEffect, useRef, useState } from 'react';
 import GachaBanner from '../../components/Gacha/GachaBanner/GachaBanner.jsx';
 import GachaOverlay from '../../components/Gacha/GachaOverlay/GachaOverlay.jsx';
 import './GachaPage.css';
-import sparkleSfx from '../../assets/sound_effects/pull_sparkle_effect.wav';
+//import sparkleSfx from '../../assets/sound_effects/pull_sparkle_effect.wav';
 
 export default function GachaPage() {
   const [results, setResults] = useState([]);
   const [showOverlay, setShowOverlay] = useState(false);
 
   //audio instance and use sparkle effect
-  const sparkleAudioRef = useRef(null);
+/*  const sparkleAudioRef = useRef(null);
   useEffect(() => {
     sparkleAudioRef.current = new Audio(sparkleSfx);
   }, []
@@ -23,7 +23,7 @@ export default function GachaPage() {
     }
   }, [showOverlay,result.length]
   );
-
+*/
   const handleClose = () => {
     setShowOverlay(false);
     setResults([]);

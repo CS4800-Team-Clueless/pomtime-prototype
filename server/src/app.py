@@ -218,7 +218,7 @@ def get_points():
 @app.route('/api/checkin/status', methods=['GET'])
 @require_auth
 def check_in_status():
-    """Check if user can check in today"""
+    """Check if user can check in (24 hours since last check-in)"""
     user_id = request.user['user_id']
     user = users_collection.find_one({'_id': ObjectId(user_id)})
 
@@ -227,46 +227,58 @@ def check_in_status():
 
     last_checkin = user.get('last_checkin')
     can_check_in = True
+    hours_remaining = 0
 
     if last_checkin:
-        # Check if last check-in was today
-        last_checkin_date = last_checkin.date() if isinstance(last_checkin, datetime) else datetime.fromisoformat(
-            str(last_checkin)).date()
-        today = datetime.utcnow().date()
+        # Ensure last_checkin is a datetime object
+        if not isinstance(last_checkin, datetime):
+            last_checkin = datetime.fromisoformat(str(last_checkin))
 
-        if last_checkin_date >= today:
+        # Calculate hours since last check-in
+        time_diff = datetime.utcnow() - last_checkin
+        hours_since_checkin = time_diff.total_seconds() / 3600
+
+        if hours_since_checkin < 24:
             can_check_in = False
+            hours_remaining = 24 - hours_since_checkin
 
     return jsonify({
         'can_check_in': can_check_in,
         'already_checked_in': not can_check_in,
         'total_points': user.get('points', 0),
-        'last_checkin': last_checkin.isoformat() if last_checkin else None
+        'last_checkin': last_checkin.isoformat() if last_checkin else None,
+        'hours_remaining': round(hours_remaining, 1) if hours_remaining > 0 else 0
     })
 
 
 @app.route('/api/checkin', methods=['POST'])
 @require_auth
 def daily_check_in():
-    """Perform daily check-in and award 5 points"""
+    """Perform daily check-in and award 5 points (must wait 24 hours between check-ins)"""
     user_id = request.user['user_id']
     user = users_collection.find_one({'_id': ObjectId(user_id)})
 
     if not user:
         return jsonify({'error': 'User not found'}), 404
 
-    # Check if already checked in today
+    # Check if 24 hours have passed since last check-in
     last_checkin = user.get('last_checkin')
 
     if last_checkin:
-        last_checkin_date = last_checkin.date() if isinstance(last_checkin, datetime) else datetime.fromisoformat(
-            str(last_checkin)).date()
-        today = datetime.utcnow().date()
+        # Ensure last_checkin is a datetime object
+        if not isinstance(last_checkin, datetime):
+            last_checkin = datetime.fromisoformat(str(last_checkin))
 
-        if last_checkin_date >= today:
+        # Calculate hours since last check-in
+        time_diff = datetime.utcnow() - last_checkin
+        hours_since_checkin = time_diff.total_seconds() / 3600
+
+        if hours_since_checkin < 24:
+            hours_remaining = 24 - hours_since_checkin
             return jsonify({
-                'error': 'Already checked in today',
-                'can_check_in': False
+                'error': 'Must wait 24 hours between check-ins',
+                'can_check_in': False,
+                'hours_remaining': round(hours_remaining, 1)
             }), 400
 
     # Award 5 points and update last check-in
@@ -289,7 +301,6 @@ def daily_check_in():
         'total_points': updated_user.get('points', 0),
         'message': 'Daily check-in successful!'
     })
-
 
 # ==================== TASK ROUTES ====================
 

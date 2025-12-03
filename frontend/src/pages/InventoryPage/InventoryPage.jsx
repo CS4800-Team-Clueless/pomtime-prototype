@@ -518,7 +518,7 @@ export default function Inventory() {
             Cancel
           </Button>
 
-          {selectedCharacter.maxCount > 1 && (
+          {selectedCharacter?.maxCount > 1 && (
             <Button variant="danger" onClick={confirmRelease}>
               Release
             </Button>

@@ -695,6 +695,21 @@ def complete_timer():
         'collection': user.get('collection', {})
     })
 
+@app.route('/api/pomodoro/sessions', methods=['GET'])
+@require_auth
+def get_sessions():
+    """Get user's pomodoro sessions history"""
+    user_id = request.user['user_id']
+
+    sessions = list(pomodoro_collection.find({'user_id': user_id}))
+
+    # Convert ObjectId to string
+    for session in sessions:
+        session['_id'] = str(session['_id'])
+
+    return jsonify({'sessions': sessions})
+
+
 # ==================== LEVEL/EXPERIENCE ROUTES ====================
 
 def calculate_level_from_xp(xp):

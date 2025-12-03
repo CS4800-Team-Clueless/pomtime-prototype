@@ -241,8 +241,10 @@ def get_points():
 
 
 def check_daily_point_limit(user_id, points):
-    DAILY_LIMIT = 200
-    today = str(datetime.now(timezone.utc).date())
+    DAILY_LIMIT = 50
+    # Using UTC-8 for PST (adjust to -7 during daylight saving if needed)
+    pst = timezone(timedelta(hours=-8))
+    today = str(datetime.now(pst).date())
 
     user = users_collection.find_one({'_id': ObjectId(user_id)})
     daily_points = user.get('daily_points', {})
@@ -259,7 +261,7 @@ def check_daily_point_limit(user_id, points):
 
     if daily_points_earned >= DAILY_LIMIT:
         return 0  # No more points can be added today
-    
+
     points_to_add = min(points, DAILY_LIMIT - daily_points_earned)
 
     if reset_date:
@@ -271,77 +273,53 @@ def check_daily_point_limit(user_id, points):
                     'points_earned': 0
                 }
             }}
-        ) 
+        )
     else:
         users_collection.update_one(
             {'_id': ObjectId(user_id)},
             {'$inc': {'daily_points.points_earned': points_to_add}}
         )
-        
+
     return points_to_add
+
+
+@app.route('/api/user/daily-points', methods=['GET'])
+@require_auth
+def get_daily_points():
+    """Get user's daily points progress"""
+    user_id = request.user['user_id']
+    # CHANGED: PST is UTC-8, PDT is UTC-7
+    pst = timezone(timedelta(hours=-8))
+    today = str(datetime.now(pst).date())
+
+    user = users_collection.find_one({'_id': ObjectId(user_id)})
+
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+
+    daily_points = user.get('daily_points', {})
+    last_date = daily_points.get('date')
+    points_earned = daily_points.get('points_earned', 0)
+
+    # If it's a new day, return 0
+    if last_date != today:
+        points_earned = 0
+
+    return jsonify({
+        'daily_points': points_earned,
+        'daily_limit': 50,
+        'date': today
+    })
 
 
 # ==================== DAILY CHECK-IN ROUTES ====================
 
-@app.route('/api/checkin/status', methods=['GET'])
-@require_auth
-def checkin_status():
-    """Get user's check-in status"""
-    try:
-        user_id = request.user['user_id']
-        user = users_collection.find_one({'_id': ObjectId(user_id)})
+# ==================== DAILY CHECK-IN ROUTES ====================
 
-        if not user:
-            return jsonify({'error': 'User not found'}), 404
-
-        # Get last check-in time
-        last_checkin = user.get('daily_points', {}).get('last_checkin')
-
-        if last_checkin:
-            # Ensure last_checkin is a datetime object
-            if isinstance(last_checkin, str):
-                last_checkin = datetime.fromisoformat(last_checkin.replace('Z', '+00:00'))
-
-            # Calculate time since last check-in
-            now = datetime.now(timezone.utc)
-
-            # Make sure last_checkin is timezone-aware
-            if last_checkin.tzinfo is None:
-                last_checkin = last_checkin.replace(tzinfo=timezone.utc)
-
-            time_since_checkin = now - last_checkin
-            can_check_in = time_since_checkin.total_seconds() >= 24 * 3600  # 24 hours
-
-            # Calculate next check-in time (24 hours after last check-in)
-            next_checkin_time = last_checkin + timedelta(hours=24)
-
-            return jsonify({
-                'can_check_in': can_check_in,
-                'already_checked_in': not can_check_in,
-                'last_checkin': last_checkin.isoformat(),
-                'next_checkin_time': next_checkin_time.isoformat(),
-                'time_remaining_seconds': max(0, (next_checkin_time - now).total_seconds())
-            })
-        else:
-            # No previous check-in, user can check in
-            return jsonify({
-                'can_check_in': True,
-                'already_checked_in': False,
-                'last_checkin': None,
-                'next_checkin_time': None
-            })
-
-    except Exception as e:
-        print(f"Error getting check-in status: {str(e)}")
-        import traceback
-        traceback.print_exc()
-        return jsonify({'error': 'Failed to get check-in status'}), 500
-
-
-@app.route('/api/checkin', methods=['POST'])
+@app.route('/api/checkin', methods=['GET', 'POST'])
 @require_auth
 def daily_checkin():
-    """Handle daily check-in"""
+    """Handle daily check-in status and submission"""
     try:
         user_id = request.user['user_id']
         user = users_collection.find_one({'_id': ObjectId(user_id)})
@@ -349,57 +327,56 @@ def daily_checkin():
         if not user:
             return jsonify({'error': 'User not found'}), 404
 
-        # Get last check-in time
-        last_checkin = user.get('daily_points', {}).get('last_checkin')
-        now = datetime.now(timezone.utc)
+        # Use PST timezone (UTC-8)
+        pst = timezone(timedelta(hours=-8))
+        today = str(datetime.now(pst).date())
 
-        # Check if user can check in (24 hours since last check-in)
-        if last_checkin:
-            if isinstance(last_checkin, str):
-                last_checkin = datetime.fromisoformat(last_checkin.replace('Z', '+00:00'))
+        # Get last check-in date
+        last_checkin_date = user.get('daily_points', {}).get('last_checkin_date')
+        already_checked_in = (last_checkin_date == today)
 
-            if last_checkin.tzinfo is None:
-                last_checkin = last_checkin.replace(tzinfo=timezone.utc)
+        # GET request - return status
+        if request.method == 'GET':
+            return jsonify({
+                'can_check_in': not already_checked_in,
+                'already_checked_in': already_checked_in,
+                'last_checkin_date': last_checkin_date
+            })
 
-            time_since_checkin = now - last_checkin
-            if time_since_checkin.total_seconds() < 24 * 3600:
-                return jsonify({
-                    'success': False,
-                    'error': 'Already checked in today',
-                    'next_checkin_time': (last_checkin + timedelta(hours=24)).isoformat()
-                }), 400
+        # POST request - perform check-in
+        if already_checked_in:
+            return jsonify({
+                'success': False,
+                'error': 'Already checked in today'
+            }), 400
 
-        # Award points
+        # Award points - check daily limit
         points_earned = 5
-        new_total_points = user.get('points', 0) + points_earned
+        actual_points_added = check_daily_point_limit(user_id, points_earned)
+        new_total_points = user.get('points', 0) + actual_points_added
 
-        # Update user document
+        # Update user document with today's date
         users_collection.update_one(
             {'_id': ObjectId(user_id)},
             {
                 '$set': {
                     'points': new_total_points,
-                    'daily_points.last_checkin': now,
-                    'daily_points.points_earned': points_earned
+                    'daily_points.last_checkin_date': today
                 }
             }
         )
 
-        # Calculate next check-in time
-        next_checkin_time = now + timedelta(hours=24)
-
         return jsonify({
             'success': True,
-            'points_earned': points_earned,
-            'total_points': new_total_points,
-            'next_checkin_time': next_checkin_time.isoformat()
+            'points_earned': actual_points_added,
+            'total_points': new_total_points
         })
 
     except Exception as e:
         print(f"Error during check-in: {str(e)}")
         import traceback
         traceback.print_exc()
-        return jsonify({'error': 'Check-in failed'}), 500
+        return jsonify({'error': 'Check-in operation failed'}), 500
 
 # ==================== TASK ROUTES ====================
 

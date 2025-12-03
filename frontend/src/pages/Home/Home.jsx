@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { Link } from "react-router-dom";
 import DailyCheckIn from "../../components/DailyCheckIn/DailyCheckIn";
+import PointsCounter from "../../components/PointsCounter/PointsCounter";
 import "./Home.css";
 
 import calendarIcon from "../../assets/icons/Calendar_Icon.png";
@@ -92,8 +93,13 @@ export default function Home() {
           visualize your progress.
         </p>
 
-        {/* Daily Check-In Component */}
-        <DailyCheckIn />
+        <div className="home-hero-widgets">
+          {/* Daily Check-In Component */}
+          <DailyCheckIn />
+
+          {/* Daily Points Counter */}
+          <PointsCounter />
+        </div>
 
         <div className="home-actions">
           <a href="/pomodoro" className="btn-primary">

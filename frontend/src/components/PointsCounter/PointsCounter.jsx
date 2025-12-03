@@ -6,15 +6,23 @@ export default function PointsCounter() {
   const { fetchWithAuth, API_URL } = useAuth();
   const [dailyPoints, setDailyPoints] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [timeUntilReset, setTimeUntilReset] = useState("");
   const DAILY_LIMIT = 50;
 
   useEffect(() => {
     fetchDailyPoints();
 
-    // Poll for updates every 30 seconds to catch points earned from other tabs/sessions
-    const interval = setInterval(fetchDailyPoints, 30000);
+    // Poll for updates every 3 seconds to catch points earned from other tabs/sessions
+    const interval = setInterval(fetchDailyPoints, 3000);
 
-    return () => clearInterval(interval);
+    // Update countdown every second
+    const countdownInterval = setInterval(updateCountdown, 1000);
+    updateCountdown(); // Initial call
+
+    return () => {
+      clearInterval(interval);
+      clearInterval(countdownInterval);
+    };
   }, []);
 
   const fetchDailyPoints = async () => {
@@ -32,20 +40,29 @@ export default function PointsCounter() {
     }
   };
 
+  const updateCountdown = () => {
+    // Calculate time until midnight PST (UTC-8)
+    const now = new Date();
+    const pstOffset = -8 * 60; // PST is UTC-8
+    const localOffset = now.getTimezoneOffset();
+    const pstTime = new Date(now.getTime() + (localOffset + pstOffset) * 60000);
+
+    // Get midnight PST
+    const midnight = new Date(pstTime);
+    midnight.setHours(24, 0, 0, 0);
+
+    // Calculate difference
+    const diff = midnight - pstTime;
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    setTimeUntilReset(`${hours}h ${minutes}m ${seconds}s`);
+  };
+
   // Calculate percentage for progress bar
   const percentage = Math.min((dailyPoints / DAILY_LIMIT) * 100, 100);
 
-  // Determine status message
-  const getStatusMessage = () => {
-    if (dailyPoints >= DAILY_LIMIT) {
-      return "Daily limit reached!";
-    } else if (dailyPoints >= DAILY_LIMIT * 0.75) {
-      return "Almost there!";
-    } else if (dailyPoints > 0) {
-      return "Keep going!";
-    }
-    return "Start earning today!";
-  };
 
   if (loading) {
     return (
@@ -76,7 +93,7 @@ export default function PointsCounter() {
         />
       </div>
 
-      <div className="points-status">{getStatusMessage()}</div>
+      <div className="points-status">Daily reset at 12:00 AM PST</div>
     </div>
   );
 }

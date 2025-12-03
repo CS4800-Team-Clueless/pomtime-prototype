@@ -2,7 +2,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 20px 0;
 }
 
 .daily-checkin img {
@@ -27,6 +26,8 @@
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  justify-content: center;
 }
 
 .checkin-button.available {
@@ -56,17 +57,19 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 24px;
+  padding: 16px 24px;
   background: #f0fdf4;
   border: 2px solid #10b981;
   border-radius: 12px;
   color: #065f46;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .checkin-text {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
 }
 
 .checkin-status {
@@ -74,8 +77,8 @@
   font-size: 1rem;
 }
 
-.checkin-points {
-  font-size: 0.875rem;
+.checkin-reset-info {
+  font-size: 0.75rem;
   color: #059669;
   font-weight: 500;
 }
@@ -103,13 +106,20 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  .checkin-button,
-  .checkin-completed {
-    padding: 10px 20px;
+  .points-counter {
+    padding: 15px 20px;
+    min-height: auto;
+  }
+
+  .points-counter-icon {
+    font-size: 1.1rem;
+  }
+
+  .points-counter-value {
     font-size: 0.95rem;
   }
 
-  .checkin-icon {
-    font-size: 1.1rem;
+  .daily-checkin {
+    min-height: auto;
   }
 }

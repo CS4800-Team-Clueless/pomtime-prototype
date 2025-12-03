@@ -35,11 +35,29 @@
   margin: 0 auto;
 }
 
-.home-actions {
-  display: flex;
+/* Side by Side Widgets Container */
+.home-hero-widgets {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 12px;
-  justify-content: center;
-  margin-top: 20px;
+  max-width: 600px;
+  margin: 24px auto;
+  align-items: stretch;
+}
+
+/* Make both child components the same height */
+.home-hero-widgets > * {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.home-actions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  max-width: 300px;
+  margin: 20px auto 0;
 }
 
 .btn-primary,
@@ -344,6 +362,12 @@
   .home-hero {
     padding: 32px 20px;
     margin: 24px 0 20px;
+  }
+
+  /* Stack widgets vertically on mobile */
+  .home-hero-widgets {
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
 
   .home-actions {

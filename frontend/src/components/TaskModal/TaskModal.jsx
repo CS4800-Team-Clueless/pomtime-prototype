@@ -12,11 +12,18 @@ export default function TaskModal({ show, onHide, task, slot, onSave }) {
         recurring: false
     });
     const [calculatedPoints, setCalculatedPoints] = useState(1);
+    const [actualPointsEarnable, setActualPointsEarnable] = useState(1);
+    const [dailyPoints, setDailyPoints] = useState(0);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
+    const DAILY_LIMIT = 50;
 
     useEffect(() => {
+        if (show) {
+            fetchDailyPoints();
+        }
+
         if (task) {
             // Editing existing task
             setFormData({
@@ -39,6 +46,16 @@ export default function TaskModal({ show, onHide, task, slot, onSave }) {
         setShowSuccessMessage(false);
     }, [task, slot, show]);
 
+    const fetchDailyPoints = async () => {
+        try {
+            const response = await fetchWithAuth(`${API_URL}/api/user/daily-points`);
+            const data = await response.json();
+            setDailyPoints(data.daily_points || 0);
+        } catch (error) {
+            console.error('Error fetching daily points:', error);
+        }
+    };
+
     // Calculate points based on duration
     useEffect(() => {
         if (formData.start && formData.end) {
@@ -48,8 +65,13 @@ export default function TaskModal({ show, onHide, task, slot, onSave }) {
             const durationMinutes = durationMs / (1000 * 60);
             const points = Math.max(1, Math.round(durationMinutes / 30));
             setCalculatedPoints(points);
+
+            // Calculate actual points user can earn today
+            const remainingPoints = DAILY_LIMIT - dailyPoints;
+            const actualPoints = Math.min(points, Math.max(0, remainingPoints));
+            setActualPointsEarnable(actualPoints);
         }
-    }, [formData.start, formData.end]);
+    }, [formData.start, formData.end, dailyPoints]);
 
     const formatDateTimeLocal = (date) => {
         if (!date) return '';
@@ -143,6 +165,27 @@ export default function TaskModal({ show, onHide, task, slot, onSave }) {
         }
     };
 
+    const getPointsMessage = () => {
+        if (dailyPoints >= DAILY_LIMIT) {
+            return {
+                text: "Daily limit reached! This task won't earn points today.",
+                variant: 'warning'
+            };
+        } else if (actualPointsEarnable < calculatedPoints) {
+            return {
+                text: `You'll earn ${actualPointsEarnable} of ${calculatedPoints} points (${dailyPoints}/${DAILY_LIMIT} earned today)`,
+                variant: 'info'
+            };
+        } else {
+            return {
+                text: `You can earn ${actualPointsEarnable} Pom Treats`,
+                variant: 'success'
+            };
+        }
+    };
+
+    const pointsMessage = getPointsMessage();
+
     return (
         <Modal show={show} onHide={onHide} centered className="task-modal">
             <Modal.Header closeButton>
@@ -208,8 +251,8 @@ export default function TaskModal({ show, onHide, task, slot, onSave }) {
 
                         <div className="points-alert mb-3">
                             <div className="points-earn-label">You can earn:</div>
-                                <div className="points-value">{calculatedPoints}🦴 Pom Treats</div>
-                                <div className="points-label"></div>
+                            <div className="points-value">{actualPointsEarnable}🦴 Pom Treats</div>
+                            <div className="points-label"></div>
                             <small className="calc-info">Every 30 minutes = 1 Pom Treat</small>
                         </div>
 

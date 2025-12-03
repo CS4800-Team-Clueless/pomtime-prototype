@@ -314,8 +314,6 @@ def get_daily_points():
 
 # ==================== DAILY CHECK-IN ROUTES ====================
 
-# ==================== DAILY CHECK-IN ROUTES ====================
-
 @app.route('/api/checkin', methods=['GET', 'POST'])
 @require_auth
 def daily_checkin():
@@ -640,6 +638,7 @@ def get_collection():
 
 
 # ====================== POMODORO ROUTES ======================
+
 @app.route('/api/pomodoro/complete', methods=['POST'])
 @require_auth
 def complete_timer():
@@ -658,13 +657,15 @@ def complete_timer():
     label = data.get('label', 'Pomodoro Session')
     # simple points rule: 2 point per 25 minutes
     timer_points = data.get('points', max(2, round(duration_minutes / 25)))
-    points = check_daily_point_limit(user_id, timer_points)
+
+    # Get the actual points to add after checking daily limit
+    actual_points_to_add = check_daily_point_limit(user_id, timer_points)
 
     # Update user doc: points, pomodoro_sessions, and collection
     update_fields = {
-        'points': points,
+        'points': actual_points_to_add,  # Use the actual points returned
         'pomodoro_sessions': 1,
-        'collection.Pomodoro': 1,  # or any key name you like
+        'collection.Pomodoro': 1,
     }
 
     users_collection.update_one(
@@ -677,7 +678,7 @@ def complete_timer():
         'user_id': user_id,
         'label': label,
         'duration_minutes': duration_minutes,
-        'points_earned': points,
+        'points_earned': actual_points_to_add,  # Use actual points added
         'completed_at': datetime.utcnow(),
     }
 
@@ -688,27 +689,11 @@ def complete_timer():
 
     return jsonify({
         'success': True,
-        'points_earned': points,
+        'points_earned': actual_points_to_add,  # Return actual points earned
         'total_points': user.get('points', 0),
         'pomodoro_sessions': user.get('pomodoro_sessions', 0),
         'collection': user.get('collection', {})
     })
-
-
-@app.route('/api/pomodoro/sessions', methods=['GET'])
-@require_auth
-def get_sessions():
-    """Get user's pomodoro sessions history"""
-    user_id = request.user['user_id']
-
-    sessions = list(pomodoro_collection.find({'user_id': user_id}))
-
-    # Convert ObjectId to string
-    for session in sessions:
-        session['_id'] = str(session['_id'])
-
-    return jsonify({'sessions': sessions})
-
 
 # ==================== LEVEL/EXPERIENCE ROUTES ====================
 

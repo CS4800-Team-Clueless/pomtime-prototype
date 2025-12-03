@@ -61,57 +61,67 @@ const PomodoroPage = () => {
   };
 
   const handleSessionComplete = async () => {
-    setIsActive(false);
-    playSound();
+  setIsActive(false);
+  playSound();
 
-    const currentSessionType = sessionType;
-    const duration = getCurrentDuration();
+  const currentSessionType = sessionType;
+  const duration = getCurrentDuration();
 
-    // Save completed session to backend (only for work sessions)
-    if (currentSessionType === "work") {
-      try {
-        const response = await fetchWithAuth(
-          `${API_URL}/api/pomodoro/complete`,
-          {
-            method: "POST",
-            body: JSON.stringify({
-              duration_minutes: duration,
-              session_type: currentSessionType,
-            }),
-          }
-        );
-
-        if (response.ok) {
-          const data = await response.json();
-
-          setSessionsSinceBreak((prev) => prev + 1);
-
-          showNotification(
-            `Work session complete! +${Math.floor(data.points_earned)} points`,
-            "success"
-          );
-
-          // Update points
-          setTotalPoints(data.total_points);
-
-          // Auto-switch to break
-          if (sessionsSinceBreak >= 3) {
-            // 4th session complete
-            switchToLongBreak();
-          } else {
-            switchToBreak();
-          }
+  // Save completed session to backend (only for work sessions)
+  if (currentSessionType === "work") {
+    try {
+      const response = await fetchWithAuth(
+        `${API_URL}/api/pomodoro/complete`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            duration_minutes: duration,
+            session_type: currentSessionType,
+          }),
         }
-      } catch (error) {
-        console.error("Failed to save session:", error);
-        showNotification("Failed to save session", "error");
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+
+        setSessionsSinceBreak((prev) => prev + 1);
+
+        // Calculate expected points (2 points per 25 minutes)
+        const expectedPoints = Math.max(2, Math.round(duration / 25) * 2);
+        const actualPoints = data.points_earned;
+
+        // Show different messages based on whether they hit the daily limit
+        let message;
+        if (actualPoints < expectedPoints) {
+          message = `Work session complete! +${actualPoints} Pom Treats! (Daily limit reached)`;
+        } else {
+          message = `Work session complete! +${actualPoints} Pom Treats!`;
+        }
+
+        showNotification(message, "success");
+
+        // Update points
+        setTotalPoints(data.total_points);
+
+        // Auto-switch to break
+        if (sessionsSinceBreak >= 3) {
+          // 4th session complete
+          switchToLongBreak();
+        } else {
+          switchToBreak();
+        }
       }
-    } else {
-      // Break completed
-      showNotification("Break complete! Ready for another session?", "info");
-      switchToWork();
+    } catch (error) {
+      console.error("Failed to save session:", error);
+      showNotification("Failed to save session", "error");
     }
-  };
+  } else {
+    // Break completed
+    showNotification("Break complete! Ready for another session?", "info");
+    switchToWork();
+  }
+};
+
 
   const getCurrentDuration = () => {
     switch (sessionType) {

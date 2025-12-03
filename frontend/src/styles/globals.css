@@ -87,7 +87,8 @@ body.dark-mode .session-type-selector .type-btn.active,
 .task-modal .modal-header,
 .btn-primary,
 .apply-btn,
-.type-btn.active {
+.type-btn.active,
+.points-counter {
     border: 1px solid #667eea;
     color: white;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);

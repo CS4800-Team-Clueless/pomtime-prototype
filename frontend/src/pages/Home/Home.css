@@ -6,7 +6,7 @@
 }
 
 .home-hero {
-  text-align: left;
+  text-align: center;
   margin: 40px 0 24px;
   background: white;
   padding: 48px 24px;
@@ -20,7 +20,6 @@
   font-weight: 800;
   letter-spacing: -0.02em;
   color: #374151;
-  text-align: center;
 }
 
 .home-hero h1 span {
@@ -363,7 +362,6 @@
   .home-hero {
     padding: 32px 20px;
     margin: 24px 0 20px;
-    text-align: left;
   }
 
   /* Stack widgets vertically on mobile */

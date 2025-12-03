@@ -1,9 +1,11 @@
 .points-counter {
-  padding: 2px 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 14px 24px;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
 .points-counter-loading {
@@ -12,30 +14,17 @@
   font-size: 0.9rem;
 }
 
-.points-counter-icon {
-  flex-shrink: 0;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-}
-
-.points-counter-icon img {
-  width: 60px;
-  height: 60px;
-  object-fit: contain;
-}
-
-.points-counter-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
 .points-counter-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 0;
-  gap: 10px
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.points-counter-icon {
+  font-size: 1.25rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 .points-counter-text {
@@ -78,7 +67,7 @@
   background: rgba(255, 255, 255, 0.3);
   border-radius: 3px;
   overflow: hidden;
-  margin: 0;
+  margin: 6px 0 4px;
 }
 
 .points-progress-fill {
@@ -94,5 +83,11 @@
   font-size: 0.75rem;
   color: rgba(255, 255, 255, 0.95);
   font-weight: 500;
-  margin-top: 5px;
-}}
+  margin-top: 0;
+}
+
+.points-counter-icon img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}

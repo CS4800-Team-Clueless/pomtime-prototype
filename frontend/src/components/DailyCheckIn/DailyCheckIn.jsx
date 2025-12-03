@@ -68,10 +68,12 @@ export default function DailyCheckIn() {
             const data = await response.json();
 
             if (data.success) {
-                // Set next check-in time to 24 hours from now
-                const nextTime = new Date();
-                nextTime.setHours(nextTime.getHours() + 24);
+                // Use the next_checkin_time from server response
+                const nextTime = data.next_checkin_time ? new Date(data.next_checkin_time) : new Date(Date.now() + 24 * 60 * 60 * 1000);
                 nextCheckinTimeRef.current = nextTime;
+
+                const now = new Date();
+                const diff = nextTime - now;
 
                 setCheckInData({
                     can_check_in: false,
@@ -80,7 +82,7 @@ export default function DailyCheckIn() {
                     total_points: data.total_points,
                     next_checkin_time: nextTime.toISOString()
                 });
-                setTimeRemaining(24 * 3600);
+                setTimeRemaining(Math.floor(diff / 1000));
             }
         } catch (error) {
             console.error('Error checking in:', error);

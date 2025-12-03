@@ -6,6 +6,8 @@ import CharacterDisplayOverlay from "../../components/ProfileSettings/CharacterD
 import "./ProfileSettings.css";
 
 import pomIcon from "../../assets/icons/PomIcon.png";
+import tomatoIcon from "../../assets/icons/Tomato_Icon.png";
+import uniqueIcon from "../../assets/icons/Unique_Icon.png";
 
 const MAX_DISPLAY_LIMIT = 6;
 
@@ -199,29 +201,31 @@ export default function ProfileSettings() {
           </div>
 
           <div className="profile-settings__divider"></div>
-            {/* XP Bar */}
-            <div className="profile-settings__section">
-              <h2 className="profile-settings__section-title">Level & Experience</h2>
-              <div className="level-section">
-                <div className="level-display">
-                  <span className="level-label">Level</span>
-                  <span className="level-number">{stats.level}</span>
+          {/* XP Bar */}
+          <div className="profile-settings__section">
+            <h2 className="profile-settings__section-title">
+              Level & Experience
+            </h2>
+            <div className="level-section">
+              <div className="level-display">
+                <span className="level-label">Level</span>
+                <span className="level-number">{stats.level}</span>
+              </div>
+              <div className="xp-bar-container">
+                <div className="xp-bar-bg">
+                  <div
+                    className="xp-bar-fill"
+                    style={{
+                      width: `${((stats.experience % 100) / 100) * 100}%`,
+                    }}
+                  ></div>
                 </div>
-                <div className="xp-bar-container">
-                  <div className="xp-bar-bg">
-                    <div
-                      className="xp-bar-fill"
-                      style={{
-                        width: `${((stats.experience % 100) / 100) * 100}%`
-                      }}
-                    ></div>
-                  </div>
-                  <div className="xp-text">
-                    {stats.experience % 100} / 100 XP
-                  </div>
-                </div>
+                <div className="xp-text">{stats.experience % 100} / 100 XP</div>
               </div>
             </div>
+          </div>
+
+          <div className="profile-settings__divider"></div>
 
           {/* Stats Section */}
           <div className="profile-settings__section">
@@ -231,7 +235,9 @@ export default function ProfileSettings() {
 
             <div className="profile-stats-grid">
               <div className="profile-stat-card">
-                <div className="profile-stat-card__icon">🍅</div>
+                <div className="profile-stat-card__icon">
+                  <img src={tomatoIcon} alt="Tomato Icon" />
+                </div>
                 <p className="profile-stat-card__value">
                   {stats.total_sessions}
                 </p>
@@ -249,7 +255,9 @@ export default function ProfileSettings() {
               </div>
 
               <div className="profile-stat-card">
-                <div className="profile-stat-card__icon">✨</div>
+                <div className="profile-stat-card__icon">
+                  <img src={uniqueIcon} alt="Unique Icon" />
+                </div>
                 <p className="profile-stat-card__value">
                   {stats.unique_character}
                 </p>

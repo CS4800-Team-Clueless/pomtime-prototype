@@ -1,30 +1,30 @@
-import { useState, useEffect, useRef } from 'react';
-import { Modal, Button } from 'react-bootstrap';
-import { useAuth } from '../../contexts/AuthContext';
-import GACHA_ART, { DEFAULT_ART } from '../../components/Gacha/GachaArt';
-import './InventoryPage.css';
-import releaseSfx from '../../assets/sound_effects/release_effect.wav';
+import { useState, useEffect, useRef } from "react";
+import { Modal, Button } from "react-bootstrap";
+import { useAuth } from "../../contexts/AuthContext";
+import GACHA_ART, { DEFAULT_ART } from "../../components/Gacha/GachaArt";
+import "./InventoryPage.css";
+import releaseSfx from "../../assets/sound_effects/release_effect.wav";
 
 // Character rarity mapping
 const CHARACTER_RARITY = {
   // 5-star
-  'King': 5,
-  'Angel': 5,
-  'Dragon': 5,
+  King: 5,
+  Angel: 5,
+  Dragon: 5,
   // 4-star
-  'Snow': 4,
-  'Prince': 4,
-  'Moon': 4,
-  'Autumn': 4,
+  Snow: 4,
+  Prince: 4,
+  Moon: 4,
+  Autumn: 4,
   // 3-star
-  'White': 3,
-  'Brown': 3,
-  'Orange': 3,
-  'Black': 3,
-  'Cream': 3,
-  'Gray': 3,
-  'Tan': 3,
-  'Beige': 3
+  White: 3,
+  Brown: 3,
+  Orange: 3,
+  Black: 3,
+  Cream: 3,
+  Gray: 3,
+  Tan: 3,
+  Beige: 3,
 };
 
 export default function Inventory() {
@@ -34,10 +34,10 @@ export default function Inventory() {
     level: 1,
     experience: 0,
     xp_in_current_level: 0,
-    xp_needed_for_next: 100
+    xp_needed_for_next: 100,
   });
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState("all");
   const [showLevelUp, setShowLevelUp] = useState(false);
   const [releasingChar, setReleasingChar] = useState(null);
   const [showReleaseModal, setShowReleaseModal] = useState(false);
@@ -46,9 +46,8 @@ export default function Inventory() {
 
   const releaseAudioRef = useRef(null);
   useEffect(() => {
-    releaseAudioRef.current = new Audio(releaseSfx)
-  }, []
-  );
+    releaseAudioRef.current = new Audio(releaseSfx);
+  }, []);
 
   useEffect(() => {
     fetchData();
@@ -56,20 +55,20 @@ export default function Inventory() {
 
   const fetchData = async () => {
     try {
-      console.log('Fetching collection and stats...');
+      console.log("Fetching collection and stats...");
 
       const collectionRes = await fetchWithAuth(`${API_URL}/api/collection`);
       const collectionData = await collectionRes.json();
-      console.log('Collection data:', collectionData);
+      console.log("Collection data:", collectionData);
 
       const statsRes = await fetchWithAuth(`${API_URL}/api/profile/stats`);
       const statsData = await statsRes.json();
-      console.log('Stats data:', statsData);
+      console.log("Stats data:", statsData);
 
       setCollection(collectionData.collection || {});
       setProfileStats(statsData);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error("Error fetching data:", error);
       // If stats endpoint fails, at least try to show collection
       try {
         const collectionRes = await fetchWithAuth(`${API_URL}/api/collection`);
@@ -80,10 +79,10 @@ export default function Inventory() {
           level: 1,
           experience: 0,
           xp_in_current_level: 0,
-          xp_needed_for_next: 100
+          xp_needed_for_next: 100,
         });
       } catch (collectionError) {
-        console.error('Failed to fetch collection:', collectionError);
+        console.error("Failed to fetch collection:", collectionError);
       }
     } finally {
       setLoading(false);
@@ -103,26 +102,28 @@ export default function Inventory() {
     setReleasingChar(charName);
     setShowReleaseModal(false);
 
-    if(releaseAudioRef.current){
-      releaseAudioRef.current.currentTime =0;
+    if (releaseAudioRef.current) {
+      releaseAudioRef.current.currentTime = 0;
       releaseAudioRef.current.play().catch((err) => {
-        console.error("Error playing effect",err);
-      }
-      );
+        console.error("Error playing effect", err);
+      });
     }
 
     try {
-      const response = await fetchWithAuth(`${API_URL}/api/collection/release`, {
-        method: 'POST',
-        body: JSON.stringify({
-          character: charName,
-          count: releaseCount
-        })
-      });
+      const response = await fetchWithAuth(
+        `${API_URL}/api/collection/release`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            character: charName,
+            count: releaseCount,
+          }),
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to release character');
+        throw new Error(errorData.error || "Failed to release character");
       }
 
       const data = await response.json();
@@ -133,7 +134,7 @@ export default function Inventory() {
           level: data.level,
           experience: data.total_xp,
           xp_in_current_level: data.xp_in_current_level,
-          xp_needed_for_next: data.xp_needed_for_next
+          xp_needed_for_next: data.xp_needed_for_next,
         });
 
         if (data.leveled_up) {
@@ -142,7 +143,7 @@ export default function Inventory() {
         }
       }
     } catch (error) {
-      console.error('Error releasing character:', error);
+      console.error("Error releasing character:", error);
       alert(`Failed to release character: ${error.message}`);
     } finally {
       setReleasingChar(null);
@@ -164,7 +165,7 @@ export default function Inventory() {
       groups[stars].push({ name, stars, count });
     });
 
-    Object.keys(groups).forEach(rarity => {
+    Object.keys(groups).forEach((rarity) => {
       groups[rarity].sort((a, b) => b.count - a.count);
     });
 
@@ -174,16 +175,20 @@ export default function Inventory() {
   const filteredCharacters = () => {
     const groups = groupedCharacters();
 
-    if (filter === 'all') {
+    if (filter === "all") {
       return [...groups[5], ...groups[4], ...groups[3]];
     }
 
     return groups[filter];
   };
 
-  const totalCharacters = Object.values(collection).reduce((sum, count) => sum + count, 0);
+  const totalCharacters = Object.values(collection).reduce(
+    (sum, count) => sum + count,
+    0
+  );
   const uniqueCharacters = Object.keys(collection).length;
-  const progressPercentage = (profileStats.xp_in_current_level / profileStats.xp_needed_for_next) * 100;
+  const progressPercentage =
+    (profileStats.xp_in_current_level / profileStats.xp_needed_for_next) * 100;
 
   if (loading) {
     return (
@@ -204,18 +209,25 @@ export default function Inventory() {
         )}
 
         <header className="inventory-header">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-            <h1 className="inventory-title">🐕 My Collection</h1>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "1rem",
+            }}
+          >
+            <h1 className="inventory-title">My Collection</h1>
             <button
               onClick={fetchData}
               style={{
-                padding: '0.5rem 1rem',
-                background: 'rgba(255,255,255,0.2)',
-                border: 'none',
-                borderRadius: '0.5rem',
-                color: 'white',
-                cursor: 'pointer',
-                fontWeight: 600
+                padding: "0.5rem 1rem",
+                background: "rgba(255,255,255,0.2)",
+                border: "none",
+                borderRadius: "0.5rem",
+                color: "white",
+                cursor: "pointer",
+                fontWeight: 600,
               }}
             >
               🔄 Refresh Inventory
@@ -236,7 +248,8 @@ export default function Inventory() {
                 ></div>
               </div>
               <div className="xp-text">
-                {profileStats.xp_in_current_level} / {profileStats.xp_needed_for_next} XP
+                {profileStats.xp_in_current_level} /{" "}
+                {profileStats.xp_needed_for_next} XP
               </div>
             </div>
           </div>
@@ -251,7 +264,9 @@ export default function Inventory() {
               <div className="stat-label">Unique Pomeranians</div>
             </div>
             <div className="stat-card">
-              <div className="points-value">{Object.keys(CHARACTER_RARITY).length}</div>
+              <div className="points-value">
+                {Object.keys(CHARACTER_RARITY).length}
+              </div>
               <div className="stat-label">Total Available</div>
             </div>
           </div>
@@ -259,36 +274,38 @@ export default function Inventory() {
 
         <div className="filter-tabs">
           <button
-            className={`filter-tab ${filter === 'all' ? 'active' : ''}`}
-            onClick={() => setFilter('all')}
+            className={`filter-tab ${filter === "all" ? "active" : ""}`}
+            onClick={() => setFilter("all")}
           >
             All
           </button>
           <button
-            className={`filter-tab ${filter === '5' ? 'active' : ''}`}
-            onClick={() => setFilter('5')}
+            className={`filter-tab ${filter === "5" ? "active" : ""}`}
+            onClick={() => setFilter("5")}
           >
             ★★★★★
           </button>
           <button
-            className={`filter-tab ${filter === '4' ? 'active' : ''}`}
-            onClick={() => setFilter('4')}
+            className={`filter-tab ${filter === "4" ? "active" : ""}`}
+            onClick={() => setFilter("4")}
           >
             ★★★★
           </button>
           <button
-            className={`filter-tab ${filter === '3' ? 'active' : ''}`}
-            onClick={() => setFilter('3')}
+            className={`filter-tab ${filter === "3" ? "active" : ""}`}
+            onClick={() => setFilter("3")}
           >
             ★★★
           </button>
         </div>
 
         <div className="collection-grid">
-          {filteredCharacters().map(char => (
+          {filteredCharacters().map((char) => (
             <div
               key={char.name}
-              className={`character-card rarity-${char.stars} ${char.count === 0 ? 'not-owned' : ''}`}
+              className={`character-card rarity-${char.stars} ${
+                char.count === 0 ? "not-owned" : ""
+              }`}
             >
               <div className="character-image">
                 <img
@@ -299,18 +316,22 @@ export default function Inventory() {
               </div>
               <div className="character-info">
                 <div className="character-name">{char.name}</div>
-                <div className="character-stars">{'★'.repeat(char.stars)}</div>
+                <div className="character-stars">{"★".repeat(char.stars)}</div>
                 <div className="character-count">
-                  {char.count > 0 ? `×${char.count}` : 'Not Obtained'}
+                  {char.count > 0 ? `×${char.count}` : "Not Obtained"}
                 </div>
 
                 {char.count > 0 && (
                   <button
                     className="release-btn"
-                    onClick={() => handleRelease(char.name, char.stars, char.count)}
+                    onClick={() =>
+                      handleRelease(char.name, char.stars, char.count)
+                    }
                     disabled={releasingChar === char.name}
                   >
-                    {releasingChar === char.name ? 'Releasing...' : `Release (+${getXPForRarity(char.stars)} XP)`}
+                    {releasingChar === char.name
+                      ? "Releasing..."
+                      : `Release (+${getXPForRarity(char.stars)} XP)`}
                   </button>
                 )}
               </div>
@@ -323,47 +344,85 @@ export default function Inventory() {
           <div className="empty-state">
             <div className="empty-icon">📦</div>
             <h3>Your collection is empty!</h3>
-            <p>Complete tasks to earn points and roll the gacha to start collecting Pomeranians.</p>
+            <p>
+              Complete tasks to earn points and roll the gacha to start
+              collecting Pomeranians.
+            </p>
           </div>
         )}
       </div>
 
       {/* Release Confirmation Modal */}
-      <Modal show={showReleaseModal} onHide={() => setShowReleaseModal(false)} centered>
-        <Modal.Header closeButton style={{ background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)', color: 'white' }}>
+      <Modal
+        show={showReleaseModal}
+        onHide={() => setShowReleaseModal(false)}
+        centered
+      >
+        <Modal.Header
+          closeButton
+          style={{
+            background: "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)",
+            color: "white",
+          }}
+        >
           <Modal.Title>Release Pomeranian?</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ textAlign: 'center', padding: '2rem' }}>
+        <Modal.Body style={{ textAlign: "center", padding: "2rem" }}>
           {selectedCharacter && (
             <>
-              <div style={{ marginBottom: '1rem' }}>
+              <div style={{ marginBottom: "1rem" }}>
                 <img
                   src={GACHA_ART[selectedCharacter.name] || DEFAULT_ART}
                   alt={selectedCharacter.name}
-                  style={{ width: '120px', height: '120px', objectFit: 'contain' }}
+                  style={{
+                    width: "120px",
+                    height: "120px",
+                    objectFit: "contain",
+                  }}
                 />
               </div>
-              <h4 style={{ marginBottom: '1rem' }}>{selectedCharacter.name}</h4>
-              <div style={{ fontSize: '1.5rem', color: '#fbbf24', marginBottom: '1rem' }}>
-                {'★'.repeat(selectedCharacter.stars)}
+              <h4 style={{ marginBottom: "1rem" }}>{selectedCharacter.name}</h4>
+              <div
+                style={{
+                  fontSize: "1.5rem",
+                  color: "#fbbf24",
+                  marginBottom: "1rem",
+                }}
+              >
+                {"★".repeat(selectedCharacter.stars)}
               </div>
 
               {selectedCharacter.maxCount > 1 && (
-                <div style={{ marginBottom: '1.5rem' }}>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>
+                <div style={{ marginBottom: "1.5rem" }}>
+                  <label
+                    style={{
+                      display: "block",
+                      marginBottom: "0.5rem",
+                      fontWeight: 600,
+                    }}
+                  >
                     Release Count: (You own {selectedCharacter.maxCount})
                   </label>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem' }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "1rem",
+                    }}
+                  >
                     <button
-                      onClick={() => setReleaseCount(Math.max(1, releaseCount - 1))}
+                      onClick={() =>
+                        setReleaseCount(Math.max(1, releaseCount - 1))
+                      }
                       style={{
-                        width: '40px',
-                        height: '40px',
-                        fontSize: '1.5rem',
-                        border: '2px solid #d1d5db',
-                        borderRadius: '0.5rem',
-                        background: 'white',
-                        cursor: 'pointer'
+                        width: "40px",
+                        height: "40px",
+                        fontSize: "1.5rem",
+                        border: "2px solid #d1d5db",
+                        borderRadius: "0.5rem",
+                        background: "white",
+                        cursor: "pointer",
                       }}
                     >
                       -
@@ -373,26 +432,37 @@ export default function Inventory() {
                       min="1"
                       max={selectedCharacter.maxCount}
                       value={releaseCount}
-                      onChange={(e) => setReleaseCount(Math.min(selectedCharacter.maxCount, Math.max(1, parseInt(e.target.value) || 1)))}
+                      onChange={(e) =>
+                        setReleaseCount(
+                          Math.min(
+                            selectedCharacter.maxCount,
+                            Math.max(1, parseInt(e.target.value) || 1)
+                          )
+                        )
+                      }
                       style={{
-                        width: '80px',
-                        padding: '0.5rem',
-                        fontSize: '1.25rem',
-                        textAlign: 'center',
-                        border: '2px solid #d1d5db',
-                        borderRadius: '0.5rem'
+                        width: "80px",
+                        padding: "0.5rem",
+                        fontSize: "1.25rem",
+                        textAlign: "center",
+                        border: "2px solid #d1d5db",
+                        borderRadius: "0.5rem",
                       }}
                     />
                     <button
-                      onClick={() => setReleaseCount(Math.min(selectedCharacter.maxCount, releaseCount + 1))}
+                      onClick={() =>
+                        setReleaseCount(
+                          Math.min(selectedCharacter.maxCount, releaseCount + 1)
+                        )
+                      }
                       style={{
-                        width: '40px',
-                        height: '40px',
-                        fontSize: '1.5rem',
-                        border: '2px solid #d1d5db',
-                        borderRadius: '0.5rem',
-                        background: 'white',
-                        cursor: 'pointer'
+                        width: "40px",
+                        height: "40px",
+                        fontSize: "1.5rem",
+                        border: "2px solid #d1d5db",
+                        borderRadius: "0.5rem",
+                        background: "white",
+                        cursor: "pointer",
                       }}
                     >
                       +
@@ -401,28 +471,41 @@ export default function Inventory() {
                 </div>
               )}
 
-              <p style={{ fontSize: '1.125rem', marginBottom: '0.5rem' }}>
-                Release {releaseCount} {selectedCharacter.name} Pomeranian{releaseCount > 1 ? 's' : ''} to gain:
+              <p style={{ fontSize: "1.125rem", marginBottom: "0.5rem" }}>
+                Release {releaseCount} {selectedCharacter.name} Pomeranian
+                {releaseCount > 1 ? "s" : ""} to gain:
               </p>
-              <div style={{
-                fontSize: '2rem',
-                fontWeight: 'bold',
-                color: '#3b82f6',
-                background: 'linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)',
-                padding: '1rem',
-                borderRadius: '0.75rem',
-                marginTop: '1rem'
-              }}>
+              <div
+                style={{
+                  fontSize: "2rem",
+                  fontWeight: "bold",
+                  color: "#3b82f6",
+                  background:
+                    "linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)",
+                  padding: "1rem",
+                  borderRadius: "0.75rem",
+                  marginTop: "1rem",
+                }}
+              >
                 +{getXPForRarity(selectedCharacter.stars) * releaseCount} XP
               </div>
-              <p style={{ marginTop: '1rem', color: '#6b7280', fontSize: '0.875rem' }}>
+              <p
+                style={{
+                  marginTop: "1rem",
+                  color: "#6b7280",
+                  fontSize: "0.875rem",
+                }}
+              >
                 This action cannot be undone.
               </p>
             </>
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowReleaseModal(false)}>
+          <Button
+            variant="secondary"
+            onClick={() => setShowReleaseModal(false)}
+          >
             Cancel
           </Button>
           <Button variant="danger" onClick={confirmRelease}>

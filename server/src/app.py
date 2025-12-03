@@ -1108,6 +1108,7 @@ def get_public_profile():
             'experience': 1,
             'collection': 1,
             'displayed_characters': 1,
+            'pomodoro_sessions': 1,
             '_id': 0
         }
     )
@@ -1137,7 +1138,8 @@ def get_public_profile():
             'displayed_characters': displayed_chars,
             'stats': {
                 'total_pomeranians': total_poms,
-                'unique_pomeranians': unique_poms
+                'unique_pomeranians': unique_poms,
+                'total_sessions': user.get('pomodoro_sessions', 0)
             }
         }
     })

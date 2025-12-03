@@ -6,7 +6,7 @@ from pymongo import MongoClient
 from google.oauth2 import id_token
 from google.auth.transport import requests
 import secrets
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from functools import wraps
 import certifi
 from bson.objectid import ObjectId
@@ -117,7 +117,11 @@ def google_auth():
                     'dark_mode': False
                 },
                 'created_at': datetime.utcnow(),
-                'last_login': datetime.utcnow()
+                'last_login': datetime.utcnow(),
+                'daily_points': {
+                    'date': datetime.now(timezone.utc).date(),
+                    'points_earned': 0
+                }
             }
             result = users_collection.insert_one(user)
             user['_id'] = result.inserted_id
@@ -211,6 +215,47 @@ def get_points():
         return jsonify({'points': user.get('points', 0)})
 
     return jsonify({'error': 'User not found'}), 404
+
+
+def check_daily_point_limit(user_id, points):
+    DAILY_LIMIT = 200
+    today = str(datetime.now(timezone.utc).date())
+
+    user = users_collection.find_one({'_id': ObjectId(user_id)})
+    daily_points = user.get('daily_points', {})
+
+    last_date = daily_points.get('date')
+    daily_points_earned = daily_points.get('points_earned', 0)
+
+    if last_date != today:
+        # Reset for new day
+        daily_points_earned = 0
+        reset_date = True
+    else:
+        reset_date = False
+
+    if daily_points_earned >= DAILY_LIMIT:
+        return 0  # No more points can be added today
+    
+    points_to_add = min(points, DAILY_LIMIT - daily_points_earned)
+
+    if reset_date:
+        users_collection.update_one(
+            {'_id': ObjectId(user_id)},
+            {'$set': {
+                'daily_points': {
+                    'date': today,
+                    'points_earned': 0
+                }
+            }}
+        ) 
+    else:
+        users_collection.update_one(
+            {'_id': ObjectId(user_id)},
+            {'$inc': {'daily_points.points_earned': points_to_add}}
+        )
+        
+    return points_to_add
 
 
 # ==================== DAILY CHECK-IN ROUTES ====================
@@ -415,7 +460,9 @@ def complete_task(task_id):
     )
 
     # Award points to user
-    points = task.get('points', 1)
+    task_points = task.get('points', 1)
+    points = check_daily_point_limit(user_id, task_points)
+
     users_collection.update_one(
         {'_id': ObjectId(user_id)},
         {'$inc': {'points': points}}
@@ -585,7 +632,8 @@ def complete_timer():
     duration_minutes = data.get('duration_minutes', 25)
     label = data.get('label', 'Pomodoro Session')
     # simple points rule: 2 point per 25 minutes
-    points = data.get('points', max(2, round(duration_minutes / 25)))
+    timer_points = data.get('points', max(2, round(duration_minutes / 25)))
+    points = check_daily_point_limit(user_id, timer_points)
 
     # Update user doc: points, pomodoro_sessions, and collection
     update_fields = {

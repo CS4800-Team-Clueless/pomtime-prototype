@@ -29,6 +29,13 @@ tasks_collection = db['tasks']
 pomodoro_collection = db['pomodoro_sessions']
 
 app = Flask(__name__)
+
+# Check if running in production
+IS_PRODUCTION = os.getenv('FLASK_ENV') == 'production' or os.getenv('ENV') == 'production'
+
+# Disable debug mode in production
+DEBUG_MODE = not IS_PRODUCTION
+
 app.secret_key = os.getenv('SECRET_KEY', secrets.token_hex(32))
 
 # Configure CORS - update with your actual frontend URL
@@ -100,6 +107,13 @@ def google_auth():
                 {'$set': {'last_login': datetime.utcnow()}}
             )
         else:
+            # Clean up any old sessions for this email (in case user was deleted and recreated)
+            sessions_to_delete = [sess_token for sess_token, session in sessions.items()
+                                  if session.get('email') == email]
+            for old_token in sessions_to_delete:
+                del sessions[old_token]
+                print(f"Cleaned up old session for {email}")
+
             # Create new user document
             user = {
                 'google_id': google_id,
@@ -148,10 +162,20 @@ def google_auth():
         })
 
     except ValueError as e:
-        return jsonify({'error': 'Invalid token', 'details': str(e)}), 401
+        print(f"Token validation error: {str(e)}")
+        if IS_PRODUCTION:
+            return jsonify({'error': 'Invalid authentication token'}), 401
+        else:
+            return jsonify({'error': 'Invalid token', 'details': str(e)}), 401
+
     except Exception as e:
         print(f"Authentication error: {str(e)}")
-        return jsonify({'error': 'Authentication failed', 'details': str(e)}), 500
+        import traceback
+        traceback.print_exc()
+        if IS_PRODUCTION:
+            return jsonify({'error': 'Authentication failed'}), 500
+        else:
+            return jsonify({'error': 'Authentication failed', 'details': str(e)}), 500
 
 
 @app.route('/auth/verify', methods=['GET'])
@@ -200,7 +224,6 @@ def get_current_user():
         return jsonify({'user': user})
 
     return jsonify({'error': 'User not found'}), 404
-
 
 # ==================== POINTS ROUTES ====================
 
@@ -1238,13 +1261,32 @@ def get_friends_leaderboard():
 
     return jsonify({'leaderboard': friends_data})
 
-# ==================== HEALTH CHECK ====================
+# ==================== HEALTH CHECK AND ERROR HANDLING ====================
+
+@app.errorhandler(Exception)
+def handle_exception(e):
+    """Catch-all error handler"""
+    # Log the full error server-side
+    print(f"ERROR: {str(e)}")
+    import traceback
+    traceback.print_exc()
+
+    # Return sanitized error to client
+    if IS_PRODUCTION:
+        return jsonify({
+            'error': 'An error occurred',
+            'message': 'Please try again or contact support if the problem persists'
+        }), 500
+    else:
+        return jsonify({
+            'error': str(e),
+            'details': traceback.format_exc()
+        }), 500
 
 @app.route('/health', methods=['GET'])
 def health_check():
     """Health check endpoint"""
     return jsonify({'status': 'healthy', 'database': 'connected'})
-
 
 if __name__ == '__main__':
     # Create indexes for better query performance
@@ -1252,4 +1294,4 @@ if __name__ == '__main__':
     users_collection.create_index('email')
     tasks_collection.create_index([('user_id', 1), ('start', 1)])
 
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=DEBUG_MODE, host='0.0.0.0', port=5000)

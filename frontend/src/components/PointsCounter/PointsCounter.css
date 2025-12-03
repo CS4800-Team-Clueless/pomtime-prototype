@@ -1,8 +1,9 @@
 .points-counter {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 14px 24px;
+  padding: 0px 24px;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: left;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -17,8 +18,8 @@
 .points-counter-header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 4px;
+  gap: 10px;
+  margin-bottom: 0px;
 }
 
 .points-counter-icon {

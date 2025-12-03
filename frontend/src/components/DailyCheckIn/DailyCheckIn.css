@@ -5,6 +5,12 @@
   margin: 20px 0;
 }
 
+.daily-checkin img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+}
+
 .daily-checkin.loading {
   padding: 20px;
 }

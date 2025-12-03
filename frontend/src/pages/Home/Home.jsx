@@ -4,6 +4,11 @@ import { Link } from "react-router-dom";
 import DailyCheckIn from "../../components/DailyCheckIn/DailyCheckIn";
 import "./Home.css";
 
+import calendarIcon from "../../assets/icons/Calendar_Icon.png";
+import celebrateIcon from "../../assets/icons/Celebration_Icon.png";
+import taskIcon from "../../assets/icons/Task_Icon.png";
+import pomTreatsIcon from "../../assets/icons/Pom_Treats_Icon.png";
+
 export default function Home() {
   const { user, fetchWithAuth, API_URL } = useAuth();
   const [weekTasks, setWeekTasks] = useState([]);
@@ -103,7 +108,12 @@ export default function Home() {
       {/* Agenda Preview Section */}
       <div className="agenda-section">
         <div className="agenda-header">
-          <h2 className="agenda-title">📅 Your Week Ahead</h2>
+          <h2 className="agenda-title">
+            <div className="agenda-icon">
+              <img src={calendarIcon} alt="Calendar Icon" />
+            </div>
+            Your Week Ahead
+          </h2>
           <Link to="/calendar" className="view-all-link">
             View Full Calendar →
           </Link>
@@ -113,7 +123,9 @@ export default function Home() {
           <div className="agenda-loading">Loading your tasks...</div>
         ) : weekTasks.length === 0 ? (
           <div className="empty-agenda">
-            <div className="empty-icon">🎉</div>
+            <div className="empty-icon">
+              <img src={celebrateIcon} alt="Celebrate Icon" />
+            </div>
             <h3>All clear!</h3>
             <p>
               You have no pending tasks this week. Great job staying on top of
@@ -132,7 +144,7 @@ export default function Home() {
                   <p className="task-time">{formatDateTime(task.start)}</p>
                 </div>
                 <div className="task-meta">
-                  <span className="task-points">{task.points}🦴</span>
+                  <div className="task-points">{task.points} 🦴</div>
                   {task.recurring && (
                     <span className="task-recurring">Daily</span>
                   )}
@@ -151,14 +163,18 @@ export default function Home() {
       {/* Quick Stats */}
       <div className="quick-stats">
         <div className="stat-box">
-          <div className="stat-icon">📋</div>
+          <div className="stat-icon">
+            <img src={taskIcon} alt="Task Icon" />
+          </div>
           <div className="stat-content">
             <div className="stat-number">{weekTasks.length}</div>
             <div className="stat-label">Tasks This Week</div>
           </div>
         </div>
         <div className="stat-box">
-          <div className="stat-icon">🎯</div>
+          <div className="stat-icon">
+            <img src={pomTreatsIcon} alt="Pom Treat Icon" />
+          </div>
           <div className="stat-content">
             <div className="stat-number">
               {weekTasks.reduce((sum, task) => sum + (task.points || 0), 0)}

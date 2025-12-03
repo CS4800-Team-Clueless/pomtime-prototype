@@ -517,9 +517,13 @@ export default function Inventory() {
           >
             Cancel
           </Button>
-          <Button variant="danger" onClick={confirmRelease}>
-            Release
-          </Button>
+
+          {selectedCharacter.maxCount > 1 && (
+            <Button variant="danger" onClick={confirmRelease}>
+              Release
+            </Button>
+          )}
+          
         </Modal.Footer>
       </Modal>
     </div>

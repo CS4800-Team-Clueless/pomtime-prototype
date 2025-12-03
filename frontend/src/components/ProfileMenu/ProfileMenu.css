@@ -131,6 +131,13 @@
   flex-shrink: 0;
 }
 
+.profile-menu__icon.bi {
+  font-weight: 700;
+  -webkit-text-stroke: 0.3px white;
+  display: flex;
+  align-items: center;
+}
+
 .profile-menu__divider {
   height: 1px;
   background-color: #e5e7eb;

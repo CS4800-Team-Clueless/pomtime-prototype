@@ -50,14 +50,8 @@ export default function Settings() {
   return (
     <div className="settings-page">
       <div className="settings-container">
-        <button onClick={handleBack} className="settings-back">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M19 12H5M12 19l-7-7 7-7"/>
-          </svg>
-          Back
-        </button>
 
-        <h1 className="settings-title">⚙️ Settings</h1>
+        <h1 className="settings-title">Themes </h1>
 
         <div className="settings-card">
           {/* Dark Mode Section */}

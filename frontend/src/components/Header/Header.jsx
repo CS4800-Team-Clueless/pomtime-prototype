@@ -27,9 +27,6 @@ export default function Header() {
           <NavLink to="/leaderboard" className="pt-link">
             Leaderboard
           </NavLink>
-          <NavLink to="/settings" className="pt-link">
-            Settings
-          </NavLink>
         </nav>
         {/* Profile Menu in top right */}
         <div className="pt-profile-menu">

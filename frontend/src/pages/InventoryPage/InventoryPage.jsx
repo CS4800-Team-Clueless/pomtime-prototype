@@ -392,112 +392,121 @@ export default function Inventory() {
                 {"★".repeat(selectedCharacter.stars)}
               </div>
 
-              {selectedCharacter.maxCount > 1 && (
-                <div style={{ marginBottom: "1.5rem" }}>
-                  <label
-                    style={{
-                      display: "block",
-                      marginBottom: "0.5rem",
-                      fontWeight: 600,
-                    }}
-                  >
-                    Release Count: (You own {selectedCharacter.maxCount})
-                  </label>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "1rem",
-                    }}
-                  >
-                    <button
-                      onClick={() =>
-                        setReleaseCount(Math.max(1, releaseCount - 1))
-                      }
+              {selectedCharacter.maxCount > 1 ? (
+                <div>
+                  <div style={{ marginBottom: "1.5rem" }}>
+                    <label
                       style={{
-                        width: "40px",
-                        height: "40px",
-                        fontSize: "1.5rem",
-                        border: "2px solid #d1d5db",
-                        borderRadius: "0.5rem",
-                        background: "white",
-                        cursor: "pointer",
+                        display: "block",
+                        marginBottom: "0.5rem",
+                        fontWeight: 600,
                       }}
                     >
-                      -
-                    </button>
-                    <input
-                      type="number"
-                      min="1"
-                      max={selectedCharacter.maxCount}
-                      value={releaseCount}
-                      onChange={(e) =>
-                        setReleaseCount(
-                          Math.min(
-                            selectedCharacter.maxCount,
-                            Math.max(1, parseInt(e.target.value) || 1)
+                      Release Count: (You own {selectedCharacter.maxCount})
+                    </label>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: "1rem",
+                      }}
+                    >
+                      <button
+                        onClick={() =>
+                          setReleaseCount(Math.max(1, releaseCount - 1))
+                        }
+                        style={{
+                          width: "40px",
+                          height: "40px",
+                          fontSize: "1.5rem",
+                          border: "2px solid #d1d5db",
+                          borderRadius: "0.5rem",
+                          background: "white",
+                          cursor: "pointer",
+                        }}
+                      >
+                        -
+                      </button>
+                      <input
+                        type="number"
+                        min="1"
+                        max={selectedCharacter.maxCount - 1}
+                        value={releaseCount}
+                        onChange={(e) =>
+                          setReleaseCount(
+                            Math.min(
+                              selectedCharacter.maxCount - 1,
+                              Math.max(1, parseInt(e.target.value) || 1)
+                            )
                           )
-                        )
-                      }
+                        }
+                        style={{
+                          width: "80px",
+                          padding: "0.5rem",
+                          fontSize: "1.25rem",
+                          textAlign: "center",
+                          border: "2px solid #d1d5db",
+                          borderRadius: "0.5rem",
+                        }}
+                      />
+                      <button
+                        onClick={() =>
+                          setReleaseCount(
+                            Math.min(selectedCharacter.maxCount - 1, releaseCount + 1)
+                          )
+                        }
+                        style={{
+                          width: "40px",
+                          height: "40px",
+                          fontSize: "1.5rem",
+                          border: "2px solid #d1d5db",
+                          borderRadius: "0.5rem",
+                          background: "white",
+                          cursor: "pointer",
+                        }}
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <p style={{ fontSize: "1.125rem", marginBottom: "0.5rem", marginTop: "1.rem" }}>
+                      Release {releaseCount} {selectedCharacter.name} Pomeranian
+                      {releaseCount > 1 ? "s" : ""} to gain:
+                    </p>
+                    <div
                       style={{
-                        width: "80px",
-                        padding: "0.5rem",
-                        fontSize: "1.25rem",
-                        textAlign: "center",
-                        border: "2px solid #d1d5db",
-                        borderRadius: "0.5rem",
-                      }}
-                    />
-                    <button
-                      onClick={() =>
-                        setReleaseCount(
-                          Math.min(selectedCharacter.maxCount, releaseCount + 1)
-                        )
-                      }
-                      style={{
-                        width: "40px",
-                        height: "40px",
-                        fontSize: "1.5rem",
-                        border: "2px solid #d1d5db",
-                        borderRadius: "0.5rem",
-                        background: "white",
-                        cursor: "pointer",
+                        fontSize: "2rem",
+                        fontWeight: "bold",
+                        color: "#3b82f6",
+                        background:
+                          "linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)",
+                        padding: "1rem",
+                        borderRadius: "0.75rem",
+                        marginTop: "1rem",
                       }}
                     >
-                      +
-                    </button>
+                        +{getXPForRarity(selectedCharacter.stars) * releaseCount} XP
+                    </div>
+                    <p
+                      style={{
+                        marginTop: "1rem",
+                        color: "#6b7280",
+                        fontSize: "0.875rem",
+                      }}
+                    >
+                      This action cannot be undone.
+                    </p>
                   </div>
                 </div>
-              )}
 
-              <p style={{ fontSize: "1.125rem", marginBottom: "0.5rem" }}>
-                Release {releaseCount} {selectedCharacter.name} Pomeranian
-                {releaseCount > 1 ? "s" : ""} to gain:
-              </p>
-              <div
-                style={{
-                  fontSize: "2rem",
-                  fontWeight: "bold",
-                  color: "#3b82f6",
-                  background:
-                    "linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)",
-                  padding: "1rem",
-                  borderRadius: "0.75rem",
-                  marginTop: "1rem",
-                }}
-              >
-                +{getXPForRarity(selectedCharacter.stars) * releaseCount} XP
-              </div>
-              <p
-                style={{
-                  marginTop: "1rem",
-                  color: "#6b7280",
-                  fontSize: "0.875rem",
-                }}
-              >
-                This action cannot be undone.
-              </p>
+              ) : (
+                <div style={{ fontSize: "1.125rem", marginBottom: "0.5rem", marginRight: "1rem", marginLeft: "1rem" }}>
+                  You need at least <strong>2 {selectedCharacter.name}</strong> Pomeranians
+                </div>
+              )}
             </>
           )}
         </Modal.Body>

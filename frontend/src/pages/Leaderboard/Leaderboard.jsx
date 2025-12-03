@@ -38,6 +38,15 @@ export default function Leaderboard() {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [addingFriend, setAddingFriend] = useState(false);
+  const [notification, setNotification] = useState(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [friendToRemove, setFriendToRemove] = useState(null);
+
+  // Show notification
+  const showNotification = (message, type = 'success') => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 3000);
+  };
 
   // Load friends and leaderboard on mount
   useEffect(() => {
@@ -80,25 +89,32 @@ export default function Leaderboard() {
 
       if (response.ok) {
         const data = await response.json();
-        alert(data.message);
+        showNotification(data.message, 'success');
         setSearchEmail("");
 
         // Reload friends and leaderboard
         await loadFriendsAndLeaderboard();
       } else {
         const error = await response.json();
-        alert(error.error || "Failed to add friend");
+        showNotification(error.error || 'Failed to add friend', 'error');
       }
     } catch (error) {
       console.error("Error adding friend:", error);
-      alert("Failed to add friend");
+      showNotification('Failed to add friend', 'error');
     } finally {
       setAddingFriend(false);
     }
   };
 
   const handleRemoveFriend = async (email) => {
-    if (!confirm(`Remove ${email} from your leaderboard?`)) return;
+    setFriendToRemove(email);
+    setShowConfirmModal(true);
+  };
+
+  const confirmRemoveFriend = async () => {
+    const email = friendToRemove;
+    setShowConfirmModal(false);
+    setFriendToRemove(null);
 
     try {
       const response = await fetchWithAuth(
@@ -109,15 +125,16 @@ export default function Leaderboard() {
       );
 
       if (response.ok) {
+        showNotification(`Removed ${email} from your leaderboard`, 'success');
         // Reload friends and leaderboard
         await loadFriendsAndLeaderboard();
       } else {
         const error = await response.json();
-        alert(error.error || "Failed to remove friend");
+        showNotification(error.error || 'Failed to remove friend', 'error');
       }
     } catch (error) {
       console.error("Error removing friend:", error);
-      alert("Failed to remove friend");
+      showNotification('Failed to remove friend', 'error');
     }
   };
 
@@ -137,11 +154,11 @@ export default function Leaderboard() {
         setShowProfileModal(true);
       } else {
         const error = await response.json();
-        alert(error.error || "Failed to load profile");
+        showNotification(error.error || 'Failed to load profile', 'error');
       }
     } catch (error) {
       console.error("Error loading profile:", error);
-      alert("Failed to load profile");
+      showNotification('Failed to load profile', 'error');
     }
   };
 
@@ -217,8 +234,6 @@ export default function Leaderboard() {
               <div
                 key={player.email_display}
                 className={`leaderboard-item ${
-                  player.email_display === user?.email ? "current-user" : ""
-                } ${
                   index === 0
                     ? "rank-1"
                     : index === 1
@@ -256,21 +271,50 @@ export default function Leaderboard() {
                     {player.experience} XP
                   </div>
                 </div>
-                <button
-                  className="remove-friend-btn"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleRemoveFriend(player.email_display);
-                  }}
-                  title="Remove friend"
-                >
-                  ×
-                </button>
+                {player.email_display !== user?.email && (
+                  <button
+                    className="remove-friend-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRemoveFriend(player.email_display);
+                    }}
+                    title="Remove friend"
+                  >
+                    ×
+                  </button>
+                )}
               </div>
             ))}
           </div>
         )}
       </div>
+
+      {/* Notification Toast */}
+      {notification && (
+        <div className={`notification-toast ${notification.type}`}>
+          <div className="notification-content">
+            <span className="notification-message">{notification.message}</span>
+          </div>
+        </div>
+      )}
+
+      {/* Confirm Remove Modal */}
+      <Modal show={showConfirmModal} onHide={() => setShowConfirmModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Remove</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Are you sure you want to remove <strong>{friendToRemove}</strong> from your leaderboard?</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowConfirmModal(false)}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={confirmRemoveFriend}>
+            Remove
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       {/* Profile Modal */}
       <Modal

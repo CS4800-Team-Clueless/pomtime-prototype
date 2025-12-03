@@ -1206,7 +1206,7 @@ def remove_friend(email):
 @app.route('/api/friends/leaderboard', methods=['GET'])
 @require_auth
 def get_friends_leaderboard():
-    """Get leaderboard of user's friends only"""
+    """Get leaderboard of user's friends + current user"""
     user_id = request.user['user_id']
     user = users_collection.find_one({'_id': ObjectId(user_id)})
 
@@ -1218,9 +1218,12 @@ def get_friends_leaderboard():
     if not friends:
         return jsonify({'leaderboard': []})
 
-    # Get all friends' profiles
+    # Get all friends' profiles + current user
+    # Create a list that includes both friends and current user's email
+    emails_to_fetch = friends + [user.get('email')]
+
     friends_data = list(users_collection.find(
-        {'email': {'$in': friends}},
+        {'email': {'$in': emails_to_fetch}},
         {
             'name': 1,
             'picture': 1,

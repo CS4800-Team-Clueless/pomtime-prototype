@@ -267,7 +267,7 @@
   color: #4b5563;
 }
 
-/* Remove friend button - FIXED */
+/* Remove friend button */
 .remove-friend-btn {
   background: #ef4444;
   color: white;
@@ -276,7 +276,7 @@
   width: 32px;
   height: 32px;
   font-size: 1.5rem;
-  line-height: 1;
+  line-height: 3;
   cursor: pointer;
   transition: background 0.2s;
   display: flex;
@@ -284,6 +284,7 @@
   justify-content: center;
   flex-shrink: 0;
   padding: 0;
+  padding-bottom: 5px;
 }
 
 .remove-friend-btn:hover {
@@ -312,6 +313,64 @@
 .show-more-btn:hover {
   background: #f9fafb;
   border-radius: 0.5rem;
+}
+
+/* Notification Toast */
+.notification-toast {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  padding: 1rem 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  animation: slideInRight 0.3s ease-out;
+  min-width: 300px;
+  max-width: 500px;
+}
+
+.notification-toast.success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.notification-toast.error {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+}
+
+.notification-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.notification-icon {
+  font-size: 1.5rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+}
+
+.notification-message {
+  flex: 1;
+  font-weight: 500;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 /* Profile Modal */
@@ -382,19 +441,28 @@
   border: 2px solid #e5e7eb;
 }
 
-.profile-stat-card .stat-icon {
+.profile-stat-card .stat-icon,
+.profile-stat-card__icon {
   font-size: 2rem;
   margin-bottom: 0.5rem;
 }
 
-.profile-stat-card .stat-value {
+.profile-stat-card__icon img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.profile-stat-card .stat-value,
+.profile-stat-card__value {
   font-size: 2rem;
   font-weight: 700;
   color: #1f2937;
   margin-bottom: 0.25rem;
 }
 
-.profile-stat-card .stat-label {
+.profile-stat-card .stat-label,
+.profile-stat-card__label {
   font-size: 0.875rem;
   color: #6b7280;
 }
@@ -603,11 +671,13 @@ body.dark-mode .profile-stat-card {
   border-color: #4b5563;
 }
 
-body.dark-mode .profile-stat-card .stat-value {
+body.dark-mode .profile-stat-card .stat-value,
+body.dark-mode .profile-stat-card__value {
   color: var(--dark-primary-color);
 }
 
-body.dark-mode .profile-stat-card .stat-label {
+body.dark-mode .profile-stat-card .stat-label,
+body.dark-mode .profile-stat-card__label {
   color: var(--dark-secondary-color);
 }
 
@@ -674,5 +744,12 @@ body.dark-mode .displayed-char-name {
   .profile-header {
     flex-direction: column;
     text-align: center;
+  }
+
+  .notification-toast {
+    top: 1rem;
+    right: 1rem;
+    left: 1rem;
+    min-width: auto;
   }
 }

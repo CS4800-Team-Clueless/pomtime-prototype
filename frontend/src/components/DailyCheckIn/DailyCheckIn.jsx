@@ -3,18 +3,12 @@ import { useAuth } from "../../contexts/AuthContext";
 import "./DailyCheckIn.css";
 
 import dailyGiftIcon from "../../assets/icons/Daily_Gift_Icon.png";
-import claimSound from '../../assets/sound_effects/treat_bark.wav'
 
 export default function DailyCheckIn() {
   const { fetchWithAuth, API_URL } = useAuth();
   const [checkInData, setCheckInData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [checking, setChecking] = useState(false);
-
-  const claimSoundRef = useRef(null);
-  useEffect(() => {
-    claimSoundRef.current = new Audio(claimSound);
-  }, []);
 
   useEffect(() => {
     fetchCheckInStatus();
@@ -43,12 +37,6 @@ export default function DailyCheckIn() {
       const data = await response.json();
 
       if (data.success) {
-
-        if(claimSoundRef.current){
-          claimSoundRef.current.currentTime = 0;
-          claimSoundRef.current.play();
-        }
-
         setCheckInData({
           can_check_in: false,
           already_checked_in: true,

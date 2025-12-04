@@ -17,6 +17,7 @@ load_dotenv()
 # Initialize MongoDB client
 MONGODB_URI = os.getenv("MONGODB_URI")
 DB_NAME = os.getenv("MONGODB_DB_NAME", "PomTimeDB")
+PST = timezone(timedelta(hours=-8))
 
 # Connect to MongoDB with SSL certificate
 client = MongoClient(
@@ -133,7 +134,7 @@ def google_auth():
                 'created_at': datetime.utcnow(),
                 'last_login': datetime.utcnow(),
                 'daily_points': {
-                    'date': datetime.now(timezone.utc).date(),
+                    'date': datetime.now(PST).strftime('%Y-%m-%d'),
                     'points_earned': 0
                 }
             }
@@ -270,7 +271,7 @@ def check_daily_point_limit(user_id, points):
             {'$set': {
                 'daily_points': {
                     'date': today,
-                    'points_earned': 0
+                    'points_earned': points_to_add  # FIXED: Set to points_to_add instead of 0
                 }
             }}
         )

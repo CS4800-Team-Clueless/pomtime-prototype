@@ -128,7 +128,6 @@ body.dark-mode .dark-mode-toggle {
 
 /* Header */
 
-
 body.dark-mode .pt-link:hover {
   background: #374151;
   color: #e5e7eb;
@@ -253,19 +252,22 @@ body.dark-mode .task-recurring {
 
 body.dark-mode .character-card.rarity-5,
 body.dark-mode .displayed-character-card.rarity-5,
-body.dark-mode .character-overlay__card.rarity-5 {
+body.dark-mode .character-overlay__card.rarity-5,
+body.dark-mode .character-card.stars-5 {
   background: linear-gradient(135deg, #78350f 0%, #92400e 100%);
 }
 
 body.dark-mode .character-card.rarity-4,
 body.dark-mode .displayed-character-card.rarity-4,
-body.dark-mode .character-overlay__card.rarity-4 {
+body.dark-mode .character-overlay__card.rarity-4,
+body.dark-mode .character-card.stars-4 {
   background: linear-gradient(135deg, #4c1d95 0%, #5b21b6 100%);
 }
 
 body.dark-mode .character-card.rarity-3,
 body.dark-mode .displayed-character-card.rarity-3,
-body.dark-mode .character-overlay__card.rarity-3 {
+body.dark-mode .character-overlay__card.rarity-3,
+body.dark-mode .character-card.stars-3 {
   background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
 }
 
@@ -482,92 +484,91 @@ body.dark-mode .displayed-char-name {
 }
 
 ody.dark-mode .text-muted {
-    --bs-text-opacity: 4;
-    color: white !important
+  --bs-text-opacity: 4;
+  color: white !important;
 }
 
 /* Dark Mode - TaskModal Overrides */
 body.dark-mode .task-modal .modal-content {
-    background: #1f2937; /* darker modal background */
-    color: #e5e7eb;
+  background: #1f2937; /* darker modal background */
+  color: #e5e7eb;
 }
 
-
 body.dark-mode .task-modal .modal-title {
-    color: #f9fafb;
+  color: #f9fafb;
 }
 
 body.dark-mode .task-modal .btn-close {
-    filter: brightness(0) invert(1);
-    opacity: 0.9;
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
 }
 
 body.dark-mode .task-modal .btn-close:hover {
-    opacity: 1;
+  opacity: 1;
 }
 
 body.dark-mode .task-modal .form-label,
 body.dark-mode .task-modal .form-check-label {
-    color: #e5e7eb;
+  color: #e5e7eb;
 }
 
 body.dark-mode .task-modal .form-control {
-    background: #374151;
-    color: #e5e7eb;
-    border-color: #4b5563;
+  background: #374151;
+  color: #e5e7eb;
+  border-color: #4b5563;
 }
 
 body.dark-mode .task-modal .form-control:focus {
-    background: #374151;
-    color: #e5e7eb;
-    border-color: #6366f1;
-    box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
+  background: #374151;
+  color: #e5e7eb;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
 }
 
 body.dark-mode .task-modal .form-check-input:checked {
-    background-color: #6366f1;
-    border-color: #6366f1;
+  background-color: #6366f1;
+  border-color: #6366f1;
 }
 
 body.dark-mode .task-modal .form-check-input:focus {
-    border-color: #6366f1;
-    box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
+  border-color: #6366f1;
+  box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
 }
 
 /* Points alert */
 body.dark-mode .task-modal .points-alert {
-    background-color: transparent !important;
-    color: #93c5fd; /* lighter blue for visibility */
+  background-color: transparent !important;
+  color: #93c5fd; /* lighter blue for visibility */
 }
 
 body.dark-mode .task-modal .points-earn-label {
-    font-size: 1.25rem;
-    color: #e5e7eb; /* bright text for dark background */
-    font-weight: 400;
-    margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+  color: #e5e7eb; /* bright text for dark background */
+  font-weight: 400;
+  margin-bottom: 0.5rem;
 }
 
 /* Alerts */
 body.dark-mode .task-modal .alert-success {
-    background-color: #064e3b;
-    border: 1px solid #10b981;
-    color: #d1fae5;
+  background-color: #064e3b;
+  border: 1px solid #10b981;
+  color: #d1fae5;
 }
 
 /* Buttons */
 body.dark-mode .task-modal .btn-success {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    color: #f0fdf4;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #f0fdf4;
 }
 
 body.dark-mode .task-modal .btn-success:hover {
-    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
 }
 
 body.dark-mode .task-modal .btn-danger {
-    background-color: #dc2626;
+  background-color: #dc2626;
 }
 
 body.dark-mode .task-modal .btn-secondary {
-    background-color: #4b5563;
+  background-color: #4b5563;
 }

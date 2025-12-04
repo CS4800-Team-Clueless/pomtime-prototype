@@ -2,11 +2,16 @@ import { Modal, Button } from "react-bootstrap";
 import "./GachaOverlay.css";
 
 // pulls: Array<{ name: string, stars: number, image: string }>
-export default function GachaOverlay({ show, pulls = [], onClose, isDarkMode }) {
+export default function GachaOverlay({
+  show,
+  pulls = [],
+  onClose,
+  isDarkMode,
+}) {
   const isSingle = pulls.length === 1;
 
-  if(!show) return null;
-  
+  if (!show) return null;
+
   return (
     <Modal
       show={show}
@@ -33,14 +38,15 @@ export default function GachaOverlay({ show, pulls = [], onClose, isDarkMode }) 
                   alt={pull.name}
                   className="character-image"
                   onError={(e) => {
-                    console.error(`Failed to load image for ${pull.name}:`, pull.image);
-                    e.target.style.display = 'none';
+                    console.error(
+                      `Failed to load image for ${pull.name}:`,
+                      pull.image
+                    );
+                    e.target.style.display = "none";
                   }}
                 />
               ) : (
-                <div className="character-placeholder">
-                  🐕
-                </div>
+                <div className="character-placeholder">🐕</div>
               )}
             </div>
             <div className="name">{pull.name}</div>

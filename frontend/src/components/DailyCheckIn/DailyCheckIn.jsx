@@ -42,8 +42,8 @@ export default function DailyCheckIn() {
       const data = await response.json();
 
       if (data.success) {
-        if(claimSoundRef.current){
-          claimSoundRef.current.currentTime =0;
+        if (claimSoundRef.current) {
+          claimSoundRef.current.currentTime = 0;
           claimSoundRef.current
             .play()
             .catch((err) => console.error("SFX failed", err));
@@ -90,7 +90,7 @@ export default function DailyCheckIn() {
               <div className="checkin-icon">
                 <img src={dailyGiftIcon} alt="Daily Gift" />
               </div>
-              Daily Gift (<span className="points-value">+5🦴</span>)
+              Daily Gift (<span className="daily-points-value">+5🦴</span>)
             </>
           )}
         </button>
@@ -101,9 +101,7 @@ export default function DailyCheckIn() {
           </div>
           <div className="checkin-text">
             <div className="checkin-status">Daily Gift Claimed!</div>
-            <div className="checkin-reset-info">
-              Resets at 12:00 AM PST
-            </div>
+            <div className="checkin-reset-info">Resets at 12:00 AM PST</div>
           </div>
         </div>
       )}

@@ -250,9 +250,6 @@ body.dark-mode .task-recurring {
 }
 
 /* Inventory cards */
-body.dark-mode .character-card {
-  background: #374151;
-}
 
 body.dark-mode .character-card.rarity-5,
 body.dark-mode .displayed-character-card.rarity-5,

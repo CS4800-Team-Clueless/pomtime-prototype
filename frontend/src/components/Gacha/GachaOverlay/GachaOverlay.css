@@ -1,5 +1,4 @@
 .gacha-modal {
-  background: radial-gradient(circle at 50% 30%, #1e2630, #10141b);
   color: #d0d4dc;
   border: 1px solid #2b3644;
   padding: 20px;
@@ -26,7 +25,7 @@
 /* Header */
 .gacha-header {
   font-weight: 700;
-  color: #e6ecf5;
+  color: var(--text);
   justify-content: center;
 }
 
@@ -53,7 +52,6 @@
   border: 2px solid transparent;
   transition: transform 0.2s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   color: #d0d4dc;
-  background: #1b222c;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -68,7 +66,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.05);
   margin-bottom: 0.5rem;
 }
 

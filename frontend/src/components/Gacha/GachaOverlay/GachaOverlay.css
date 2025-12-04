@@ -8,6 +8,19 @@
   box-shadow: 0 8px 28px rgba(15, 20, 25, 0.7);
 }
 
+.gacha-modal.overlay-dark{
+  --bg: #1f2937; /* fallback color if gradient fails */
+  --text: #e5e7eb;
+  color: var(--text);
+  background-color: var(--bg);
+}
+
+.gacha-modal.overlay-light{
+  color: var(--text);
+  background-color: var(--bg);
+  transition: background-color 0.3s, color 0.3s;
+}
+
 /* Header */
 .gacha-header {
   font-weight: 700;

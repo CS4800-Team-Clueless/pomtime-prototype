@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useSettings } from '../../contexts/SettingsContext';
 import GachaBanner from '../../components/Gacha/GachaBanner/GachaBanner.jsx';
 import GachaOverlay from '../../components/Gacha/GachaOverlay/GachaOverlay.jsx';
 import './GachaPage.css';
@@ -8,6 +9,7 @@ import greatSparkleSfx from "../../assets/sound_effects/great_pull_sparkle.wav";
 export default function GachaPage() {
   const [results, setResults] = useState([]);
   const [showOverlay, setShowOverlay] = useState(false);
+  const { settings } = useSettings();
 
   //audio instance and use sparkle effect
   const sparkleAudioRef = useRef(null);
@@ -53,6 +55,7 @@ export default function GachaPage() {
         show={showOverlay}
         pulls={results}
         onClose={handleClose}
+        isDarkMode={settings.dark_mode}
       />
     </div>
   );

@@ -2,16 +2,20 @@ import { Modal, Button } from "react-bootstrap";
 import "./GachaOverlay.css";
 
 // pulls: Array<{ name: string, stars: number, image: string }>
-export default function GachaOverlay({ show, pulls = [], onClose }) {
+export default function GachaOverlay({ show, pulls = [], onClose, isDarkMode }) {
   const isSingle = pulls.length === 1;
 
+  if(!show) return null;
+  
   return (
     <Modal
       show={show}
       onHide={onClose}
       centered
       size="lg"
-      contentClassName="gacha-modal"
+      contentClassName={`gacha-modal ${
+        isDarkMode ? "overlay-dark" : "overlay-light"
+      }`}
     >
       <Modal.Header className="gacha-header border-0">
         <Modal.Title>

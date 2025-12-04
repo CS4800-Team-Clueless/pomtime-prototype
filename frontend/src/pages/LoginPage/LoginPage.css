@@ -1,28 +1,83 @@
-.login-page {
+.landing-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #d4a574 0%, #c77d4e 100%);
+  /*background: linear-gradient(135deg, #d4a574 0%, #c77d4e 100%);background: linear-gradient(135deg, #d4a574 0%, #c77d4e 100%);*/
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-  padding: 20px;
+  padding: 40px 20px;
+  position: relative;
+  overflow: hidden;
 }
 
-.login-container {
-  background-color: white;
-  padding: 60px 50px;
-  border-radius: 16px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-  text-align: center;
-  max-width: 450px;
+.landing-page .bg-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  animation: float 15s infinite ease-in-out;
+}
+
+.landing-page .circle-1 {
+  width: 300px;
+  height: 300px;
+  top: -100px;
+  left: -100px;
+  animation-delay: 0s;
+}
+
+.landing-page .circle-2 {
+  width: 400px;
+  height: 400px;
+  bottom: -150px;
+  right: -150px;
+  animation-delay: 5s;
+}
+
+.landing-page .circle-3 {
+  width: 200px;
+  height: 200px;
+  top: 50%;
+  right: 10%;
+  animation-delay: 10s;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  25% {
+    transform: translate(40px, -40px) scale(1.15) rotate(90deg);
+  }
+  50% {
+    transform: translate(-30px, 30px) scale(0.85) rotate(180deg);
+  }
+  75% {
+    transform: translate(35px, 25px) scale(1.1) rotate(270deg);
+  }
+}
+
+.landing-page .content-wrapper {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
   width: 100%;
-  animation: fadeIn 0.5s ease-in;
 }
 
-@keyframes fadeIn {
+.landing-page .hero-section {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  padding: 60px 50px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  margin-bottom: 40px;
+  animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
@@ -30,52 +85,279 @@
   }
 }
 
-.login-container h1 {
-  margin-bottom: 12px;
-  color: #1a202c;
+.landing-page .pt-logo {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 0px;
+  border-radius: 20px;
+}
+
+.landing-page .hero-title {
+  font-size: 48px;
+  font-weight: 800;
+  color: #1a202c !important;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.landing-page .pomtime-logo {
+  color: var(--brand);
+}
+
+.landing-page .hero-subtitle {
+  font-size: 18px;
+  color: #4a5568 !important;
+  line-height: 1.7;
+  max-width: 600px;
+  margin: 0 auto 40px;
+}
+
+.landing-page .login-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.landing-page .login-hint {
+  font-size: 14px;
+  color: #718096 !important;
+  margin: 0;
+}
+
+/* Slideshow Section */
+.landing-page .slideshow-section {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  padding: 50px 40px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  margin-bottom: 40px;
+  animation: slideUp 0.6s ease-out 0.1s backwards;
+}
+
+.landing-page .slideshow-title {
+  text-align: center;
   font-size: 32px;
   font-weight: 700;
-  letter-spacing: -0.5px;
+  color: #1a202c !important;
+  margin-bottom: 32px;
 }
 
-.login-container p {
-  margin-bottom: 40px;
-  color: #718096;
-  font-size: 16px;
-  line-height: 1.6;
+.landing-page .slideshow-container {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-/* Style for the Google button container */
-.login-container > div {
+.landing-page .slideshow-inner {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #f7fafc;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.landing-page .slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.6s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.landing-page .slide.active {
+  opacity: 1;
+}
+
+.landing-page .slide-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #ffffff;
+}
+
+.landing-page .slide-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+  color: #1a202c !important;
+}
+
+.landing-page .slide-btn:hover {
+  background: white;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.landing-page .slide-btn-prev {
+  left: -24px;
+}
+
+.landing-page .slide-btn-next {
+  right: -24px;
+}
+
+.landing-page .slide-dots {
   display: flex;
   justify-content: center;
-  margin-top: 10px;
+  gap: 12px;
+  margin-top: 24px;
 }
 
-/* Add a subtle animation on hover */
-.login-container > div:hover {
-  transform: scale(1.02);
-  transition: transform 0.2s ease;
+.landing-page .dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  background: #cbd5e0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
 }
 
-/* Footer text */
-.login-footer {
-  margin-top: 30px;
-  font-size: 13px;
-  color: #a0aec0;
+.landing-page .dot:hover {
+  background: #a0aec0;
+  transform: scale(1.2);
 }
 
-/* Responsive design */
-@media (max-width: 480px) {
-  .login-container {
+.landing-page .dot.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  transform: scale(1.3);
+}
+
+/* Features Grid */
+.landing-page .features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-bottom: 60px;
+  animation: slideUp 0.6s ease-out 0.2s backwards;
+}
+
+.landing-page .feature-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 32px 28px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.landing-page .feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.landing-page .feature-icon {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  color: white !important;
+}
+
+.landing-page .feature-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a202c !important;
+  margin-bottom: 12px;
+}
+
+.landing-page .feature-card p {
+  font-size: 15px;
+  color: #4a5568 !important;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .landing-page .hero-section {
     padding: 40px 30px;
   }
 
-  .login-container h1 {
+  .landing-page .hero-title {
+    font-size: 36px;
+  }
+
+  .landing-page .hero-subtitle {
+    font-size: 16px;
+  }
+
+  .landing-page .slideshow-section {
+    padding: 40px 30px;
+  }
+
+  .landing-page .slideshow-title {
     font-size: 26px;
   }
 
-  .login-container p {
-    font-size: 14px;
+  .landing-page .slide-btn-prev {
+    left: -16px;
+  }
+
+  .landing-page .slide-btn-next {
+    right: -16px;
+  }
+
+  .landing-page .features-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .landing-page {
+    padding: 20px;
+  }
+
+  .landing-page .hero-title {
+    font-size: 32px;
+  }
+
+  .landing-page .slideshow-section {
+    padding: 30px 20px;
+  }
+
+  .landing-page .slideshow-title {
+    font-size: 24px;
+    margin-bottom: 24px;
+  }
+
+  .landing-page .slide-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .landing-page .slide-btn-prev {
+    left: -12px;
+  }
+
+  .landing-page .slide-btn-next {
+    right: -12px;
   }
 }

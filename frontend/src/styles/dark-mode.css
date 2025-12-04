@@ -9,10 +9,12 @@
   --brand: #c47d61; /* bootstrap primary-like */
   --bg: #1f2937; /* fallback color if gradient fails */
   --text: #e5e7eb;
+  --secondary-text: #adb5c3;
   --hover-text: #d7d8db;
   --active-bg: #333e4e;
   --hover-bg: #1f2937;
   --card-bg: #1f2937;
+  --placeholder-text: #6b7280;
 }
 
 /* Light mode defaults (no class needed) */

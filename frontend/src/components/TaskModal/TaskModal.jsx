@@ -64,6 +64,7 @@ export default function TaskModal({ show, onHide, task, slot, onSave }) {
             const durationMs = end - start;
             const durationMinutes = durationMs / (1000 * 60);
             const points = Math.max(1, Math.round(durationMinutes / 30));
+
             setCalculatedPoints(points);
 
             // Calculate actual points user can earn today
@@ -251,8 +252,8 @@ export default function TaskModal({ show, onHide, task, slot, onSave }) {
 
                         <div className="points-alert mb-3">
                             <div className="points-earn-label">You can earn:</div>
-                            <div className="points-value">{actualPointsEarnable}🦴 Pom Treats</div>
-                            <div className="points-label"></div>
+                            <div className="points-value">{calculatedPoints}🦴 Pom Treats</div>
+                            <div className="info-text"> Earned {dailyPoints} / {DAILY_LIMIT} Pom Treats today</div>
                             <small className="calc-info">Every 30 minutes = 1 Pom Treat</small>
                         </div>
 

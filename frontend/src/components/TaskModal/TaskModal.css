@@ -27,7 +27,7 @@
 }
 
 input.form-control::placeholder {
-  color: var(--text);
+  color: var(--placeholder-text);
 }
 
 .task-modal .form-control {
@@ -253,4 +253,10 @@ input.form-control::placeholder {
   color: #6b7280;
   font-size: 0.875rem;
   margin-top: 0.25rem;
+}
+
+.task-modal .info-text {
+  color: var(--secondary-text);
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
 }

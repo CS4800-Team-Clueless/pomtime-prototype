@@ -26,6 +26,10 @@
   margin-bottom: 0.5rem;
 }
 
+input.form-control::placeholder {
+  color: var(--text);
+}
+
 .task-modal .form-control {
   border: 1px solid #d1d5db;
   border-radius: 0.5rem;
@@ -104,7 +108,7 @@
 }
 
 .text-muted {
-  color: #6b7280
+  color: #6b7280;
   font-size: 0.75rem;
   display: block;
 }

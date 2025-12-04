@@ -648,7 +648,6 @@ def complete_timer():
     - increments user points
     - increments pomodoro_sessions count
     - updates a collection entry
-    - logs the session in pomodoro_collection
     """
     user_id = request.user['user_id']
     data = request.get_json()
@@ -666,7 +665,6 @@ def complete_timer():
     update_fields = {
         'points': actual_points_to_add,  # Use the actual points returned
         'pomodoro_sessions': 1,
-        'collection.Pomodoro': 1,
     }
 
     users_collection.update_one(
@@ -683,8 +681,6 @@ def complete_timer():
         'completed_at': datetime.utcnow(),
     }
 
-    pomodoro_collection.insert_one(pomodoro_session)
-
     # Return updated user info
     user = users_collection.find_one({'_id': ObjectId(user_id)})
 
@@ -693,7 +689,6 @@ def complete_timer():
         'points_earned': actual_points_to_add,  # Return actual points earned
         'total_points': user.get('points', 0),
         'pomodoro_sessions': user.get('pomodoro_sessions', 0),
-        'collection': user.get('collection', {})
     })
 
 @app.route('/api/pomodoro/sessions', methods=['GET'])

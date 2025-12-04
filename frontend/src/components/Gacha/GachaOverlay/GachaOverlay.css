@@ -9,13 +9,15 @@
 }
 
 .gacha-modal.overlay-dark{
-  --bg: #1f2937; /* fallback color if gradient fails */
+  --bg: #1f2937; 
   --text: #e5e7eb;
   color: var(--text);
   background-color: var(--bg);
 }
 
 .gacha-modal.overlay-light{
+  --bg: #f9fafb; 
+  --text: #1f2937;
   color: var(--text);
   background-color: var(--bg);
   transition: background-color 0.3s, color 0.3s;

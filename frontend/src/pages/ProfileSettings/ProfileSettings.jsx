@@ -114,6 +114,9 @@ export default function ProfileSettings() {
       const data = await response.json();
 
       setSessions(data.sessions || {});
+
+      console.log(data.sessions);
+
       setStats((prev) => ({
         ...prev,
 

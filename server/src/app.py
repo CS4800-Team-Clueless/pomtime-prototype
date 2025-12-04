@@ -681,6 +681,8 @@ def complete_timer():
         'completed_at': datetime.utcnow(),
     }
 
+    pomodoro_collection.insert_one(pomodoro_session)
+
     # Return updated user info
     user = users_collection.find_one({'_id': ObjectId(user_id)})
 

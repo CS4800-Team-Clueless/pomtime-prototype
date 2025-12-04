@@ -202,7 +202,7 @@ const PomodoroPage = () => {
 
   return (
     <div className="pomodoro-page">
-      <audio ref={audioRef} src="../../assets/sound_effects/timer_bark.wav" preload="auto" />
+      <audio ref={audioRef} src="/notification.mp3" preload="auto" />
 
       {notification && (
         <div className={`notification notification-${notification.type}`}>

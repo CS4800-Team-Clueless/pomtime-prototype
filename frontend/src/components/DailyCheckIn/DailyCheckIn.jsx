@@ -21,7 +21,7 @@ export default function DailyCheckIn() {
 
   const fetchCheckInStatus = async () => {
     try {
-      const response = await fetchWithAuth(`${API_URL}/api/checkin/`);
+      const response = await fetchWithAuth(`${API_URL}/api/checkin`);
       const data = await response.json();
       setCheckInData(data);
     } catch (error) {

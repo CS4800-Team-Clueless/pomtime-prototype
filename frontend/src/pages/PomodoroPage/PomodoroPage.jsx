@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import timerSound from "../../assets/sound_effects/timer_bark.wav";
 import { useAuth } from "../../contexts/AuthContext";
 import "./PomodoroPage.css";
 
@@ -202,7 +203,7 @@ const PomodoroPage = () => {
 
   return (
     <div className="pomodoro-page">
-      <audio ref={audioRef} src="/notification.mp3" preload="auto" />
+      <audio ref={audioRef} src={timerSound} preload="auto" />
 
       {notification && (
         <div className={`notification notification-${notification.type}`}>
